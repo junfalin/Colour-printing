@@ -116,11 +116,11 @@ class ColourPrint:
                                     string='{}',
                                     str_style1=str_style[1])
 
-    def __call__(self, data, category='INFO'):
+    def __call__(self, *args, category='INFO'):
         if not self.switch.signal or category in self.switch.category_filter:
             return
-        template = self.__user_setting(category)
-        print(template.format(data))
+        template = self.__user_setting(category).replace('{}', len(args) * '{} ')
+        print(template.format(*args))
 
     def __str__(self):
         return """{
@@ -159,3 +159,5 @@ class ColourPrint:
                 },
 
         }"""
+
+

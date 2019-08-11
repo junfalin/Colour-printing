@@ -1,7 +1,11 @@
 # Colour-printing
+以不同颜色区分终端输出信息类型，让终端输出不再单调
 > 参考：https://blog.csdn.net/gatieme/article/details/45439671    @JeanCheng
 
-> 支持：Python version:3.7
+> version:Python 3.7
+- 内置类型： INFO(默认) SUCCESS ERROR WARRING 
+- 过滤器：Switch.category_filter -> list
+- 开关：Switch.signal -> bool
 #### 示例
 ```
 import time
