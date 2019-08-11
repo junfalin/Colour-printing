@@ -4,6 +4,7 @@
 > 支持：Python version:3.7
 #### 示例
 ```
+import time
 from printing.log import ColourPrint, Switch
 
 
