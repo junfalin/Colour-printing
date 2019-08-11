@@ -1,5 +1,5 @@
 from datetime import datetime
-from printing.style import STYLE, STR_STYLE, CATEGORY_STYLE, TIME_STYLE
+from colour_printing.style import STYLE, STR_STYLE, CATEGORY_STYLE, TIME_STYLE
 
 
 class Switch:

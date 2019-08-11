@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="colour-printing",
-    version="0.0.1",
+    version="0.0.3",
     author="faithforus",
     author_email="ljunf817@163.com",
     description="colour-printing",
