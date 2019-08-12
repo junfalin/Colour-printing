@@ -1,9 +1,15 @@
 # Colour-printing
 以不同颜色区分终端输出信息类型，标识出重要信息
-> Python version: 3
-- 内置类型： INFO(默认) SUCCESS ERROR WARRING 
-- 过滤器：Switch.filter -> list
-- 开关：Switch.signal -> bool
+> Support:Python 3.5+
+- 内置类型： 
+  - INFO(默认) 
+  - SUCCESS 
+  - ERROR 
+  - WARRING 
+- 过滤器：
+  - Switch.filter : list
+- 开关：
+  - Switch.signal : bool
 #### 示例
 ```
 import time

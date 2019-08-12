@@ -116,7 +116,8 @@ class ColourPrint:
                                     string='{}',
                                     str_style1=str_style[1])
 
-    def __call__(self, *args, flag='INFO'):
+    def __call__(self, *args, **kwargs):
+        flag = kwargs.pop('flag', 'INFO')
         if not self.switch.signal or flag in self.switch.filter:
             return
         template = self.__user_setting(flag).replace('{}', len(args) * '{} ')
@@ -159,4 +160,3 @@ class ColourPrint:
                 },
 
         }"""
-
