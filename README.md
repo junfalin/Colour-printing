@@ -1,7 +1,5 @@
 # Colour-printing
 以不同颜色区分终端输出信息类型，标识出重要信息
-> 参考：[@JeanCheng](https://blog.csdn.net/gatieme/article/details/45439671)
-
 > Python version: 3
 - 内置类型： INFO(默认) SUCCESS ERROR WARRING 
 - 过滤器：Switch.filter -> list
@@ -40,3 +38,6 @@ echo.set_str_style(flag='Custom', back='yellow')
 echo("hello world!", flag='Custom')
 
 ```
+
+
+> 参考：[@JeanCheng](https://blog.csdn.net/gatieme/article/details/45439671)

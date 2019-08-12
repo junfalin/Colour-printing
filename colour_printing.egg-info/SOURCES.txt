@@ -1,4 +1,5 @@
 README.md
+README.rst
 setup.py
 colour_printing/__init__.py
 colour_printing/log.py
