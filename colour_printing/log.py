@@ -1,16 +1,16 @@
 from datetime import datetime
-from colour_printing.style import STYLE, STR_STYLE, CATEGORY_STYLE, TIME_STYLE
+from colour_printing.style import STYLE, STR_STYLE, FLAG_STYLE, TIME_STYLE
 
 
 class Switch:
-    signal = True  # 总开关
-    category_filter = []  # 过滤,指定那些种类不打印
+    signal: bool = True  # 总开关
+    filter: list = []  # 过滤,指定那些种类不打印
 
 
 class ColourPrint:
     """
         @format：
-                【category】time string
+                【flag】time string
         @usage:
             default: INFO, ERROR, WARRING, SUCCESS
                 >> log=ColourPrint()
@@ -19,34 +19,34 @@ class ColourPrint:
 
                 >> [INFO] 2019-08-11 17:38:20 hello
 
-                >> log('hello',category='ERROR')
+                >> log('hello',flag='ERROR')
 
                 >> [ERROR] 2019-08-11 17:53:27 hello
 
-            user: category_name
+            user: flag_name
                 >> log=ColourPrint()
 
-                >> log.set_str_style(category=category_name,mode='',fore='',back='')
+                >> log.set_str_style(flag=flag_name,mode='',fore='',back='')
 
                 >> log.set_time_style(...)
 
-                >> log.set_category_style(...)
+                >> log.set_flag_style(...)
 
         @help:
                 >> print(ColourPrint())
 
         @attr:
                 self.config={
-                            category:{
+                            flag:{
                                     'str_style':(style,end),
-                                    'category_style':(style,end),
+                                    'flag_style':(style,end),
                                     'time_style':(style,end),
                             }
                 }
     """
 
     time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-    template = '{category_style0}[{category}]{category_style1} {time_style0}{time}{time_style1} {str_style0}{string}{str_style1}'
+    template = '{flag_style0}[{flag}]{flag_style1} {time_style0}{time}{time_style1} {str_style0}{string}{str_style1}'
 
     def __init__(self):
         self.switch = Switch
@@ -73,42 +73,42 @@ class ColourPrint:
 
         return style, end
 
-    def set_str_style(self, category, mode='', fore='', back=''):
-        self.config.setdefault(category, {})[STR_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+    def set_str_style(self, flag, mode='', fore='', back=''):
+        self.config.setdefault(flag, {})[STR_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
 
-    def set_time_style(self, category, mode='', fore='', back=''):
-        self.config.setdefault(category, {})[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+    def set_time_style(self, flag, mode='', fore='', back=''):
+        self.config.setdefault(flag, {})[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
 
-    def set_category_style(self, category, mode='', fore='', back=''):
-        self.config.setdefault(category, {})[CATEGORY_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+    def set_flag_style(self, flag, mode='', fore='', back=''):
+        self.config.setdefault(flag, {})[FLAG_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
 
     def __default_setting(self):
         self.config.setdefault('INFO', {})[STR_STYLE] = self.__setting(mode='bold', fore='blue')
         self.config.setdefault('INFO', {})[TIME_STYLE] = self.__setting(mode='invert')
-        self.config.setdefault('INFO', {})[CATEGORY_STYLE] = self.__setting(mode='bold', fore='blue')
+        self.config.setdefault('INFO', {})[FLAG_STYLE] = self.__setting(mode='bold', fore='blue')
 
         self.config.setdefault('WARRING', {})[STR_STYLE] = self.__setting(mode='bold', fore='yellow')
         self.config.setdefault('WARRING', {})[TIME_STYLE] = self.__setting(mode='invert')
-        self.config.setdefault('WARRING', {})[CATEGORY_STYLE] = self.__setting(mode='bold', fore='yellow')
+        self.config.setdefault('WARRING', {})[FLAG_STYLE] = self.__setting(mode='bold', fore='yellow')
 
         self.config.setdefault('SUCCESS', {})[STR_STYLE] = self.__setting(mode='bold', fore='green')
         self.config.setdefault('SUCCESS', {})[TIME_STYLE] = self.__setting(mode='invert')
-        self.config.setdefault('SUCCESS', {})[CATEGORY_STYLE] = self.__setting(mode='bold', fore='green')
+        self.config.setdefault('SUCCESS', {})[FLAG_STYLE] = self.__setting(mode='bold', fore='green')
 
         self.config.setdefault('ERROR', {})[STR_STYLE] = self.__setting(mode='bold', fore='red')
         self.config.setdefault('ERROR', {})[TIME_STYLE] = self.__setting(mode='invert')
-        self.config.setdefault('ERROR', {})[CATEGORY_STYLE] = self.__setting(mode='bold', fore='red')
+        self.config.setdefault('ERROR', {})[FLAG_STYLE] = self.__setting(mode='bold', fore='red')
 
-    def __user_setting(self, category):
-        style = self.config.get(category)
+    def __user_setting(self, flag):
+        style = self.config.get(flag)
         if not style:
-            raise KeyError(f'还未设定>{category}<类型，请set_str_style,set_time_style...')
-        str_style = style.pop(STR_STYLE, self.__setting())
-        time_style = style.pop(TIME_STYLE, self.__setting())
-        category_style = style.pop(CATEGORY_STYLE, self.__setting())
-        return self.template.format(category_style0=category_style[0],
-                                    category=category,
-                                    category_style1=category_style[1],
+            raise KeyError('未知flag<{}>，自定义set_str_style(),set_time_style()...'.format(flag))
+        str_style = style.get(STR_STYLE, self.__setting())
+        time_style = style.get(TIME_STYLE, self.__setting())
+        flag_style = style.get(FLAG_STYLE, self.__setting())
+        return self.template.format(flag_style0=flag_style[0],
+                                    flag=flag,
+                                    flag_style1=flag_style[1],
                                     time_style0=time_style[0],
                                     time=self.time(),
                                     time_style1=time_style[1],
@@ -116,10 +116,10 @@ class ColourPrint:
                                     string='{}',
                                     str_style1=str_style[1])
 
-    def __call__(self, *args, category='INFO'):
-        if not self.switch.signal or category in self.switch.category_filter:
+    def __call__(self, *args, flag='INFO'):
+        if not self.switch.signal or flag in self.switch.filter:
             return
-        template = self.__user_setting(category).replace('{}', len(args) * '{} ')
+        template = self.__user_setting(flag).replace('{}', len(args) * '{} ')
         print(template.format(*args))
 
     def __str__(self):
@@ -159,5 +159,4 @@ class ColourPrint:
                 },
 
         }"""
-
 

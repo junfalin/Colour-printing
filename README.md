@@ -1,10 +1,10 @@
 # Colour-printing
-以不同颜色区分终端输出信息类型，让终端输出不再单调
-> 参考：https://blog.csdn.net/gatieme/article/details/45439671    @JeanCheng
+以不同颜色区分终端输出信息类型，标识出重要信息
+> 参考：[@JeanCheng](https://blog.csdn.net/gatieme/article/details/45439671)
 
-> version:Python 3.7
+> Python version: 3
 - 内置类型： INFO(默认) SUCCESS ERROR WARRING 
-- 过滤器：Switch.category_filter -> list
+- 过滤器：Switch.filter -> list
 - 开关：Switch.signal -> bool
 #### 示例
 ```
@@ -16,14 +16,14 @@ print('Default Setting!')
 log = ColourPrint()
 
 log("hello world!")
-#Switch.category_filter.append('SUCCESS') #过滤
+#Switch.filter.append('SUCCESS') #过滤
 time.sleep(1)
-log("hello world!", category='ERROR')
+log("hello world!", flag='ERROR')
 time.sleep(1)
-log("hello world!", category='SUCCESS')
+log("hello world!", flag='SUCCESS')
 time.sleep(1)
 #Switch.signal=False #关闭
-log("hello world!", category='WARRING')
+log("hello world!", flag='WARRING')
 
 ```
 #### 自定义style
@@ -33,10 +33,10 @@ print('User Setting!')
 
 echo = ColourPrint()
 #可选
-echo.set_category_style(category='Custom', mode='underline')
-echo.set_time_style(category='Custom', mode='bold', fore='red')
-echo.set_str_style(category='Custom', back='yellow')
+echo.set_flag_style(flag='Custom', mode='underline')
+echo.set_time_style(flag='Custom', mode='bold', fore='red')
+echo.set_str_style(flag='Custom', back='yellow')
 
-echo("hello world!", category='Custom')
+echo("hello world!", flag='Custom')
 
 ```
