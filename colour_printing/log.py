@@ -52,6 +52,7 @@ class ColourPrint:
         self.switch = Switch
         self.config = {}
         self.__default_setting()
+        self.flag_len = 7
 
     @classmethod
     def __setting(cls, mode='', fore='', back=''):
@@ -73,14 +74,21 @@ class ColourPrint:
 
         return style, end
 
+    def __cal_flag_len(self, flag):
+        if len(flag) > self.flag_len:
+            self.flag_len = len(flag)
+
     def set_str_style(self, flag, mode='', fore='', back=''):
         self.config.setdefault(flag, {})[STR_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        self.__cal_flag_len(flag)
 
     def set_time_style(self, flag, mode='', fore='', back=''):
         self.config.setdefault(flag, {})[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        self.__cal_flag_len(flag)
 
     def set_flag_style(self, flag, mode='', fore='', back=''):
         self.config.setdefault(flag, {})[FLAG_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        self.__cal_flag_len(flag)
 
     def __default_setting(self):
         self.config.setdefault('INFO', {})[STR_STYLE] = self.__setting(mode='bold', fore='blue')
@@ -102,12 +110,13 @@ class ColourPrint:
     def __user_setting(self, flag):
         style = self.config.get(flag)
         if not style:
-            raise KeyError('未知flag<{}>，自定义set_str_style(),set_time_style()...'.format(flag))
+            e = '未知flag "{}",自定义请使用set_*_style()...'.format(flag)
+            raise ValueError(e)
         str_style = style.get(STR_STYLE, self.__setting())
         time_style = style.get(TIME_STYLE, self.__setting())
         flag_style = style.get(FLAG_STYLE, self.__setting())
         return self.template.format(flag_style0=flag_style[0],
-                                    flag=flag,
+                                    flag=flag.center(self.flag_len, '-'),
                                     flag_style1=flag_style[1],
                                     time_style0=time_style[0],
                                     time=self.time(),
