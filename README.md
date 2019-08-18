@@ -1,5 +1,8 @@
 # Colour-printing
 以不同颜色区分终端输出信息类型，标识出重要信息
+```
+pip install colour_printing
+```
 > Support:Python 3.5+
 - 内置类型： 
   - INFO(默认) 
