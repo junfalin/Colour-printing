@@ -9,7 +9,7 @@ def read(fname):
 
 setuptools.setup(
     name="colour-printing",
-    version="0.0.9",
+    version="0.1.0",
     author="faithforus",
     author_email="ljunf817@163.com",
     description="colour-printing",

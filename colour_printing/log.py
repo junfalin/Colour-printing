@@ -26,6 +26,8 @@ class ColourPrint:
             user: flag_name
                 >> log=ColourPrint()
 
+                >> log.new_flag(flag_name)
+                #可选
                 >> log.set_str_style(flag=flag_name,mode='',fore='',back='')
 
                 >> log.set_time_style(...)
@@ -78,6 +80,10 @@ class ColourPrint:
         if len(flag) > self.flag_len:
             self.flag_len = len(flag)
 
+    def new_flag(self, flag):
+        self.config.setdefault(flag, {})
+        self.__cal_flag_len(flag)
+
     def set_str_style(self, flag, mode='', fore='', back=''):
         self.config.setdefault(flag, {})[STR_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
         self.__cal_flag_len(flag)
@@ -109,8 +115,8 @@ class ColourPrint:
 
     def __user_setting(self, flag):
         style = self.config.get(flag)
-        if not style:
-            e = '未知flag "{}",自定义请使用set_*_style()...'.format(flag)
+        if style is None:
+            e = '未知flag "{}",自定义请使用new_flag(),set_*_style()...'.format(flag)
             raise ValueError(e)
         str_style = style.get(STR_STYLE, self.__setting())
         time_style = style.get(TIME_STYLE, self.__setting())
@@ -169,3 +175,5 @@ class ColourPrint:
                 },
 
         }"""
+
+

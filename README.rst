@@ -49,7 +49,9 @@ Python version: 3.5+
   print('User Setting!')
 
   echo = ColourPrint()
-  #可选
+  #创建
+  echo.new_flag('Custom')
+  #样式设定（可选）
   echo.set_flag_style(flag='Custom', mode='underline')
   echo.set_time_style(flag='Custom', mode='bold', fore='red')
   echo.set_str_style(flag='Custom', back='yellow')
