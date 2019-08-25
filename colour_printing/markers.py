@@ -12,6 +12,11 @@ class Markers:
     def __init__(self, flag_name: str):
         self.__flag_name = flag_name.upper()
         self.__config = {}
+        self.cal_flag_len()
+
+    def cal_flag_len(self):
+        if Markers.__flag_len < len(self.__flag_name):
+            Markers.__flag_len = len(self.__flag_name)
 
     @classmethod
     def __setting(cls, mode='', fore='', back=''):

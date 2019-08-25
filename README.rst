@@ -8,7 +8,10 @@ Python version: 3.5+
 
 - 内置类型
 
-  + INFO(默认) SUCCESS ERROR WARRING
+  + info
+  + success
+  + error
+  + warn
 - 过滤器
 
   + Switch.filter : list

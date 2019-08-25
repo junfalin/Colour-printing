@@ -5,10 +5,10 @@ pip install colour_printing
 ```
 > Support:Python 3.5+
 - 内置类型： 
-  - INFO(默认) 
-  - SUCCESS 
-  - ERROR 
-  - WARN
+  - info 
+  - success 
+  - error 
+  - warn
 - 过滤器：
   - Switch.filter : list
 - 开关：
