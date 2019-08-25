@@ -22,21 +22,19 @@ Python version: 3.5+
 
 ::
 
-  import time
-  from printing.log import ColourPrint, Switch
-
   print('Default Setting!')
   log = ColourPrint()
 
-  log("hello world!")
+  log.info("hello world!")
+
   #Switch.filter.append('SUCCESS') #过滤
-  time.sleep(1)
-  log("hello world!", flag='ERROR')
-  time.sleep(1)
-  log("hello world!", flag='SUCCESS')
-  time.sleep(1)
+
+  log.error("hello world!")
+  log.success("hello world!")
+
   #Switch.signal=False #关闭
-  log("hello world!", flag='WARRING')
+
+  log.warn("hello world!")
 
 ===========
 自定义style
@@ -48,12 +46,10 @@ Python version: 3.5+
 
   print('User Setting!')
 
-  echo = ColourPrint()
-  #创建
-  echo.new_flag('Custom')
-  #样式设定（可选）
-  echo.set_flag_style(flag='Custom', mode='underline')
-  echo.set_time_style(flag='Custom', mode='bold', fore='red')
-  echo.set_str_style(flag='Custom', back='yellow')
+  class MyColour(ColourPrint):
+      def custom(self):
+          self.debug = self.Markers('debug').flag_style(model='bold').time_style()
+          self.log = self.Markers('log')
 
-  echo("hello world!", flag='Custom')
+  echo = MyColour()
+  echo.debug('hello world!')

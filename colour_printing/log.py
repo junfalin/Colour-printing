@@ -7,82 +7,59 @@ default_error = "error"
 
 
 class ColourPrint:
+    Markers = Markers
+
     def __init__(self):
         self.__default_setting()
 
-    def new_flag(self, flag: str):
-        setattr(self, flag, Markers(flag))
-        if Markers.flag_len < len(flag):
-            Markers.flag_len = len(flag)
+    def __init_subclass__(cls, **kwargs):
+        cls.custom(cls)
+
+    def custom(self):
+        e = '''
+        Custom styles need to override this method ! 
+        for example : 
+            self.debug = self.Markers('debug').flag_style(mode="bold").time_style(...)'''
+        raise NotImplementedError(e)
 
     def __default_setting(self):
-        info = Markers(default_info)
-        info.set_flag_style(mode='bold', fore='blue')
-        info.set_time_style(mode='invert')
-        info.set_str_style(mode='bold', fore='blue')
-        setattr(self, default_info, info)
+        self.info = Markers(default_info) \
+            .flag_style(mode='bold', fore='blue').time_style(mode='invert').message_style(mode='bold', fore='blue')
 
-        warn = Markers(default_warn)
-        warn.set_flag_style(mode='bold', fore='yellow')
-        warn.set_time_style(mode='invert')
-        warn.set_str_style(mode='bold', fore='yellow')
-        setattr(self, default_warn, warn)
+        self.warn = Markers(default_warn) \
+            .flag_style(mode='bold', fore='yellow').time_style(mode='invert').message_style(mode='bold', fore='yellow')
 
-        success = Markers(default_success)
-        success.set_flag_style(mode='bold', fore='green')
-        success.set_time_style(mode='invert')
-        success.set_str_style(mode='bold', fore='green')
-        setattr(self, default_success, success)
+        self.success = Markers(default_success) \
+            .flag_style(mode='bold', fore='green').time_style(mode='invert').message_style(mode='bold', fore='green')
 
-        error = Markers(default_error)
-        error.set_flag_style(mode='bold', fore='red')
-        error.set_time_style(mode='invert')
-        error.set_str_style(mode='bold', fore='red')
-        setattr(self, default_error, error)
+        self.error = Markers(default_error) \
+            .flag_style(mode='bold', fore='red').time_style(mode='invert').message_style(mode='bold', fore='red')
 
     def __str__(self):
-        return """{
-            'fore':
-                {  # 前景色
-                    'black': 30,  # 黑色
-                    'red': 31,  # 红色
-                    'green': 32,  # 绿色
-                    'yellow': 33,  # 黄色
-                    'blue': 34,  # 蓝色
-                    'purple': 35,  # 紫红色
-                    'cyan': 36,  # 青蓝色
-                    'white': 37,  # 白色
-                },
-
-            'back':
-                {  # 背景
-                    'black': 40,  # 黑色
-                    'red': 41,  # 红色
-                    'green': 42,  # 绿色
-                    'yellow': 43,  # 黄色
-                    'blue': 44,  # 蓝色
-                    'purple': 45,  # 紫红色
-                    'cyan': 46,  # 青蓝色
-                    'white': 47,  # 白色
-                },
-
-            'mode':
-                {  # 显示模式
-                    'mormal': 0,  # 终端默认设置
-                    'bold': 1,  # 高亮显示
-                    'underline': 4,  # 使用下划线
-                    'blink': 5,  # 闪烁
-                    'invert': 7,  # 反白显示
-                    'hide': 8,  # 不可见
-                },
-
-        }"""
-
-
-
-
-
-
-
-
-
+        return """
+                @'fore': # 前景色
+                        'black': 黑色
+                        'red': 红色
+                        'green': 绿色
+                        'yellow': 黄色
+                        'blue':  蓝色
+                        'purple':  紫红色
+                        'cyan':  青蓝色
+                        'white':  白色
+                @'back':# 背景
+                        'black':  黑色
+                        'red':  红色
+                        'green': 绿色
+                        'yellow':  黄色
+                        'blue': 蓝色
+                        'purple':  紫红色
+                        'cyan':  青蓝色
+                        'white': 白色
+                @'mode':# 显示模式
+                        'normal': 终端默认设置
+                        'bold':  高亮显示
+                        'underline':  使用下划线
+                        'blink': 闪烁
+                        'invert': 反白显示
+                        'hide': 不可见
+            """

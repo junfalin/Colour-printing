@@ -1,15 +1,17 @@
 from datetime import datetime
-from colour_printing.style import STYLE, STR_STYLE, FLAG_STYLE, TIME_STYLE
+from colour_printing.style import STYLE, MESSAGE_STYLE, FLAG_STYLE, TIME_STYLE
 from colour_printing.switch import Switch
 
-class Markers:
-    time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-    template = '{flag_style0}[{flag}]{flag_style1} {time_style0}{time}{time_style1} {str_style0}{string}{str_style1}'
-    flag_len = 7
 
-    def __init__(self, flag: str):
-        self.flag = flag.upper()
-        self.config = {}
+class Markers:
+    __get_time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
+    __template = '{flag_style0}[{flag}]{flag_style1} {time_style0}{time}{time_style1} ' \
+                 '{message_style0}{string}{message_style1}'
+    __flag_len = 7
+
+    def __init__(self, flag_name: str):
+        self.__flag_name = flag_name.upper()
+        self.__config = {}
 
     @classmethod
     def __setting(cls, mode='', fore='', back=''):
@@ -31,32 +33,35 @@ class Markers:
 
         return style, end
 
-    def set_str_style(self, mode='', fore='', back=''):
-        self.config[STR_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+    def message_style(self, mode='', fore='', back=''):
+        self.__config[MESSAGE_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        return self
 
-    def set_time_style(self, mode='', fore='', back=''):
-        self.config[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+    def time_style(self, mode='', fore='', back=''):
+        self.__config[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        return self
 
-    def set_flag_style(self, mode='', fore='', back=''):
-        self.config[FLAG_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+    def flag_style(self, mode='', fore='', back=''):
+        self.__config[FLAG_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        return self
 
     def __user_setting(self):
-        str_style = self.config.get(STR_STYLE, self.__setting())
-        time_style = self.config.get(TIME_STYLE, self.__setting())
-        flag_style = self.config.get(FLAG_STYLE, self.__setting())
-        return self.template.format(flag_style0=flag_style[0],
-                                    flag=self.flag.center(self.flag_len, '-'),
-                                    flag_style1=flag_style[1],
-                                    time_style0=time_style[0],
-                                    time=self.time(),
-                                    time_style1=time_style[1],
-                                    str_style0=str_style[0],
-                                    string='{}',
-                                    str_style1=str_style[1])
+        message_style = self.__config.get(MESSAGE_STYLE, self.__setting())
+        time_style = self.__config.get(TIME_STYLE, self.__setting())
+        flag_style = self.__config.get(FLAG_STYLE, self.__setting())
+        return self.__template.format(flag_style0=flag_style[0],
+                                      flag=self.__flag_name.center(self.__flag_len, '-'),
+                                      flag_style1=flag_style[1],
+                                      time_style0=time_style[0],
+                                      time=self.__get_time(),
+                                      time_style1=time_style[1],
+                                      message_style0=message_style[0],
+                                      string='{}',
+                                      message_style1=message_style[1])
 
     def __call__(self, *args):
-        if not Switch.signal or self.flag.lower() in Switch.filter or \
-                self.flag in Switch.filter:
+        if not Switch.signal or self.__flag_name.lower() in Switch.filter or \
+                self.__flag_name in Switch.filter:
             return
         template = self.__user_setting().replace('{}', len(args) * '{} ')
         print(template.format(*args))

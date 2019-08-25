@@ -8,45 +8,40 @@ pip install colour_printing
   - INFO(默认) 
   - SUCCESS 
   - ERROR 
-  - WARRING 
+  - WARN
 - 过滤器：
   - Switch.filter : list
 - 开关：
   - Switch.signal : bool
 #### 示例
 ```
-import time
-from printing.log import ColourPrint, Switch
-
-
 print('Default Setting!')
-log = ColourPrint()
+  log = ColourPrint()
 
-log("hello world!")
-#Switch.filter.append('SUCCESS') #过滤
-time.sleep(1)
-log("hello world!", flag='ERROR')
-time.sleep(1)
-log("hello world!", flag='SUCCESS')
-time.sleep(1)
-#Switch.signal=False #关闭
-log("hello world!", flag='WARRING')
+  log.info("hello world!")
+
+  #Switch.filter.append('SUCCESS') #过滤
+
+  log.error("hello world!")
+  log.success("hello world!")
+
+  #Switch.signal=False #关闭
+
+  log.warn("hello world!")
 
 ```
 #### 自定义style
 - 查看样式表： print(ColourPrint())
 ```
-print('User Setting!')
+  print('User Setting!')
 
-echo = ColourPrint()
-#创建
-echo.new_flag('Custom')
-#样式设定（可选）
-echo.set_flag_style(flag='Custom', mode='underline')
-echo.set_time_style(flag='Custom', mode='bold', fore='red')
-echo.set_str_style(flag='Custom', back='yellow')
+  class MyColour(ColourPrint):
+      def custom(self):
+          self.debug = self.Markers('debug').flag_style(model='bold').time_style()
+          self.log = self.Markers('log')
 
-echo("hello world!", flag='Custom')
+  echo = MyColour()
+  echo.debug('hello world!')
 
 ```
 

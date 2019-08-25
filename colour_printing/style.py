@@ -38,6 +38,6 @@ STYLE = {
             'end': 0,
         },
 }
-STR_STYLE = 'str_style'
+MESSAGE_STYLE = 'message_style'
 FLAG_STYLE = 'flag_style'
 TIME_STYLE = 'time_style'
