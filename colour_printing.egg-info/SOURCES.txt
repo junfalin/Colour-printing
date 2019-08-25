@@ -3,7 +3,9 @@ README.rst
 setup.py
 colour_printing/__init__.py
 colour_printing/log.py
+colour_printing/markers.py
 colour_printing/style.py
+colour_printing/switch.py
 colour_printing.egg-info/PKG-INFO
 colour_printing.egg-info/SOURCES.txt
 colour_printing.egg-info/dependency_links.txt

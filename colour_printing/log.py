@@ -1,142 +1,44 @@
-from datetime import datetime
-from colour_printing.style import STYLE, STR_STYLE, FLAG_STYLE, TIME_STYLE
+from colour_printing.markers import Markers
 
-
-class Switch:
-    signal: bool = True  # 总开关
-    filter: list = []  # 过滤,指定那些种类不打印
+default_info = "info"
+default_warn = "warn"
+default_success = "success"
+default_error = "error"
 
 
 class ColourPrint:
-    """
-        @format：
-                【flag】time string
-        @usage:
-            default: INFO, ERROR, WARRING, SUCCESS
-                >> log=ColourPrint()
-
-                >> log('hello')
-
-                >> [INFO] 2019-08-11 17:38:20 hello
-
-                >> log('hello',flag='ERROR')
-
-                >> [ERROR] 2019-08-11 17:53:27 hello
-
-            user: flag_name
-                >> log=ColourPrint()
-
-                >> log.new_flag(flag_name)
-                #可选
-                >> log.set_str_style(flag=flag_name,mode='',fore='',back='')
-
-                >> log.set_time_style(...)
-
-                >> log.set_flag_style(...)
-
-        @help:
-                >> print(ColourPrint())
-
-        @attr:
-                self.config={
-                            flag:{
-                                    'str_style':(style,end),
-                                    'flag_style':(style,end),
-                                    'time_style':(style,end),
-                            }
-                }
-    """
-
-    time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-    template = '{flag_style0}[{flag}]{flag_style1} {time_style0}{time}{time_style1} {str_style0}{string}{str_style1}'
-
     def __init__(self):
-        self.switch = Switch
-        self.config = {}
         self.__default_setting()
-        self.flag_len = 7
 
-    @classmethod
-    def __setting(cls, mode='', fore='', back=''):
-        """
-        linxu:转义序列以ESC开头，即ASCII码下的\033
-                   格式: \033[显示方式;前景色;背景色m
-        """
-        mode = '%s' % STYLE['mode'][mode] if STYLE['mode'].get(mode) else ''
-
-        fore = '%s' % STYLE['fore'][fore] if STYLE['fore'].get(fore) else ''
-
-        back = '%s' % STYLE['back'][back] if STYLE['back'].get(back) else ''
-
-        style = ';'.join([s for s in [mode, fore, back] if s])
-
-        style = '\033[%sm' % style if style else ''
-
-        end = '\033[%sm' % STYLE['default']['end'] if style else ''
-
-        return style, end
-
-    def __cal_flag_len(self, flag):
-        if len(flag) > self.flag_len:
-            self.flag_len = len(flag)
-
-    def new_flag(self, flag):
-        self.config.setdefault(flag, {})
-        self.__cal_flag_len(flag)
-
-    def set_str_style(self, flag, mode='', fore='', back=''):
-        self.config.setdefault(flag, {})[STR_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
-        self.__cal_flag_len(flag)
-
-    def set_time_style(self, flag, mode='', fore='', back=''):
-        self.config.setdefault(flag, {})[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
-        self.__cal_flag_len(flag)
-
-    def set_flag_style(self, flag, mode='', fore='', back=''):
-        self.config.setdefault(flag, {})[FLAG_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
-        self.__cal_flag_len(flag)
+    def new_flag(self, flag: str):
+        setattr(self, flag, Markers(flag))
+        if Markers.flag_len < len(flag):
+            Markers.flag_len = len(flag)
 
     def __default_setting(self):
-        self.config.setdefault('INFO', {})[STR_STYLE] = self.__setting(mode='bold', fore='blue')
-        self.config.setdefault('INFO', {})[TIME_STYLE] = self.__setting(mode='invert')
-        self.config.setdefault('INFO', {})[FLAG_STYLE] = self.__setting(mode='bold', fore='blue')
+        info = Markers(default_info)
+        info.set_flag_style(mode='bold', fore='blue')
+        info.set_time_style(mode='invert')
+        info.set_str_style(mode='bold', fore='blue')
+        setattr(self, default_info, info)
 
-        self.config.setdefault('WARRING', {})[STR_STYLE] = self.__setting(mode='bold', fore='yellow')
-        self.config.setdefault('WARRING', {})[TIME_STYLE] = self.__setting(mode='invert')
-        self.config.setdefault('WARRING', {})[FLAG_STYLE] = self.__setting(mode='bold', fore='yellow')
+        warn = Markers(default_warn)
+        warn.set_flag_style(mode='bold', fore='yellow')
+        warn.set_time_style(mode='invert')
+        warn.set_str_style(mode='bold', fore='yellow')
+        setattr(self, default_warn, warn)
 
-        self.config.setdefault('SUCCESS', {})[STR_STYLE] = self.__setting(mode='bold', fore='green')
-        self.config.setdefault('SUCCESS', {})[TIME_STYLE] = self.__setting(mode='invert')
-        self.config.setdefault('SUCCESS', {})[FLAG_STYLE] = self.__setting(mode='bold', fore='green')
+        success = Markers(default_success)
+        success.set_flag_style(mode='bold', fore='green')
+        success.set_time_style(mode='invert')
+        success.set_str_style(mode='bold', fore='green')
+        setattr(self, default_success, success)
 
-        self.config.setdefault('ERROR', {})[STR_STYLE] = self.__setting(mode='bold', fore='red')
-        self.config.setdefault('ERROR', {})[TIME_STYLE] = self.__setting(mode='invert')
-        self.config.setdefault('ERROR', {})[FLAG_STYLE] = self.__setting(mode='bold', fore='red')
-
-    def __user_setting(self, flag):
-        style = self.config.get(flag)
-        if style is None:
-            e = '未知flag "{}",自定义请使用new_flag(),set_*_style()...'.format(flag)
-            raise ValueError(e)
-        str_style = style.get(STR_STYLE, self.__setting())
-        time_style = style.get(TIME_STYLE, self.__setting())
-        flag_style = style.get(FLAG_STYLE, self.__setting())
-        return self.template.format(flag_style0=flag_style[0],
-                                    flag=flag.center(self.flag_len, '-'),
-                                    flag_style1=flag_style[1],
-                                    time_style0=time_style[0],
-                                    time=self.time(),
-                                    time_style1=time_style[1],
-                                    str_style0=str_style[0],
-                                    string='{}',
-                                    str_style1=str_style[1])
-
-    def __call__(self, *args, **kwargs):
-        flag = kwargs.pop('flag', 'INFO')
-        if not self.switch.signal or flag in self.switch.filter:
-            return
-        template = self.__user_setting(flag).replace('{}', len(args) * '{} ')
-        print(template.format(*args))
+        error = Markers(default_error)
+        error.set_flag_style(mode='bold', fore='red')
+        error.set_time_style(mode='invert')
+        error.set_str_style(mode='bold', fore='red')
+        setattr(self, default_error, error)
 
     def __str__(self):
         return """{
@@ -175,5 +77,12 @@ class ColourPrint:
                 },
 
         }"""
+
+
+
+
+
+
+
 
 
