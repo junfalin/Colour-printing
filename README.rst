@@ -40,8 +40,8 @@ Python version: 3.5+
   log.warn("hello world!")
 
   #颜料桶
-  s1 = log.dyestuff('this red', fore='red')
-  s2 = log.dyestuff('this green', fore='green')
+  s1 = log.dyestuff('this red', fore=Fore.RED)
+  s2 = log.dyestuff('this green', fore=Fore.GREEN)
   print(s1, s2)
 
 ===========
@@ -56,8 +56,8 @@ Python version: 3.5+
 
   class MyColour(ColourPrint):
       def custom(self):
-          self.debug = self.Markers('debug').flag_style(model='bold')
-          self.log = self.Markers('log').flag_style(model='hide')
+          self.debug = self.Markers('debug').flag_style(model=Mode.BOLD)
+          self.log = self.Markers('log').flag_style(model=Mode.HIDE)
 
   echo = MyColour()
   echo.debug('hello world!')

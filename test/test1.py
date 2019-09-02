@@ -1,4 +1,4 @@
-from colour_printing import ColourPrint
+from colour_printing import ColourPrint, Mode, Fore, Back
 
 
 class Log(ColourPrint):
@@ -7,10 +7,9 @@ class Log(ColourPrint):
 
 
 log = Log()
-print(log)
 log.debug('123', 'sda', 'sadasd')
 
-s1 = log.dyestuff('this red', fore='red')
+s1 = log.dyestuff('this red', fore=Fore)
 s2 = Log.dyestuff('this green', fore='green')
 s3 = ColourPrint.dyestuff('this blue', fore='blue')
 print(s1, s2, s3)

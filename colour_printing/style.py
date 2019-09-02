@@ -1,3 +1,5 @@
+from enum import Enum
+
 STYLE = {
     'fore':
         {  # 前景色
@@ -25,7 +27,7 @@ STYLE = {
 
     'mode':
         {  # 显示模式
-            'mormal': 0,  # 终端默认设置
+            'normal': 0,  # 终端默认设置
             'bold': 1,  # 高亮显示
             'underline': 4,  # 使用下划线
             'blink': 5,  # 闪烁
@@ -58,3 +60,34 @@ def setting(mode='', fore='', back=''):
     end = '\033[%sm' % STYLE['default']['end'] if style else ''
 
     return style, end
+
+
+class Fore(Enum):
+    BLACK = 'black'
+    RED = 'red'
+    GREEN = 'green'
+    YELLOW = 'yellow'
+    BLUE = 'blue'
+    PURPLE = 'purple'
+    CYAN = 'cyan'
+    WHITE = 'white'
+
+
+class Back(Enum):
+    BLACK = 'black'
+    RED = 'red'
+    GREEN = 'green'
+    YELLOW = 'yellow'
+    BLUE = 'blue'
+    PURPLE = 'purple'
+    CYAN = 'cyan'
+    WHITE = 'white'
+
+
+class Mode(Enum):
+    NORMAL = 'normal'
+    BOLD = 'bold'
+    UNDERLINE = 'underline'
+    BLINK = 'blink'
+    INVERT = 'invert'
+    HIDE = 'hide'
