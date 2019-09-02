@@ -39,6 +39,11 @@ Python version: 3.5+
 
   log.warn("hello world!")
 
+  #颜料桶
+  s1 = log.dyestuff('this red', fore='red')
+  s2 = log.dyestuff('this green', fore='green')
+  print(s1, s2)
+
 ===========
 自定义style
 ===========

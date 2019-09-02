@@ -28,7 +28,10 @@ print('Default Setting!')
   #Switch.signal=False #关闭
 
   log.warn("hello world!")
-
+  #颜料桶
+  s1 = log.dyestuff('this red',fore='red')
+  s2 = log.dyestuff('this green',fore='green')
+  print(s1,s2)
 ```
 #### 自定义style
 - 查看样式表： print(ColourPrint())

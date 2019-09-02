@@ -38,6 +38,23 @@ STYLE = {
             'end': 0,
         },
 }
-MESSAGE_STYLE = 'message_style'
-FLAG_STYLE = 'flag_style'
-TIME_STYLE = 'time_style'
+
+
+def setting(mode='', fore='', back=''):
+    """
+    linxu:转义序列以ESC开头，即ASCII码下的\033
+               格式: \033[显示方式;前景色;背景色m
+    """
+    mode = '%s' % STYLE['mode'][mode] if STYLE['mode'].get(mode) else ''
+
+    fore = '%s' % STYLE['fore'][fore] if STYLE['fore'].get(fore) else ''
+
+    back = '%s' % STYLE['back'][back] if STYLE['back'].get(back) else ''
+
+    style = ';'.join([s for s in [mode, fore, back] if s])
+
+    style = '\033[%sm' % style if style else ''
+
+    end = '\033[%sm' % STYLE['default']['end'] if style else ''
+
+    return style, end

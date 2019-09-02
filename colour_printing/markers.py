@@ -1,6 +1,10 @@
 from datetime import datetime
-from colour_printing.style import STYLE, MESSAGE_STYLE, FLAG_STYLE, TIME_STYLE
+from colour_printing.style import setting
 from colour_printing.switch import Switch
+
+MESSAGE_STYLE = 'message_style'
+FLAG_STYLE = 'flag_style'
+TIME_STYLE = 'time_style'
 
 
 class Markers:
@@ -19,48 +23,28 @@ class Markers:
         if Markers.__flag_len < len(self.__flag_name):
             Markers.__flag_len = len(self.__flag_name)
 
-    @classmethod
-    def __setting(cls, mode='', fore='', back=''):
-        """
-        linxu:转义序列以ESC开头，即ASCII码下的\033
-                   格式: \033[显示方式;前景色;背景色m
-        """
-        mode = '%s' % STYLE['mode'][mode] if STYLE['mode'].get(mode) else ''
-
-        fore = '%s' % STYLE['fore'][fore] if STYLE['fore'].get(fore) else ''
-
-        back = '%s' % STYLE['back'][back] if STYLE['back'].get(back) else ''
-
-        style = ';'.join([s for s in [mode, fore, back] if s])
-
-        style = '\033[%sm' % style if style else ''
-
-        end = '\033[%sm' % STYLE['default']['end'] if style else ''
-
-        return style, end
-
     def message_style(self, mode='', fore='', back=''):
-        self.__config[MESSAGE_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        self.__config[MESSAGE_STYLE] = setting(mode=mode, fore=fore, back=back)
         return self
 
     def time_style(self, mode='', fore='', back=''):
         if mode == 'hide':
             self.__hide.append('time')
         else:
-            self.__config[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+            self.__config[TIME_STYLE] = setting(mode=mode, fore=fore, back=back)
         return self
 
     def flag_style(self, mode='', fore='', back=''):
         if mode == 'hide':
             self.__hide.append('flag')
         else:
-            self.__config[FLAG_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+            self.__config[FLAG_STYLE] = setting(mode=mode, fore=fore, back=back)
         return self
 
     def __user_setting(self):
-        message_style = self.__config.get(MESSAGE_STYLE, self.__setting())
-        time_style = self.__config.get(TIME_STYLE, self.__setting())
-        flag_style = self.__config.get(FLAG_STYLE, self.__setting())
+        message_style = self.__config.get(MESSAGE_STYLE, setting())
+        time_style = self.__config.get(TIME_STYLE, setting())
+        flag_style = self.__config.get(FLAG_STYLE, setting())
         return self.__template.format(flag_style0=flag_style[0],
                                       flag=f"[{self.__flag_name.center(self.__flag_len, '-')}] "
                                       if 'flag' not in self.__hide else "",

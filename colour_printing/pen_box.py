@@ -1,4 +1,5 @@
 from colour_printing.markers import Markers
+from colour_printing.dyestuff import Dyestuff
 
 default_info = "info"
 default_warn = "warn"
@@ -8,6 +9,7 @@ default_error = "error"
 
 class ColourPrint:
     Markers = Markers
+    dyestuff = Dyestuff.dyestuff
 
     def __init__(self):
         self.__default_setting()
