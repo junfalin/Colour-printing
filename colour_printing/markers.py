@@ -5,16 +5,17 @@ from colour_printing.switch import Switch
 
 class Markers:
     __get_time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-    __template = '{flag_style0}[{flag}]{flag_style1} {time_style0}{time}{time_style1} ' \
+    __template = '{flag_style0}{flag}{flag_style1}{time_style0}{time}{time_style1}' \
                  '{message_style0}{string}{message_style1}'
     __flag_len = 7
 
     def __init__(self, flag_name: str):
         self.__flag_name = flag_name.upper()
         self.__config = {}
-        self.cal_flag_len()
+        self.__cal_flag_len()
+        self.__hide = []
 
-    def cal_flag_len(self):
+    def __cal_flag_len(self):
         if Markers.__flag_len < len(self.__flag_name):
             Markers.__flag_len = len(self.__flag_name)
 
@@ -43,11 +44,17 @@ class Markers:
         return self
 
     def time_style(self, mode='', fore='', back=''):
-        self.__config[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        if mode == 'hide':
+            self.__hide.append('time')
+        else:
+            self.__config[TIME_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
         return self
 
     def flag_style(self, mode='', fore='', back=''):
-        self.__config[FLAG_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
+        if mode == 'hide':
+            self.__hide.append('flag')
+        else:
+            self.__config[FLAG_STYLE] = self.__setting(mode=mode, fore=fore, back=back)
         return self
 
     def __user_setting(self):
@@ -55,10 +62,11 @@ class Markers:
         time_style = self.__config.get(TIME_STYLE, self.__setting())
         flag_style = self.__config.get(FLAG_STYLE, self.__setting())
         return self.__template.format(flag_style0=flag_style[0],
-                                      flag=self.__flag_name.center(self.__flag_len, '-'),
+                                      flag=f"[{self.__flag_name.center(self.__flag_len, '-')}] "
+                                      if 'flag' not in self.__hide else "",
                                       flag_style1=flag_style[1],
                                       time_style0=time_style[0],
-                                      time=self.__get_time(),
+                                      time=f"{self.__get_time()} " if 'time' not in self.__hide else '',
                                       time_style1=time_style[1],
                                       message_style0=message_style[0],
                                       string='{}',

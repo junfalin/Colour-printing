@@ -4,7 +4,7 @@
 pip install colour_printing
 ```
 > Support:Python 3.5+
-- 内置类型： 
+- 内置： 
   - info 
   - success 
   - error 

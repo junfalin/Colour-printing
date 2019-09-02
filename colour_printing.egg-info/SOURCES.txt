@@ -10,3 +10,4 @@ colour_printing.egg-info/PKG-INFO
 colour_printing.egg-info/SOURCES.txt
 colour_printing.egg-info/dependency_links.txt
 colour_printing.egg-info/top_level.txt
+test/test1.py

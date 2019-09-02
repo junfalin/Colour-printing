@@ -6,7 +6,7 @@ Colour-printing
 
 Python version: 3.5+
 
-- 内置类型
+- 内置
 
   + info
   + success
@@ -51,8 +51,9 @@ Python version: 3.5+
 
   class MyColour(ColourPrint):
       def custom(self):
-          self.debug = self.Markers('debug').flag_style(model='bold').time_style()
-          self.log = self.Markers('log')
+          self.debug = self.Markers('debug').flag_style(model='bold')
+          self.log = self.Markers('log').flag_style(model='hide')
 
   echo = MyColour()
   echo.debug('hello world!')
+  echo.log('hello world!')
