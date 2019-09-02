@@ -9,13 +9,16 @@ default_error = "error"
 
 class ColourPrint:
     Markers = Markers
-    dyestuff = Dyestuff.dyestuff
 
     def __init__(self):
         self.__default_setting()
 
     def __init_subclass__(cls, **kwargs):
         cls.custom(cls)
+
+    @staticmethod
+    def dyestuff(*args, mode='', fore='', back=''):
+        return Dyestuff.dyestuff(*args, mode=mode, fore=fore, back=back)
 
     def custom(self):
         e = '''

@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: colour-printing
-Version: 0.1.5
+Version: 0.1.6
 Summary: colour-printing
 Home-page: https://github.com/Faithforus/Colour-printing
 Author: faithforus
@@ -46,6 +46,11 @@ Description: ===============
           #Switch.signal=False #关闭
         
           log.warn("hello world!")
+        
+          #颜料桶
+          s1 = log.dyestuff('this red', fore='red')
+          s2 = log.dyestuff('this green', fore='green')
+          print(s1, s2)
         
         ===========
         自定义style

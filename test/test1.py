@@ -7,8 +7,10 @@ class Log(ColourPrint):
 
 
 log = Log()
+print(log)
+log.debug('123', 'sda', 'sadasd')
 
-log.info('123', 'sda', 'sadasd')
 s1 = log.dyestuff('this red', fore='red')
-s2 = log.dyestuff('this green', fore='green')
-print(s1, s2)
+s2 = Log.dyestuff('this green', fore='green')
+s3 = ColourPrint.dyestuff('this blue', fore='blue')
+print(s1, s2, s3)
