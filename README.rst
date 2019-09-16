@@ -30,16 +30,15 @@ Python version: 3.5+
     from colour_printing import log, Switch, cprint, Back, Fore, Mode
 
     log.info("hello world!")
-    # Switch.signal=False #关闭
 
+    # Switch.signal=False #关闭
     # Switch.filter.append('SUCCESS') #过滤
 
     log.error("hello world!")
     log.success("hello world!")
-
-
     log.warn("hello world!")
     log.debug("hello world!")
+
     # 颜料
     cprint('default')
     cprint('hello', fore=Fore.RED)
@@ -63,9 +62,10 @@ Python version: 3.5+
 
     class MyColour(ColourPrint):
         def custom(self):
-            self.test = self.Markers('test').flag_style(fore=Fore.PURPLE, mode=Mode.HIDE).time_style(
-                mode=Mode.INVERT).message_style(
-                fore=Fore.YELLOW)
+            self.test = self.Markers('test')
+            .flag_style(fore=Fore.PURPLE, mode=Mode.HIDE)
+            .time_style(mode=Mode.INVERT)
+            .message_style(fore=Fore.YELLOW)
 
 
     echo = MyColour()
