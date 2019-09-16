@@ -39,7 +39,8 @@ Python version: 3.5+
   log.warn("hello world!")
 
   #彩印
-  cprint('hello',fore=Fore.BLUE)
+  cprint('default')
+  cprint('hello',fore=Fore.RED)
 
 ===========
 自定义style

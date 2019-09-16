@@ -28,7 +28,8 @@ pip install colour_printing
 
   log.warn("hello world!")
   #颜料
-  cprint('hello',fore=Fore.BLUE)
+  cprint('default')
+  cprint('hello',fore=Fore.RED)
 
 ```
 #### 自定义style
