@@ -1,26 +1,12 @@
-from colour_printing.custom import ColourPrint, Mode, Fore, Back
+from colour_printing.custom import ColourPrint, Back, Fore, Mode
 
 
-class Log(ColourPrint):
+class MyColour(ColourPrint):
     def custom(self):
-        self.debug = self.Markers('debug').flag_style(fore=Fore.PURPLE).time_style(mode=Mode.INVERT).message_style(
+        self.debug = self.Markers('debug').flag_style(fore=Fore.PURPLE,mode=Mode.HIDE).time_style(mode=Mode.INVERT).message_style(
             fore=Fore.YELLOW)
 
 
-log = Log()
-log.info(121123213)
-log.info(121123213)
-log.info(121123213)
-log.success(121123213)
-log.success(121123213)
-log.success(121123213)
-log.warn(121123213)
-log.warn(121123213)
-log.warn(121123213)
-log.warn(121123213)
-log.error(121123213)
-log.error(121123213)
-
-log.debug('123', 'sda', 'sadasd')
-log.debug('123', 'sda', 'sadasd')
-log.debug('123', 'sda', 'sadasd')
+echo = MyColour()
+echo.debug('hello world!')
+echo.info(echo)

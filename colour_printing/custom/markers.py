@@ -18,7 +18,7 @@ class Markers:
 
     def __cal_flag_len(self):
         if Markers.__flag_len <= len(self.__flag_name):
-            Markers.__flag_len = len(self.__flag_name)+2
+            Markers.__flag_len = len(self.__flag_name) + 2
 
     def message_style(self, mode='', fore='', back=''):
         self.__config[MESSAGE_STYLE] = setting(mode=mode, fore=fore, back=back)
