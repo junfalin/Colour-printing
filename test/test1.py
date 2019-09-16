@@ -4,9 +4,10 @@ from colour_printing import cprint
 
 class MyColour(ColourPrint):
     def custom(self):
-        self.test = self.Markers('test').flag_style(fore=Fore.CYAN, mode=Mode.HIDE).time_style(
-            mode=Mode.UNDERLINE).message_style(
-            fore=Fore.YELLOW)
+        self.test = self.Markers('test')\
+            .flag_style(fore=Fore.CYAN)\
+            .time_style(mode=Mode.UNDERLINE)\
+            .message_style(fore=Fore.YELLOW)
 
 
 echo = MyColour()

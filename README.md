@@ -45,8 +45,8 @@ pip install colour-printing
     class MyColour(ColourPrint):
         def custom(self):
             self.test = self.Markers('test')
-                        .flag_style(fore=Fore.PURPLE, mode=Mode.HIDE)
-                        .time_style(mode=Mode.INVERT)
+                        .flag_style(fore=Fore.CYAN)
+                        .time_style(mode=Mode.UNDERLINE)
                         .message_style(fore=Fore.YELLOW)
     
     echo = MyColour()
