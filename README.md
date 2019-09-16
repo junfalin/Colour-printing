@@ -15,8 +15,7 @@ pip install colour_printing
   - Switch.signal : bool
 #### 示例
 ```
-print('Default Setting!')
-  log = ColourPrint()
+  from colour_printing import log, Switch,cprint
 
   log.info("hello world!")
 
@@ -28,20 +27,22 @@ print('Default Setting!')
   #Switch.signal=False #关闭
 
   log.warn("hello world!")
-  #颜料桶
-  s1 = log.dyestuff('this red', fore=Fore.RED)
-  s2 = log.dyestuff('this green', fore=Fore.GREEN)
-  print(s1,s2)
+  #颜料
+  cprint('hello',fore=Fore.BLUE)
+
 ```
 #### 自定义style
-- 查看样式表： print(ColourPrint())
+- 查看样式表： 
 ```
-  print('User Setting!')
+  print(log)
+```
+```
+  from colour_printing.custom import ColourPrint, Back, Fore, Mode
+
 
   class MyColour(ColourPrint):
       def custom(self):
-          self.debug = self.Markers('debug').flag_style(model=Mode.BOLD)
-          self.log = self.Markers('log').flag_style(model=Mode.HIDE)
+          self.debug = self.Markers('debug').flag_style(fore=Fore.PURPLE).time_style(mode=Mode.INVERT).message_style(fore=Fore.YELLOW)
 
   echo = MyColour()
   echo.debug('hello world!')

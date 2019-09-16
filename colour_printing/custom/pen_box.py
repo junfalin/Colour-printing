@@ -1,5 +1,4 @@
-from colour_printing.markers import Markers
-from colour_printing.dyestuff import Dyestuff
+from colour_printing.custom.markers import Markers
 
 default_info = "info"
 default_warn = "warn"
@@ -15,10 +14,6 @@ class ColourPrint:
 
     def __init_subclass__(cls, **kwargs):
         cls.custom(cls)
-
-    @staticmethod
-    def dyestuff(*args, mode='', fore='', back=''):
-        return Dyestuff.dyestuff(*args, mode=mode, fore=fore, back=back)
 
     def custom(self):
         e = '''
@@ -68,3 +63,6 @@ class ColourPrint:
                         'invert': 反白显示
                         'hide': 不可见
             """
+
+
+log = ColourPrint()

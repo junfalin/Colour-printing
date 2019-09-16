@@ -1,3 +1,3 @@
-from colour_printing.pen_box import ColourPrint
+from colour_printing.custom.pen_box import log
 from colour_printing.switch import Switch
-from colour_printing.style import Mode, Back, Fore
+from colour_printing.cprint import cprint

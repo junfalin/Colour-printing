@@ -1,5 +1,3 @@
-from enum import Enum
-
 STYLE = {
     'fore':
         {  # 前景色
@@ -62,7 +60,7 @@ def setting(mode='', fore='', back=''):
     return style, end
 
 
-class Fore(Enum):
+class Fore(dict):
     BLACK = 'black'
     RED = 'red'
     GREEN = 'green'
@@ -73,7 +71,7 @@ class Fore(Enum):
     WHITE = 'white'
 
 
-class Back(Enum):
+class Back(dict):
     BLACK = 'black'
     RED = 'red'
     GREEN = 'green'
@@ -84,7 +82,7 @@ class Back(Enum):
     WHITE = 'white'
 
 
-class Mode(Enum):
+class Mode(dict):
     NORMAL = 'normal'
     BOLD = 'bold'
     UNDERLINE = 'underline'
