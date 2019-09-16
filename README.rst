@@ -25,7 +25,7 @@ Python version: 3.5+
 
 ::
 
-  from colour_printing import log, Switch,cprint
+  from colour_printing import log, Switch,cprint,Back, Fore, Mode
 
   log.info("hello world!")
 

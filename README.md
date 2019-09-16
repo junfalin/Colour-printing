@@ -15,7 +15,7 @@ pip install colour_printing
   - Switch.signal : bool
 #### 示例
 ```
-  from colour_printing import log, Switch,cprint
+  from colour_printing import log, Switch,cprint,Back, Fore, Mode
 
   log.info("hello world!")
 
