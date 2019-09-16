@@ -1,9 +1,0 @@
-README.md
-setup.py
-printing/__init__.py
-printing/log.py
-printing/style.py
-printing.egg-info/PKG-INFO
-printing.egg-info/SOURCES.txt
-printing.egg-info/dependency_links.txt
-printing.egg-info/top_level.txt
