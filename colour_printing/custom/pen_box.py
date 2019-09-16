@@ -26,23 +26,23 @@ class ColourPrint:
 
     def __default_setting(self):
         self.info = Markers(default_info) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.BLUE).time_style(mode=Mode.INVERT, fore=Fore.BLUE).message_style(
+            .flag_style(mode=Mode.INVERT, fore=Fore.BLUE).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.BLUE)
 
         self.warn = Markers(default_warn) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.YELLOW).time_style(mode=Mode.INVERT, fore=Fore.YELLOW).message_style(
+            .flag_style(mode=Mode.INVERT, fore=Fore.YELLOW).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.YELLOW)
 
         self.success = Markers(default_success) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.GREEN).time_style(mode=Mode.INVERT, fore=Fore.GREEN).message_style(
+            .flag_style(mode=Mode.INVERT, fore=Fore.GREEN).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.GREEN)
 
         self.error = Markers(default_error) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.RED).time_style(mode=Mode.INVERT, fore=Fore.RED).message_style(
+            .flag_style(mode=Mode.INVERT, fore=Fore.RED).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.RED)
 
         self.debug = Markers(default_debug) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.PURPLE).time_style(mode=Mode.INVERT, fore=Fore.PURPLE).message_style(
+            .flag_style(mode=Mode.INVERT, fore=Fore.PURPLE).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.PURPLE)
 
     def __str__(self):
