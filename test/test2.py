@@ -13,4 +13,3 @@ log.warn("hello world!")
 # 颜料
 cprint('default')
 cprint('hello', fore=Fore.RED)
-print(123)
