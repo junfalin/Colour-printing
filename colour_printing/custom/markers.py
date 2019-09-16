@@ -8,7 +8,7 @@ TIME_STYLE = 'time_style'
 
 
 class Markers:
-    __get_time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
+    __get_time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
     __flag_len = 7
 
     def __init__(self, flag_name: str):
@@ -18,7 +18,7 @@ class Markers:
 
     def __cal_flag_len(self):
         if Markers.__flag_len < len(self.__flag_name):
-            Markers.__flag_len = len(self.__flag_name)
+            Markers.__flag_len = len(self.__flag_name)+2
 
     def message_style(self, mode='', fore='', back=''):
         self.__config[MESSAGE_STYLE] = setting(mode=mode, fore=fore, back=back)
@@ -36,7 +36,7 @@ class Markers:
         message_style = self.__config.get(MESSAGE_STYLE, setting())
         time_style = self.__config.get(TIME_STYLE, setting())
         flag_style = self.__config.get(FLAG_STYLE, setting())
-        flag = '{0}{1}{2}'.format(flag_style[0], f"[{self.__flag_name.center(self.__flag_len, '-')}]", flag_style[1])
+        flag = '{0}{1}{2}'.format(flag_style[0], f"[{self.__flag_name.center(self.__flag_len, '_')}]", flag_style[1])
         time = '{0}{1}{2}'.format(time_style[0], self.__get_time(), time_style[1])
         return flag, time, message_style
 

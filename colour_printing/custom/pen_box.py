@@ -1,4 +1,5 @@
 from colour_printing.custom.markers import Markers
+from colour_printing.custom.style import Back, Mode, Fore
 
 default_info = "info"
 default_warn = "warn"
@@ -24,16 +25,20 @@ class ColourPrint:
 
     def __default_setting(self):
         self.info = Markers(default_info) \
-            .flag_style(mode='bold', fore='blue').time_style(mode='invert').message_style(mode='bold', fore='blue')
+            .flag_style(mode=Mode.BOLD, fore=Fore.BLUE).time_style(mode=Mode.INVERT).message_style(mode=Mode.BOLD,
+                                                                                                   fore=Fore.BLUE)
 
         self.warn = Markers(default_warn) \
-            .flag_style(mode='bold', fore='yellow').time_style(mode='invert').message_style(mode='bold', fore='yellow')
+            .flag_style(mode=Mode.BOLD, fore=Fore.YELLOW).time_style(mode=Mode.INVERT).message_style(mode=Mode.BOLD,
+                                                                                                     fore=Fore.YELLOW)
 
         self.success = Markers(default_success) \
-            .flag_style(mode='bold', fore='green').time_style(mode='invert').message_style(mode='bold', fore='green')
+            .flag_style(mode=Mode.BOLD, fore=Fore.GREEN).time_style(mode=Mode.INVERT).message_style(mode=Mode.BOLD,
+                                                                                                    fore=Fore.GREEN)
 
         self.error = Markers(default_error) \
-            .flag_style(mode='bold', fore='red').time_style(mode='invert').message_style(mode='bold', fore='red')
+            .flag_style(mode=Mode.BOLD, fore=Fore.RED).time_style(mode=Mode.INVERT).message_style(mode=Mode.BOLD,
+                                                                                                  fore=Fore.RED)
 
     def __str__(self):
         return """

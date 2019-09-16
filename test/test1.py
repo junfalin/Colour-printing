@@ -8,4 +8,19 @@ class Log(ColourPrint):
 
 
 log = Log()
+log.info(121123213)
+log.info(121123213)
+log.info(121123213)
+log.success(121123213)
+log.success(121123213)
+log.success(121123213)
+log.warn(121123213)
+log.warn(121123213)
+log.warn(121123213)
+log.warn(121123213)
+log.error(121123213)
+log.error(121123213)
+
+log.debug('123', 'sda', 'sadasd')
+log.debug('123', 'sda', 'sadasd')
 log.debug('123', 'sda', 'sadasd')
