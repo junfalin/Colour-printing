@@ -5,6 +5,7 @@ default_info = "info"
 default_warn = "warn"
 default_success = "success"
 default_error = "error"
+default_debug = "debug"
 
 
 class ColourPrint:
@@ -25,20 +26,24 @@ class ColourPrint:
 
     def __default_setting(self):
         self.info = Markers(default_info) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.BLUE).time_style(mode=Mode.INVERT).message_style(mode=Mode.BOLD,
-                                                                                                   fore=Fore.BLUE)
+            .flag_style(mode=Mode.BOLD, fore=Fore.BLUE).time_style(mode=Mode.INVERT, fore=Fore.BLUE).message_style(
+            fore=Fore.BLUE)
 
         self.warn = Markers(default_warn) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.YELLOW).time_style(mode=Mode.INVERT).message_style(mode=Mode.BOLD,
-                                                                                                     fore=Fore.YELLOW)
+            .flag_style(mode=Mode.BOLD, fore=Fore.YELLOW).time_style(mode=Mode.INVERT, fore=Fore.YELLOW).message_style(
+            fore=Fore.YELLOW)
 
         self.success = Markers(default_success) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.GREEN).time_style(mode=Mode.INVERT).message_style(mode=Mode.BOLD,
-                                                                                                    fore=Fore.GREEN)
+            .flag_style(mode=Mode.BOLD, fore=Fore.GREEN).time_style(mode=Mode.INVERT, fore=Fore.GREEN).message_style(
+            fore=Fore.GREEN)
 
         self.error = Markers(default_error) \
-            .flag_style(mode=Mode.BOLD, fore=Fore.RED).time_style(mode=Mode.INVERT).message_style(mode=Mode.BOLD,
-                                                                                                  fore=Fore.RED)
+            .flag_style(mode=Mode.BOLD, fore=Fore.RED).time_style(mode=Mode.INVERT, fore=Fore.RED).message_style(
+            fore=Fore.RED)
+
+        self.debug = Markers(default_debug) \
+            .flag_style(mode=Mode.BOLD, fore=Fore.PURPLE).time_style(mode=Mode.INVERT, fore=Fore.PURPLE).message_style(
+            fore=Fore.PURPLE)
 
     def __str__(self):
         return """
