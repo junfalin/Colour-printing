@@ -32,7 +32,7 @@ pip install colour_printing
   cprint('hello',fore=Fore.RED)
 
 ```
-![a](https://github.com/Faithforus/Colour-printing/blob/master/default.png ''默认样式'')
+![image](https://github.com/Faithforus/Colour-printing/blob/master/default.png)
 #### 自定义style
 - 查看样式表： 
 ```
@@ -51,7 +51,7 @@ pip install colour_printing
 
 ```
 
-![b](https://github.com/Faithforus/Colour-printing/blob/master/style.png ''自定义样式'')
+![image](https://github.com/Faithforus/Colour-printing/blob/master/style.png)
 
 
 > 参考：[@JeanCheng](https://blog.csdn.net/gatieme/article/details/45439671)
