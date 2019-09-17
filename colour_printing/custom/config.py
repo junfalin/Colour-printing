@@ -78,7 +78,8 @@ def new_pyfile_template(term):
 """
     level_list = ['info', 'error', 'success', 'debug', 'warn']
     # lib
-    res += """from datetime import datetime\n\nget_time = lambda : datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n\n"""
+    res += """from datetime import datetime\nfrom colour_printing import Mode, Fore, Back
+\n\nget_time = lambda : datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n\n"""
     # default
     for t in term:
         res += f'{t.upper()}_DEFAULT = lambda: ""\n\n'
@@ -88,9 +89,9 @@ def new_pyfile_template(term):
         for t in term:
             temp = """
     '%s': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 """ % t
             res += temp

@@ -81,6 +81,9 @@ pip install colour-printing
 - setting.py (配置文件):  **_DEFAULT ：由lambda 实现
 
 
+![**_config.py](https://github.com/Faithforus/Colour-printing/blob/master/printme.png)
+
+
 
 
 

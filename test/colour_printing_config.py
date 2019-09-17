@@ -13,6 +13,8 @@
 #########################################################################################
 """
 from datetime import datetime
+from colour_printing import Mode, Fore, Back
+
 
 get_time = lambda : datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
 
@@ -22,71 +24,71 @@ MESSAGE_DEFAULT = lambda: ""
 
 INFO = {
     'time': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 
     'message': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 }
 
 ERROR = {
     'time': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 
     'message': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 }
 
 SUCCESS = {
     'time': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 
     'message': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 }
 
 DEBUG = {
     'time': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 
     'message': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 }
 
 WARN = {
     'time': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 
     'message': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
+        "fore": Fore,
+        "back": Back,
+        "mode": Mode,
     },
 }
 
