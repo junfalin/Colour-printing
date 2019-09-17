@@ -64,11 +64,15 @@ pip install colour-printing
 ```
     from colour_printing.custom import PrintMe
 
-    pe = PrintMe(template='{time}:{message}',config_filename='myconfig')    #config_filename(可选)不存在则创建   
+    pe = PrintMe(template='{time}:{message}',config_filename='myconfig')
+    #config_filename(可选)不存在则创建 ,默认为colour_printing_config.py  
+
     pe.info('hello')
     pe.info('hello')
+
     #pe.switch = False
     #pe.filter.append('info')
+
     pe.info('hello')
     pe.info('hello')
     pe.error('hello')
@@ -80,7 +84,7 @@ pip install colour-printing
 - template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
 - setting.py (配置文件):  **_DEFAULT ：由lambda 实现
 
-
+- myconfig.py(无需创建)
 ![**_config.py](https://github.com/Faithforus/Colour-printing/blob/master/printme.png)
 
 

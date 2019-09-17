@@ -40,11 +40,11 @@ class Pen(object):
         time = '{0}{1}{2}'.format(time_style[0], self.__get_time(), time_style[1])
         return flag, time, message_style
 
-    def __call__(self, *args):
+    def __call__(self, *args, **kwargs):
         if not Switch.signal or self.__flag_name.lower() in Switch.filter or self.__flag_name in Switch.filter:
             return
         flag, time, message_style = self.__user_setting()
         str_temp = []
         for s in args:
             str_temp.append(f'{message_style[0]}{s}{message_style[1]}')
-        print(time, flag, *str_temp)
+        print(time, flag, *str_temp, **kwargs)
