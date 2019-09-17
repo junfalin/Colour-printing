@@ -50,52 +50,36 @@ class PrintMe(object):
                     sett = setting(**v[t])
                     style.update({f'{t}0': sett[0], f'{t}1': sett[1]})
 
-    @level_wrap
-    def info(self, *args, **kwargs):
-        style = self.box['INFO']
+    def show(self, style, *args, **kwargs):
         data = {}
         for i in self.term:
             data[i] = kwargs.pop(i, self.default[i]())
         data.update(style)
         data['message'] = " ".join([str(i) for i in args])
-        print(self.template.format(**data))
+        print(self.template.format(**data), sep=kwargs.get('sep', " "), end=kwargs.get('end', "\n"),
+              file=kwargs.get('file', None))
+
+    @level_wrap
+    def info(self, *args, **kwargs):
+        style = self.box['INFO']
+        self.show(style, *args, **kwargs)
 
     @level_wrap
     def debug(self, *args, **kwargs):
         style = self.box['DEBUG']
-        data = {}
-        for i in self.term:
-            data[i] = kwargs.pop(i, self.default[i]())
-        data.update(style)
-        data['message'] = " ".join([str(i) for i in args])
-        print(self.template.format(**data))
+        self.show(style, *args, **kwargs)
 
     @level_wrap
     def error(self, *args, **kwargs):
         style = self.box['ERROR']
-        data = {}
-        for i in self.term:
-            data[i] = kwargs.pop(i, self.default[i]())
-        data.update(style)
-        data['message'] = " ".join([str(i) for i in args])
-        print(self.template.format(**data))
+        self.show(style, *args, **kwargs)
 
     @level_wrap
     def warn(self, *args, **kwargs):
         style = self.box['WARN']
-        data = {}
-        for i in self.term:
-            data[i] = kwargs.pop(i, self.default[i]())
-        data.update(style)
-        data['message'] = " ".join([str(i) for i in args])
-        print(self.template.format(**data))
+        self.show(self, style, *args, **kwargs)
 
     @level_wrap
     def success(self, *args, **kwargs):
         style = self.box['SUCCESS']
-        data = {}
-        for i in self.term:
-            data[i] = kwargs.pop(i, self.default[i]())
-        data.update(style)
-        data['message'] = " ".join([str(i) for i in args])
-        print(self.template.format(**data))
+        self.show(style, *args, **kwargs)

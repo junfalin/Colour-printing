@@ -82,9 +82,7 @@ pip install colour-printing
 ```
 > 需要注意 
 - template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
-- setting.py (配置文件):  **_DEFAULT ：由lambda 实现
-
-- myconfig.py(无需创建)
+- myconfig.py (配置文件)如下图:  **_DEFAULT ：需由lambda 实现
 ![**_config.py](https://github.com/Faithforus/Colour-printing/blob/master/printme.png)
 
 
