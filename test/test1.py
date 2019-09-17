@@ -1,10 +1,10 @@
-from colour_printing.custom import ColourPrint, Back, Fore, Mode
+from colour_printing import ColourPrint, Back, Fore, Mode
 from colour_printing import cprint
 
 
 class MyColour(ColourPrint):
     def custom(self):
-        self.test = self.Markers('test')\
+        self.test = self.Pen('test')\
             .flag_style(fore=Fore.CYAN)\
             .time_style(mode=Mode.UNDERLINE)\
             .message_style(fore=Fore.YELLOW)

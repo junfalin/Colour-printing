@@ -1,5 +1,5 @@
 from datetime import datetime
-from colour_printing.custom.style import setting
+from colour_printing.style import setting
 from colour_printing.switch import Switch
 
 MESSAGE_STYLE = 'message_style'
@@ -7,7 +7,7 @@ FLAG_STYLE = 'flag_style'
 TIME_STYLE = 'time_style'
 
 
-class Markers:
+class Pen(object):
     __get_time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
     __flag_len = 7
 
@@ -17,8 +17,8 @@ class Markers:
         self.__cal_flag_len()
 
     def __cal_flag_len(self):
-        if Markers.__flag_len < len(self.__flag_name):
-            Markers.__flag_len = len(self.__flag_name)
+        if Pen.__flag_len < len(self.__flag_name):
+            Pen.__flag_len = len(self.__flag_name)
 
     def message_style(self, mode='', fore='', back=''):
         self.__config[MESSAGE_STYLE] = setting(mode=mode, fore=fore, back=back)

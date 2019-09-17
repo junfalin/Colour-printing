@@ -1,5 +1,5 @@
-from colour_printing.custom.markers import Markers
-from colour_printing.custom.style import Back, Mode, Fore
+from colour_printing.pen import Pen
+from colour_printing.style import Mode, Fore
 
 default_info = "info"
 default_warn = "warn"
@@ -8,8 +8,8 @@ default_error = "error"
 default_debug = "debug"
 
 
-class ColourPrint:
-    Markers = Markers
+class ColourPrint(object):
+    Pen = Pen
 
     def __init__(self):
         self.__default_setting()
@@ -25,23 +25,23 @@ class ColourPrint:
         raise NotImplementedError(e)
 
     def __default_setting(self):
-        self.info = Markers(default_info) \
+        self.info = Pen(default_info) \
             .flag_style(mode=Mode.INVERT, fore=Fore.BLUE).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.BLUE)
 
-        self.warn = Markers(default_warn) \
+        self.warn = Pen(default_warn) \
             .flag_style(mode=Mode.INVERT, fore=Fore.YELLOW).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.YELLOW)
 
-        self.success = Markers(default_success) \
+        self.success = Pen(default_success) \
             .flag_style(mode=Mode.INVERT, fore=Fore.GREEN).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.GREEN)
 
-        self.error = Markers(default_error) \
+        self.error = Pen(default_error) \
             .flag_style(mode=Mode.INVERT, fore=Fore.RED).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.RED)
 
-        self.debug = Markers(default_debug) \
+        self.debug = Pen(default_debug) \
             .flag_style(mode=Mode.INVERT, fore=Fore.PURPLE).time_style(fore=Fore.CYAN).message_style(
             fore=Fore.PURPLE)
 
