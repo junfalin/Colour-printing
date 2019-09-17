@@ -1,3 +1,5 @@
+
+"""
 #                     *Colour-printing Reference*
 #########################################################################################
 #   @'fore': # 前景色         @'back':# 背景              @'mode':# 显示模式               # 
@@ -10,153 +12,146 @@
 #            'cyan':  青蓝色          'cyan':  青蓝色                                     #
 #            'white':  白色           'white':  白色                                     #
 #########################################################################################
+"""
+from datetime import datetime
+
+get_time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
+
+TIME_DEFAULT = lambda: ""
+
+NAME_DEFAULT = lambda: ""
+
+LEVEL_DEFAULT = lambda: ""
+
+MESSAGE_DEFAULT = lambda: ""
 
 INFO = {
     'time': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'name': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'level': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
-    'msg': {
-        "fore": "",
+    'message': {
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 }
 
 ERROR = {
     'time': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'name': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'level': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
-    'msg': {
-        "fore": "",
+    'message': {
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 }
 
 SUCCESS = {
     'time': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'name': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'level': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
-    'msg': {
-        "fore": "",
+    'message': {
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 }
 
 DEBUG = {
     'time': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'name': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'level': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
-    'msg': {
-        "fore": "",
+    'message': {
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 }
 
 WARN = {
     'time': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'name': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
     'level': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 
-    'msg': {
-        "fore": "",
+    'message': {
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 }
+

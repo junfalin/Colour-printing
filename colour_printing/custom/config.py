@@ -3,8 +3,6 @@ import os
 import pkgutil
 import sys
 import types
-from configparser import ConfigParser
-
 from flask._compat import string_types
 from werkzeug.utils import import_string
 
@@ -62,37 +60,41 @@ def _matching_loader_thinks_module_is_package(loader, mod_name):
         loader.__class__.__name__)
 
 
-def new_config_template(term):
-    res = """#                     *Colour-printing Reference*
-#########################################################################################
-#   @'fore': # 前景色         @'back':# 背景              @'mode':# 显示模式               # 
-#            'black': 黑色            'black':  黑色              'normal': 终端默认设置   # 
-#            'red': 红色              'red':  红色                'bold':  高亮显示        # 
-#            'green': 绿色            'green': 绿色               'underline':  使用下划线 #
-#            'yellow': 黄色           'yellow': 黄色              'blink': 闪烁           # 
-#            'blue':  蓝色            'blue':  蓝色               'invert': 反白显示       #    
-#            'purple':  紫红色        'purple':  紫红色            'hide': 不可见          #    
-#            'cyan':  青蓝色          'cyan':  青蓝色                                     #
-#            'white':  白色           'white':  白色                                     #
-#########################################################################################
-"""
-    level_list = ['info', 'error', 'success', 'debug', 'warn']
-    for t in term:
-        for l in level_list:
-            temp = f"""
-[{t}_{l}]
-level = {l}
-default = 
-back = 
-fore = 
-mode = 
-"""
-            res += temp
-    return res
+"""从.config文件导入"""  # 暂时搁置
+# def new_config_template(term):
+#     res = """#                     *Colour-printing Reference*
+# #########################################################################################
+# #   @'fore': # 前景色         @'back':# 背景              @'mode':# 显示模式               #
+# #            'black': 黑色            'black':  黑色              'normal': 终端默认设置   #
+# #            'red': 红色              'red':  红色                'bold':  高亮显示        #
+# #            'green': 绿色            'green': 绿色               'underline':  使用下划线 #
+# #            'yellow': 黄色           'yellow': 黄色              'blink': 闪烁           #
+# #            'blue':  蓝色            'blue':  蓝色               'invert': 反白显示       #
+# #            'purple':  紫红色        'purple':  紫红色            'hide': 不可见          #
+# #            'cyan':  青蓝色          'cyan':  青蓝色                                     #
+# #            'white':  白色           'white':  白色                                     #
+# #########################################################################################
+# """
+#     level_list = ['info', 'error', 'success', 'debug', 'warn']
+#     for t in term:
+#         for l in level_list:
+#             temp = f"""
+# [{t}_{l}]
+# level = {l}
+# default =
+# back =
+# fore =
+# mode =
+# """
+#             res += temp
+#     return res
+
+"""从.py文件导入"""
 
 
 def new_pyfile_template(term):
-    res = """#                     *Colour-printing Reference*
+    res = """\"""
+#                     *Colour-printing Reference*
 #########################################################################################
 #   @'fore': # 前景色         @'back':# 背景              @'mode':# 显示模式               # 
 #            'black': 黑色            'black':  黑色              'normal': 终端默认设置   # 
@@ -104,18 +106,23 @@ def new_pyfile_template(term):
 #            'cyan':  青蓝色          'cyan':  青蓝色                                     #
 #            'white':  白色           'white':  白色                                     #
 #########################################################################################
-
+\"""
 """
     level_list = ['info', 'error', 'success', 'debug', 'warn']
+    # lib
+    res += """from datetime import datetime\n\nget_time = lambda : datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n\n"""
+    # default
+    for t in term:
+        res += f'{t.upper()}_DEFAULT = lambda: ""\n\n'
+    # style
     for l in level_list:
         res += "%s = {" % l.upper()
         for t in term:
             temp = """
     '%s': {
-        "fore": "",
+        "fore": "red",
         "back": "",
         "mode": "",
-        "default": "",
     },
 """ % t
             res += temp
@@ -123,26 +130,26 @@ def new_pyfile_template(term):
     return res
 
 
-class Config(object):
-    def __init__(self, import_name, term, root_path=None):
+class Config(dict):
+    def __init__(self, import_name, printme, root_path=None):
+        dict.__init__(self)
         self.import_name = import_name
         self.name = 'yeah'
-
+        self.printme = printme
         if root_path:
             self.root_path = root_path
         else:
             self.root_path = self.auto_find_instance_path()
-        self.config = ConfigParser()
-        self.create_config_file(term)
-        self.create_py_file(term)
 
-    def create_config_file(self, term):
-        with open(self.root_path + '/colour_printing.config', 'w')as f:
-            f.write(new_config_template(term))
+    #     self.config = ConfigParser()
 
-    def create_py_file(self, term):
-        with open(self.root_path + '/colour_printing_setting.py', 'w')as f:
-            f.write(new_pyfile_template(term))
+    # def create_config_file(self, term):
+    #     with open(self.root_path + '/colour_printing.config', 'w')as f:
+    #         f.write(new_config_template(term))
+
+    def create_py_file(self, filename):
+        with open(filename, 'w')as f:
+            f.write(new_pyfile_template(self.printme.term))
 
     def auto_find_instance_path(self):
         prefix, package_path = find_package(self.import_name)
@@ -150,12 +157,16 @@ class Config(object):
             return os.path.join(package_path)
         return os.path.join(prefix, 'var', self.name + '-instance')
 
-    def from_config_file(self, filename):
-        self.config.read(filename)
-        print(self.config.items('name_info'))
+    # def from_config_file(self, filename):
+    #     self.config.read(filename)
 
     def from_pyfile(self, filename, silent=False):
-        filename = os.path.join(self.root_path, filename)
+        if not filename.endswith('.py'):
+            filename = filename + '.py'
+        file_path = os.path.join(self.root_path, filename)
+        if not os.path.exists(file_path):
+            self.create_py_file(file_path)
+            print(f'[!]Tip:: {filename}文件不存在,现已创建at: {file_path}')
         d = types.ModuleType('config')
         d.__file__ = filename
         try:
@@ -185,8 +196,4 @@ class Config(object):
         for key in dir(obj):
             if key.isupper():
                 self[key] = getattr(obj, key)
-
-
-if __name__ == '__main__':
-    c = Config(__name__, ['time', 'name', 'level', 'msg'])
-    c.from_config_file('colour_printing.config')
+        self.printme.set_config()  # 渲染
