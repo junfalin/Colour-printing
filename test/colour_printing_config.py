@@ -1,4 +1,3 @@
-
 """
 #                     *Colour-printing Reference*
 #########################################################################################
@@ -15,30 +14,14 @@
 """
 from datetime import datetime
 
-get_time = lambda _: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
+get_time = lambda : datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 TIME_DEFAULT = lambda: ""
-
-NAME_DEFAULT = lambda: ""
-
-LEVEL_DEFAULT = lambda: ""
 
 MESSAGE_DEFAULT = lambda: ""
 
 INFO = {
     'time': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
-    'name': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
-    'level': {
         "fore": "red",
         "back": "",
         "mode": "",
@@ -58,18 +41,6 @@ ERROR = {
         "mode": "",
     },
 
-    'name': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
-    'level': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
     'message': {
         "fore": "red",
         "back": "",
@@ -79,18 +50,6 @@ ERROR = {
 
 SUCCESS = {
     'time': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
-    'name': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
-    'level': {
         "fore": "red",
         "back": "",
         "mode": "",
@@ -110,18 +69,6 @@ DEBUG = {
         "mode": "",
     },
 
-    'name': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
-    'level': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
     'message': {
         "fore": "red",
         "back": "",
@@ -131,18 +78,6 @@ DEBUG = {
 
 WARN = {
     'time': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
-    'name': {
-        "fore": "red",
-        "back": "",
-        "mode": "",
-    },
-
-    'level': {
         "fore": "red",
         "back": "",
         "mode": "",

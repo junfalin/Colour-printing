@@ -1,4 +1,4 @@
-from colour_printing.pen import Pen
+from colour_printing.default.pen import Pen
 from colour_printing.style import Mode, Fore
 
 default_info = "info"

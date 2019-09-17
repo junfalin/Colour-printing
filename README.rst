@@ -27,7 +27,8 @@ Python version: 3.5+
 
 ::
 
-    from colour_printing import log, Switch, cprint, Back, Fore, Mode
+    from colour_printing.default import log, Switch, Back, Fore, Mode
+    from colour_printing import cprint
 
     log.info("hello world!")
 
@@ -45,8 +46,8 @@ Python version: 3.5+
 
 
 
-自定义style
-===========
+默认模板style
+=============
 
 - 查看样式表：
 
@@ -70,4 +71,30 @@ Python version: 3.5+
 
     echo = MyColour()
     echo.test('hello world!')
+
+
+自定义模板/style
+===================
+
+::
+    from colour_printing.custom import PrintMe
+
+    pe = PrintMe(template='{time}:{message}',config_filename='myconfig')    #config_filename(可选)不存在则创建
+    pe.info('hello')
+    pe.info('hello')
+    #pe.switch = False
+    #pe.filter.append('info')
+    pe.info('hello')
+    pe.info('hello')
+    pe.error('hello')
+    pe.error('hello')
+
+
+需要注意
+
+  + template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
+
+  + setting.py (配置文件):  ××_DEFAULT ：由lambda 实现
+
+
 

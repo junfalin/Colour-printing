@@ -1,65 +1,33 @@
 import errno
 import os
-import pkgutil
 import sys
 import types
-from flask._compat import string_types
-from werkzeug.utils import import_string
 
 
-def find_package(import_name):
-    root_mod_name = import_name.split('.')[0]
-    loader = pkgutil.get_loader(root_mod_name)
-    if loader is None or import_name == '__main__':
-        package_path = os.getcwd()
-    else:
-        if hasattr(loader, 'get_filename'):
-            filename = loader.get_filename(root_mod_name)
-        elif hasattr(loader, 'archive'):
-            filename = loader.archive
-        else:
+def import_string(import_name, silent=False):
+    import_name = str(import_name).replace(":", ".")
+    try:
+        try:
             __import__(import_name)
-            filename = sys.modules[import_name].__file__
-        package_path = os.path.abspath(os.path.dirname(filename))
-        if _matching_loader_thinks_module_is_package(
-                loader, root_mod_name):
-            package_path = os.path.dirname(package_path)
-
-    site_parent, site_folder = os.path.split(package_path)
-    py_prefix = os.path.abspath(sys.prefix)
-    if package_path.startswith(py_prefix):
-        return py_prefix, package_path
-    elif site_folder.lower() == 'site-packages':
-        parent, folder = os.path.split(site_parent)
-        # Windows like installations
-        if folder.lower() == 'lib':
-            base_dir = parent
-        elif os.path.basename(parent).lower() == 'lib':
-            base_dir = os.path.dirname(parent)
+        except ImportError:
+            if "." not in import_name:
+                raise
         else:
-            base_dir = site_parent
-        return base_dir, package_path
-    return None, package_path
+            return sys.modules[import_name]
+
+        module_name, obj_name = import_name.rsplit(".", 1)
+        module = __import__(module_name, globals(), locals(), [obj_name])
+        try:
+            return getattr(module, obj_name)
+        except AttributeError as e:
+            raise ImportError(e)
+
+    except ImportError as e:
+        raise e
 
 
-def _matching_loader_thinks_module_is_package(loader, mod_name):
-    if hasattr(loader, 'is_package'):
-        return loader.is_package(mod_name)
-    # importlib's namespace loaders do not have this functionality but
-    # all the modules it loads are packages, so we can take advantage of
-    # this information.
-    elif (loader.__class__.__module__ == '_frozen_importlib' and
-          loader.__class__.__name__ == 'NamespaceLoader'):
-        return True
-    # Otherwise we need to fail with an error that explains what went
-    # wrong.
-    raise AttributeError(
-        ('%s.is_package() method is missing but is required by CtpBee of '
-         'PEP 302 import hooks.  If you do not use import hooks and '
-         'you encounter this error please file a bug against Flask.') %
-        loader.__class__.__name__)
-
-
+string_types = (str,)
+integer_types = (int,)
 """从.config文件导入"""  # 暂时搁置
 # def new_config_template(term):
 #     res = """#                     *Colour-printing Reference*
@@ -131,15 +99,10 @@ def new_pyfile_template(term):
 
 
 class Config(dict):
-    def __init__(self, import_name, printme, root_path=None):
+    def __init__(self, printme, root_path):
         dict.__init__(self)
-        self.import_name = import_name
-        self.name = 'yeah'
         self.printme = printme
-        if root_path:
-            self.root_path = root_path
-        else:
-            self.root_path = self.auto_find_instance_path()
+        self.root_path = root_path
 
     #     self.config = ConfigParser()
 
@@ -151,12 +114,6 @@ class Config(dict):
         with open(filename, 'w')as f:
             f.write(new_pyfile_template(self.printme.term))
 
-    def auto_find_instance_path(self):
-        prefix, package_path = find_package(self.import_name)
-        if prefix is None:
-            return os.path.join(package_path)
-        return os.path.join(prefix, 'var', self.name + '-instance')
-
     # def from_config_file(self, filename):
     #     self.config.read(filename)
 
@@ -166,7 +123,7 @@ class Config(dict):
         file_path = os.path.join(self.root_path, filename)
         if not os.path.exists(file_path):
             self.create_py_file(file_path)
-            print(f'[!]Tip:: {filename}文件不存在,现已创建at: {file_path}')
+            print(f'[*] Tip :: 文件不存在,现已创建at: {file_path}')
         d = types.ModuleType('config')
         d.__file__ = filename
         try:

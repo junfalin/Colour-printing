@@ -1,4 +1,14 @@
-from configparser import ConfigParser
-config = ConfigParser()
-config.read('zh_cn.config', encoding='UTF-8')
-print('sections:', config.sections())
+from colour_printing.custom import PrintMe
+
+p = PrintMe(template='{time}::{message}')
+p.info('hello')
+p.info('hello')
+# p.switch = False
+p.filter.append('info')
+p.info('hello')
+p.info('hello')
+p.error('hello')
+p.error('hello')
+p.error('hello')
+
+

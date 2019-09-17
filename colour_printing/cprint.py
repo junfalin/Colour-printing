@@ -1,4 +1,4 @@
-from colour_printing.style import setting, Fore, Mode
+from colour_printing.style import setting, Fore, Mode, Back
 
 
 def cprint(*args, **kwargs):

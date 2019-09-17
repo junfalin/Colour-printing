@@ -1,6 +1,5 @@
-import time
-
-from colour_printing import log, Switch, cprint, Back, Fore, Mode
+from colour_printing.default import log
+from colour_printing import Switch, cprint, Back, Fore, Mode
 
 log.info("hello world!")
 # Switch.signal=False #关闭
@@ -9,7 +8,6 @@ log.info("hello world!")
 
 log.error("hello world!")
 log.success("hello world!")
-
 
 log.warn("hello world!")
 log.debug("hello world!")
