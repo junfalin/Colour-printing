@@ -11,3 +11,4 @@ class MyColour(ColourPrint):
 
 
 echo = MyColour()
+echo.warn('qwq')

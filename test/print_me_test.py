@@ -1,10 +1,8 @@
 from colour_printing.custom import PrintMe
 
-p = PrintMe(template='{time} {message}')
+p = PrintMe(template='{time} {message}', log_output=True)
 # p.switch = False
 # p.filter.append('info')
-p.info('hello')
-p.error('hello')
-p.success('hello')
-p.debug('hello')
-p.warn('hello')
+for i in range(50):
+    p.info(i)
+

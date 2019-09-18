@@ -69,7 +69,8 @@ pip install colour-printing
 ```
     from colour_printing.custom import PrintMe
 
-    p = PrintMe(template='{time} {message}')
+    p = PrintMe(template='{time} {message}',config_filename,='',
+                                log_output=True,log_name='')#日志文件输出
     # p.switch = False
     # p.filter.append('info')
     p.info('hello')

@@ -15,20 +15,23 @@
 from datetime import datetime
 from colour_printing import Mode, Fore, Back
 
+get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
 
-get_time = lambda : datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
+time_default = lambda: ""
+
+message_default = lambda: ""
 
 INFO = {
     'time': {
-        "DEFAULT": get_time,
+        "DEFAULT": time_default,  # <-- Must be function name or lambda expression
         "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "DEFAULT": lambda: "",
-        "fore": Fore.BLUE,
+        "DEFAULT": message_default,  # <-- Must be function name or lambda expression
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
@@ -36,15 +39,15 @@ INFO = {
 
 ERROR = {
     'time': {
-        "DEFAULT": get_time,
+        "DEFAULT": time_default,  # <-- Must be function name or lambda expression
         "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "DEFAULT": lambda: "",
-        "fore": Fore.RED,
+        "DEFAULT": message_default,  # <-- Must be function name or lambda expression
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
@@ -52,15 +55,15 @@ ERROR = {
 
 SUCCESS = {
     'time': {
-        "DEFAULT": get_time,
+        "DEFAULT": time_default,  # <-- Must be function name or lambda expression
         "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "DEFAULT": lambda: "",
-        "fore": Fore.GREEN,
+        "DEFAULT": message_default,  # <-- Must be function name or lambda expression
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
@@ -68,15 +71,15 @@ SUCCESS = {
 
 DEBUG = {
     'time': {
-        "DEFAULT": get_time,
+        "DEFAULT": time_default,  # <-- Must be function name or lambda expression
         "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "DEFAULT": lambda: "",
-        "fore": Fore.PURPLE,
+        "DEFAULT": message_default,  # <-- Must be function name or lambda expression
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
@@ -84,15 +87,15 @@ DEBUG = {
 
 WARN = {
     'time': {
-        "DEFAULT": get_time,
+        "DEFAULT": time_default,  # <-- Must be function name or lambda expression
         "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "DEFAULT": lambda: "",
-        "fore": Fore.YELLOW,
+        "DEFAULT": message_default,  # <-- Must be function name or lambda expression
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
