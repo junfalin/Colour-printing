@@ -80,16 +80,14 @@ def new_pyfile_template(term):
     # lib
     res += """from datetime import datetime\nfrom colour_printing import Mode, Fore, Back
 \n\nget_time = lambda : datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n\n"""
-    # default
-    for t in term:
-        res += f'{t.upper()}_DEFAULT = lambda: ""\n\n'
     # style
     for l in level_list:
         res += "%s = {" % l.upper()
         for t in term:
             temp = """
     '%s': {
-        "fore": Fore,
+        "DEFAULT": lambda: "",
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
@@ -124,7 +122,7 @@ class Config(dict):
         file_path = os.path.join(self.root_path, filename)
         if not os.path.exists(file_path):
             self.create_py_file(file_path)
-            print(f'[*] Tip :: 文件不存在,现已创建at: {file_path}')
+            print(f'[*]Tip:: 文件不存在,现已创建at: {file_path}')
         d = types.ModuleType('config')
         d.__file__ = filename
         try:

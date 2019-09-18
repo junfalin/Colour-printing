@@ -1,4 +1,4 @@
-from colour_printing.default import ColourPrint,Back, Fore, Mode
+from colour_printing.default import ColourPrint, Back, Fore, Mode
 from colour_printing import cprint
 
 
@@ -11,5 +11,3 @@ class MyColour(ColourPrint):
 
 
 echo = MyColour()
-cprint(echo, fore=Fore.BLUE, mode=Mode.BOLD)
-echo.test('hello world!')

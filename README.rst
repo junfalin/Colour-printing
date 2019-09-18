@@ -40,9 +40,13 @@ Python version: 3.5+
     log.warn("hello world!")
     log.debug("hello world!")
 
-    # 颜料
+    # 打印色彩字符
     cprint('default')
     cprint('hello', fore=Fore.RED)
+    #或者
+    s1 = cprint('I', fore=Fore.YELLOW, show=False)
+    s2 = cprint('LOVE','China', fore=Fore.RED, show=False)
+    cprint(s1, s2[0], s2[1])
 
 
 
@@ -58,8 +62,6 @@ Python version: 3.5+
 ::
 
     from colour_printing.custom import ColourPrint, Back, Fore, Mode
-    from colour_printing import cprint
-
 
     class MyColour(ColourPrint):
         def custom(self):
@@ -79,22 +81,21 @@ Python version: 3.5+
 ::
     from colour_printing.custom import PrintMe
 
-    pe = PrintMe(template='{time}:{message}',config_filename='myconfig')    #config_filename(可选)不存在则创建
-    pe.info('hello')
-    pe.info('hello')
-    #pe.switch = False
-    #pe.filter.append('info')
-    pe.info('hello')
-    pe.info('hello')
-    pe.error('hello')
-    pe.error('hello')
+    p = PrintMe(template='{time} {message}')
+    # p.switch = False
+    # p.filter.append('info')
+    p.info('hello')
+    p.error('hello')
+    p.success('hello')
+    p.debug('hello')
+    p.warn('hello')
 
 
 需要注意
 
   + template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
 
-  + setting.py (配置文件):  ××_DEFAULT ：由lambda 实现
+  + setting.py (配置文件):  DEFAULT ：由lambda 实现
 
 
 

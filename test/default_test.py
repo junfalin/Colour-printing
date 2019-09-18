@@ -12,5 +12,12 @@ log.success("hello world!")
 log.warn("hello world!")
 log.debug("hello world!")
 # 颜料
+# 打印色彩字符
+print()
 cprint('default')
 cprint('hello', fore=Fore.RED)
+# 或者
+print()
+s1 = cprint('I', fore=Fore.YELLOW, show=False)
+s2 = cprint('LOVE', 'China', fore=Fore.RED, show=False)
+cprint(s1, s2[0], s2[1])

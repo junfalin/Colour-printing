@@ -1,5 +1,5 @@
 # Colour-printing
-以不同颜色区分终端输出信息类型，标识出重要信息
+用颜色区分终端输出信息类型，自定义输出模板，标识出重要信息
 ```
 pip install colour-printing
 ```
@@ -10,10 +10,11 @@ pip install colour-printing
   - error 
   - warn
   - debug
-- 过滤器：
+- 过滤器：(用于默认模板)
   - Switch.filter : list
-- 开关：
   - Switch.signal : bool
+- 内部实现当然是print,所以print中的参数同样支持
+  - sep=' ', end='\n', file=None
 #### 示例
 ```
     from colour_printing.default import log, Switch, Back, Fore, Mode
@@ -29,9 +30,15 @@ pip install colour-printing
     log.success("hello world!")
     log.warn("hello world!")
     log.debug("hello world!")
-    # 颜料
+    # 打印色彩字符
     cprint('default')
     cprint('hello', fore=Fore.RED)
+    #或者
+    s1 = cprint('I', fore=Fore.YELLOW, show=False)
+    s2 = cprint('LOVE','China', fore=Fore.RED, show=False)
+    cprint(s1, s2[0], s2[1])
+    
+    
 
 ```
 ![image](https://github.com/Faithforus/Colour-printing/blob/master/default.png)
@@ -41,9 +48,7 @@ pip install colour-printing
   print(log)
 ```
 ```
-    from colour_printing.default import ColourPrint, Back, Fore, Mode
-    from colour_printing import cprint
-    
+    from colour_printing.default import ColourPrint, Back, Fore, Mode    
     class MyColour(ColourPrint):
         def custom(self):
             self.test = self.Markers('test')
@@ -64,25 +69,21 @@ pip install colour-printing
 ```
     from colour_printing.custom import PrintMe
 
-    pe = PrintMe(template='{time}:{message}',config_filename='myconfig')
-    #config_filename(可选)不存在则创建 ,默认为colour_printing_config.py  
-
-    pe.info('hello')
-    pe.info('hello')
-
-    #pe.switch = False
-    #pe.filter.append('info')
-
-    pe.info('hello')
-    pe.info('hello')
-    pe.error('hello')
-    pe.error('hello')
+    p = PrintMe(template='{time} {message}')
+    # p.switch = False
+    # p.filter.append('info')
+    p.info('hello')
+    p.error('hello')
+    p.success('hello')
+    p.debug('hello')
+    p.warn('hello')
 
 
 ```
 > 需要注意 
 - template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
-- myconfig.py (配置文件)如下图:  **_DEFAULT ：需由lambda 实现
+- myconfig.py (配置文件)如下图:  DEFAULT ：需由lambda 实现
+- 具体查看test/colour_printing_config.py
 ![**_config.py](https://github.com/Faithforus/Colour-printing/blob/master/printme.png)
 
 

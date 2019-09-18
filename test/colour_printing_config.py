@@ -18,19 +18,17 @@ from colour_printing import Mode, Fore, Back
 
 get_time = lambda : datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
 
-TIME_DEFAULT = lambda: ""
-
-MESSAGE_DEFAULT = lambda: ""
-
 INFO = {
     'time': {
-        "fore": Fore,
+        "DEFAULT": get_time,
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "fore": Fore,
+        "DEFAULT": lambda: "",
+        "fore": Fore.BLUE,
         "back": Back,
         "mode": Mode,
     },
@@ -38,13 +36,15 @@ INFO = {
 
 ERROR = {
     'time': {
-        "fore": Fore,
+        "DEFAULT": get_time,
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "fore": Fore,
+        "DEFAULT": lambda: "",
+        "fore": Fore.RED,
         "back": Back,
         "mode": Mode,
     },
@@ -52,13 +52,15 @@ ERROR = {
 
 SUCCESS = {
     'time': {
-        "fore": Fore,
+        "DEFAULT": get_time,
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "fore": Fore,
+        "DEFAULT": lambda: "",
+        "fore": Fore.GREEN,
         "back": Back,
         "mode": Mode,
     },
@@ -66,13 +68,15 @@ SUCCESS = {
 
 DEBUG = {
     'time': {
-        "fore": Fore,
+        "DEFAULT": get_time,
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "fore": Fore,
+        "DEFAULT": lambda: "",
+        "fore": Fore.PURPLE,
         "back": Back,
         "mode": Mode,
     },
@@ -80,13 +84,15 @@ DEBUG = {
 
 WARN = {
     'time': {
-        "fore": Fore,
+        "DEFAULT": get_time,
+        "fore": Fore.CYAN,
         "back": Back,
         "mode": Mode,
     },
 
     'message': {
-        "fore": Fore,
+        "DEFAULT": lambda: "",
+        "fore": Fore.YELLOW,
         "back": Back,
         "mode": Mode,
     },
