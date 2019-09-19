@@ -19,9 +19,23 @@ Python version: 3.5+
   + Switch.filter : list
   + Switch.signal : bool
 
+小工具
+=======
 
-示例
-=====
+::
+
+    # 打印色彩字符
+    cprint('default')
+    cprint('hello', fore=Fore.RED)
+    #或者只要色彩字符
+    s1 = cword('I', fore=Fore.YELLOW)
+    s2 = cword('LOVE','China', fore=Fore.RED)
+    print(s1, s2[0], s2[1])
+
+
+
+默认模板示例
+============
 
 ::
 
@@ -38,59 +52,38 @@ Python version: 3.5+
     log.warn("hello world!")
     log.debug("hello world!")
 
-    # 打印色彩字符
-    cprint('default')
-    cprint('hello', fore=Fore.RED)
-    #或者
-    s1 = cword('I', fore=Fore.YELLOW)
-    s2 = cword('LOVE','China', fore=Fore.RED)
-    print(s1, s2[0], s2[1])
 
 
 
-默认模板style
-=============
 
-- 查看样式表：
+自定义模板/style/新增level
+==========================
 
 ::
 
- print(log)
+    from colour_printing.custom import PrintMe,level_wrap
 
-::
-
-    from colour_printing.custom import ColourPrint, Back, Fore, Mode
-
-    class MyColour(ColourPrint):
-        def custom(self):
-            self.test = self.Markers('test')
-            .flag_style(fore=Fore.PURPLE, mode=Mode.HIDE)
-            .time_style(mode=Mode.INVERT)
-            .message_style(fore=Fore.YELLOW)
-
-
-    echo = MyColour()
-    echo.info('hello world!')
-    echo.test('hello world!')
-
-
-自定义模板/style
-===================
-
-::
-
-    from colour_printing.custom import PrintMe
-
-    p = PrintMe(template='{time} {message}',
-                config_filename = '' ,
-                log_output = True , #日志文件输出
-                log_name = '' , #日志文件名
-                log_delay = 5 ) #日志关闭延迟
+    p = PrintMe( template ='{time} {message}'
+                 config_filename ='' ,
+                 config_path = '',)
+    p.log_handler.run(log_name='',log_path='',log_delay='')  # 日志输出到文件
 
     # p.switch = False
-    # p.filter.append('info')
+    # p.prtin_filter=['info','error']
 
     p.info('hello')
+    p.error('hello')
+    p.warn('hello')
+    p.success('hello')
+    #新增level
+    class NewOne(PrintMe):
+        @level_wrap
+        def critical(self, *args, **kwargs):
+            """不执行"""
+            pass
+
+    n = NewOne(template='{time} {message}')
+    n.critical('new')
 
 
 需要注意

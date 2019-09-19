@@ -36,25 +36,6 @@ def level_wrap(func):
     return wrap
 
 
-def log_to_file(printme):
-    count = printme.log_delay
-    path = os.path.join(printme.log_path, printme.log_name)
-    stream.write(f'[*]Tip>> 日志文件path: {path}\n')
-    with open(path, 'a+') as f:
-        while printme.switch and printme.Master_switch:
-            if count < 0:
-                stream.write('[*]Tip>> 日志输出关闭\n')
-                break
-            if printme.queue.empty():
-                stream.write(f'[*]Tip>> 等待输出信息 {count} s\n')
-                time.sleep(1)
-                count -= 1
-                continue
-            f.write(printme.queue.get())
-            f.flush()
-            count = printme.log_delay
-
-
 class PrintMeError(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -84,6 +65,48 @@ class ColourPrinting(object):
         pass
 
 
+class LogHandler(object):
+    def __init__(self, printme):
+        self.printme = printme
+        self.log_path = os.getcwd()
+        self.log_name = 'colour_printing_log.log'
+        self.log_delay = 5
+
+    def run(self, log_path: str = '', log_name: str = '', log_delay: int = None):  # log
+        """
+        :param log_path: 路径
+        :param log_name: 文件名
+        :param log_delay: 防止线程阻塞,无消息后延时退出
+        :return:
+        """
+        if log_path:
+            self.log_path = log_path
+        if log_name:
+            self.log_name = log_name
+        if log_delay:
+            self.log_delay = int(log_delay)
+        t = threading.Thread(target=self.__log_to_file, args=())
+        t.start()
+
+    def __log_to_file(self):
+        count = self.log_delay
+        path = os.path.join(self.log_path, self.log_name)
+        stream.write(f'[*]Tip>> 日志文件path: {path}\n')
+        with open(path, 'a+') as f:
+            while self.printme.switch and self.printme.Master_switch:
+                if count < 0:
+                    stream.write('[*]Tip>> 日志输出关闭\n')
+                    break
+                if self.printme.queue.empty():
+                    stream.write(f'[*]Tip>> 等待输出信息 {count} s\n')
+                    time.sleep(1)
+                    count -= 1
+                    continue
+                f.write(self.printme.queue.get())
+                f.flush()
+                count = self.log_delay
+
+
 class PrintMe(ColourPrinting):
 
     def __init__(self, template: str,
@@ -101,7 +124,8 @@ class PrintMe(ColourPrinting):
         self.default = {}
         # switch
         self.__switch = True
-        self.__filter = []
+        self.__print_filter = []
+        self.__log_filter = []
         # style config
         self.config_filename = config_filename if config_filename.endswith('.py') else config_filename + '.py'
         self.root_path = config_path if config_path else os.getcwd()
@@ -109,10 +133,7 @@ class PrintMe(ColourPrinting):
         self.config.from_pyfile(self.config_filename)
         # log
         self.queue = Queue()
-        self.log_path = os.getcwd()
-        self.log_name = 'colour_printing_log.log'
-        self.log_delay = 5
-        self.__log_filter = []
+        self.log_handler = LogHandler(self)
 
     def load_config(self):
         """获取py文件中的配置"""
@@ -125,16 +146,6 @@ class PrintMe(ColourPrinting):
                 default.update({t: v[t].pop("DEFAULT", lambda: "")})
                 sett = setting(**v[t])
                 style.update({f'{t}0': sett[0], f'{t}1': sett[1]})
-
-    def log_output(self, log_path: str = '', log_name: str = '', log_delay: int = None):  # log
-        if log_path:
-            self.log_path = log_path
-        if log_name:
-            self.log_name = log_name
-        if log_delay:
-            self.log_delay = int(log_delay)
-        t = threading.Thread(target=log_to_file, args=(self,))
-        t.start()
 
     def show(self, level: str, data: dict, end: str):
         # style
@@ -154,13 +165,13 @@ class PrintMe(ColourPrinting):
 
     @property
     def print_filter(self):
-        return self.__filter
+        return self.__print_filter
 
     @print_filter.setter
     def print_filter(self, val):
         if not isinstance(val, list):
             val = [val]
-        self.__filter = [i.upper() for i in val]
+        self.__print_filter = [i.upper() for i in val]
 
     @property
     def log_filter(self):
