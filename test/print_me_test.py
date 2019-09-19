@@ -17,7 +17,7 @@ class NewTow(NewOne):
 
 m = NewOne(template='{time} :-> {message}')
 m2 = NewTow(template='{time} :-> {message}')
-# p.log_handler.run()  # 打开日志输出
+m.log_handler.run()  # 打开日志输出
 for i in range(50):
     m.info(i, end='\n')
 time.sleep(1)

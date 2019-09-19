@@ -82,41 +82,36 @@ class LogHandler(object):
         self.printme = printme
         self.log_path = os.getcwd()
         self.log_name = f'{datetime.strftime(datetime.now(), "%Y-%m-%d")}.log'
-        self.log_delay = 5
+        self.log_delay = 60 * 2
+        self.main_t = None
 
-    def run(self, log_path: str = '', log_name: str = '', log_delay: int = None):  # log
+    def run(self, log_path: str = '', log_name: str = ''):  # log
         """
         :param log_path: 路径
         :param log_name: 文件名
-        :param log_delay: 防止线程阻塞,无消息后延时退出
+        :param log_delay: 防止线程阻塞,无消息后延时退出 ,默认2分钟
         :return:
         """
         if log_path:
             self.log_path = log_path
         if log_name:
             self.log_name = log_name
-        if log_delay:
-            self.log_delay = int(log_delay)
+        self.main_t = threading.currentThread()
         t = threading.Thread(target=self.__log_to_file, args=())
         t.start()
 
     def __log_to_file(self):
-        count = self.log_delay
         path = os.path.join(self.log_path, self.log_name)
         stream.write(f'[*]Tip>> 日志文件path: {path}\n')
         with open(path, 'a+') as f:
             while self.printme.switch and self.printme.Master_switch:
-                if count < 0:
-                    stream.write('[*]Tip>> 日志输出关闭\n')
-                    break
                 if self.printme.queue.empty():
-                    stream.write(f'[*]Tip>> 等待输出信息 {count} s\n')
-                    time.sleep(1)
-                    count -= 1
-                    continue
+                    if self.main_t.isAlive():
+                        continue
+                    else:
+                        break
                 f.write(self.printme.queue.get())
                 f.flush()
-                count = self.log_delay
 
 
 class PrintMe(ColourPrinting):

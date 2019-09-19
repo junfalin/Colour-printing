@@ -66,7 +66,7 @@ Python version: 3.5+
     p = PrintMe( template ='{time} {message}'
                  config_filename ='' ,
                  config_path = '',)
-    p.log_handler.run(log_name='',log_path='',log_delay='')  # 日志输出到文件
+    p.log_handler.run(log_name='',log_path='')  # 日志输出到文件
 
     # p.switch = False
     # p.prtin_filter=['info','error']
