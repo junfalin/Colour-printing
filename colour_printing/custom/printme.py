@@ -6,10 +6,17 @@ import threading
 from queue import Queue
 from colour_printing.style import setting
 from colour_printing.custom.config import Config
+from datetime import datetime
 import time
 
 stream = sys.stdout
 level_list = []
+
+
+class Term(object):
+    def __init__(self, term, **kwargs):
+        for t in term:
+            setattr(self, t, kwargs.get(t))
 
 
 def level_wrap(func):
@@ -24,6 +31,8 @@ def level_wrap(func):
         for i in self.term:
             data[i] = kwargs.pop(i, default[i]())
         data['message'] = " ".join([str(i) for i in args])
+        # record
+        self.record(Term(self.term, **data))
         # 日志
         if level not in self.log_filter:
             msg = self.raw_template.format(**data) + "\n"
@@ -64,12 +73,15 @@ class ColourPrinting(object):
     def success(self, *args, **kwargs):
         pass
 
+    def record(self, record):
+        pass
+
 
 class LogHandler(object):
     def __init__(self, printme):
         self.printme = printme
         self.log_path = os.getcwd()
-        self.log_name = 'colour_printing_log.log'
+        self.log_name = f'{datetime.strftime(datetime.now(), "%Y-%m-%d")}.log'
         self.log_delay = 5
 
     def run(self, log_path: str = '', log_name: str = '', log_delay: int = None):  # log

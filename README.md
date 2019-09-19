@@ -51,6 +51,7 @@ pip install colour-printing
     p = PrintMe( template ='{time} {message}'
                  config_filename ='' ,
                  config_path = '',) 
+    # 实例化后会生成默认配置文件 ××_config.py
     p.log_handler.run(log_name='',log_path='',log_delay='')  # 日志输出到文件
 
     # p.switch = False

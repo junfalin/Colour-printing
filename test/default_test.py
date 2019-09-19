@@ -1,6 +1,7 @@
 from colour_printing.default import log
 from colour_printing import cprint, Back, Fore, Mode, cword
 
+log.log_handler.run()
 log.info("hello world!")
 # Switch.signal=False #关闭
 

@@ -1,0 +1,5 @@
+2019-09-19 20:14:13.154 --INFO- hello world!
+2019-09-19 20:14:13.155 -ERROR- hello world!
+2019-09-19 20:14:13.155 SUCCESS hello world!
+2019-09-19 20:14:13.155 --WARN- hello world!
+2019-09-19 20:14:13.155 -DEBUG- hello world!

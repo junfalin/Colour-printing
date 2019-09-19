@@ -4,14 +4,21 @@ from colour_printing.custom import PrintMe, level_wrap
 
 
 class NewOne(PrintMe):
-    @level_wrap
-    def critical(self, *args, **kwargs):
-        pass
+
+    def record(self, record):
+        print('1 Vlog', record.__dict__)
 
 
-p = NewOne(template='{time} :-> {message}')
-p.log_handler.run()  # 打开日志输出
+class NewTow(NewOne):
+
+    def record(self, record):
+        print('2 Vlog', record.__dict__)
+
+
+m = NewOne(template='{time} :-> {message}')
+m2 = NewTow(template='{time} :-> {message}')
+# p.log_handler.run()  # 打开日志输出
 for i in range(50):
-    p.info(i, end='\n')
+    m.info(i, end='\n')
 time.sleep(1)
-p.critical(p.level_list)
+m.info()
