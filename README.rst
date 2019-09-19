@@ -11,13 +11,10 @@ Python version: 3.5+
   + info
   + success
   + error
-  + warn
+  + warning
   + debug
 
-- 过滤器
 
-  + Switch.filter : list
-  + Switch.signal : bool
 
 小工具
 =======
@@ -31,6 +28,24 @@ Python version: 3.5+
     s1 = cword('I', fore=Fore.YELLOW)
     s2 = cword('LOVE','China', fore=Fore.RED)
     print(s1, s2[0], s2[1])
+
+创建配置模板文件
+================
+
+::
+
+    >> cd [path]
+    >> cprint (template) [config_filename]
+    # cprint "{time}: {message}" "style"
+
+
+
+需要注意
+
+  + template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
+
+  + colour_printing_config.py (配置文件):  DEFAULT ：lambda or function name
+
 
 
 
@@ -63,9 +78,9 @@ Python version: 3.5+
 
     from colour_printing.custom import PrintMe,level_wrap
 
-    p = PrintMe( template ='{time} {message}'
-                 config_filename ='' ,
-                 config_path = '',)
+    p = PrintMe( template ='{time} {message}')
+    log.config.from_pyfile(filename = '') # 载入配置
+    #log.config.from_object(instance = '') # 载入配置
     p.log_handler.run(log_name='',log_path='')  # 日志输出到文件
 
     # p.switch = False
@@ -86,11 +101,18 @@ Python version: 3.5+
     n.critical('new')
 
 
-需要注意
+输出信息
+===========
 
-  + template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
+::
 
-  + colour_printing_config.py (配置文件):  DEFAULT ：lambda or function name
+    class VLog(PrintMe):
+        def record(self,record: object):
+        """ 继承后可获得输出信息,自定义操作 """
+            print(type(record))
+
+    vlog = VLog(template='{time} {message}')
+    vlog.info('this is message')
 
 
 

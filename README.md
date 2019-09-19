@@ -8,11 +8,8 @@ pip install colour-printing
   - info 
   - success 
   - error 
-  - warn
+  - warning
   - debug
-- 过滤器：(用于默认模板)
-  - Switch.filter : list
-  - Switch.signal : bool
   
 #### 小工具
 
@@ -43,15 +40,30 @@ pip install colour-printing
 
 ```
 ![image](https://github.com/Faithforus/Colour-printing/blob/master/default.png)
+
+
+
+### 创建配置模板文件
+```
+>> cd [path]
+>> cprint (template) [config_filename]
+# cprint "{time}: {message}" "style"
+```
+
+> 需要注意 
+- template (模板):  具体由format实现，所以格式要求 “{}{}{}{**message**}”  {**message**}字段必需!
+- colour_printing_config.py (配置文件):  DEFAULT ：**lambda** or **function name** ;具体查看test/colour_printing_config.py
+
+
+
 #### 自定义模板/样式/新增level
 
 ```
     from colour_printing.custom import PrintMe,level_wrap
 
-    p = PrintMe( template ='{time} {message}'
-                 config_filename ='' ,
-                 config_path = '',) 
-    # 实例化后会生成默认配置文件 ××_config.py
+    p = PrintMe( template ='{time} {message}') 
+    log.config.from_pyfile(filename = '') # 载入配置
+    #log.config.from_object(instance = '') # 载入配置
     p.log_handler.run(log_name='',log_path='')  # 日志输出到文件
 
     # p.switch = False
@@ -72,8 +84,15 @@ pip install colour-printing
     n.critical('new')
 
 ```
-> 需要注意 
-- template (模板):  具体由format实现，所以格式要求 “{}{}{}{**message**}”  {**message**}字段必需!
-- colour_printing_config.py (配置文件):  DEFAULT ：**lambda** or **function name** ;具体查看test/colour_printing_config.py
 
 
+#### 输出信息
+```
+    class VLog(PrintMe):
+        def record(self,record: object):
+        """ 继承后可获得输出信息,自定义操作 """
+            print(type(record))
+    
+    vlog = VLog(template='{time} {message}')
+    vlog.info('this is message')
+```

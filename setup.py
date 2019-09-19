@@ -9,7 +9,7 @@ def read(fname):
 
 setuptools.setup(
     name="colour-printing",
-    version="0.3.5",
+    version="0.3.8",
     author="faithforus",
     author_email="ljunf817@163.com",
     description="colour-printing",
@@ -22,4 +22,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    entry_points={
+        'console_scripts': ['cprint = colour_printing.cmdline:execute']
+    },
 )

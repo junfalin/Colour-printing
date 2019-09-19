@@ -38,7 +38,23 @@ INFO = {
     },
 }
 
-DEBUG = {
+SUCCESS = {
+    "time": {
+        "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.CYAN,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode,  # 模式
+    },
+
+    "message": {
+        "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.CYAN,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode,  # 模式
+    },
+}
+
+WARNING = {
     "time": {
         "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
         "fore": Fore.CYAN,  # 前景色
@@ -70,39 +86,7 @@ ERROR = {
     },
 }
 
-WARN = {
-    "time": {
-        "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
-        "back": Back,  # 背景色
-        "mode": Mode,  # 模式
-    },
-
-    "message": {
-        "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
-        "back": Back,  # 背景色
-        "mode": Mode,  # 模式
-    },
-}
-
-SUCCESS = {
-    "time": {
-        "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
-        "back": Back,  # 背景色
-        "mode": Mode,  # 模式
-    },
-
-    "message": {
-        "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
-        "back": Back,  # 背景色
-        "mode": Mode,  # 模式
-    },
-}
-
-CRITICAL = {
+DEBUG = {
     "time": {
         "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
         "fore": Fore.CYAN,  # 前景色

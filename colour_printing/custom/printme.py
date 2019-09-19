@@ -6,8 +6,6 @@ import threading
 from queue import Queue
 from colour_printing.style import setting
 from colour_printing.custom.config import Config
-from datetime import datetime
-import time
 
 stream = sys.stdout
 level_list = []
@@ -25,14 +23,14 @@ def level_wrap(func):
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
         level = func.__name__.upper()
-        default = self.default[level]
+        default = self.default.get(level, {})
         data = {}
         # 参数
         for i in self.term:
-            data[i] = kwargs.pop(i, default[i]())
+            data[i] = kwargs.pop(i, default.get(i, lambda: "")())
         data['message'] = " ".join([str(i) for i in args])
         # record
-        self.record(Term(self.term, **data))
+        self.handler_record(Term(self.term, **data))
         # 日志
         if level not in self.log_filter:
             msg = self.raw_template.format(**data) + "\n"
@@ -66,14 +64,14 @@ class ColourPrinting(object):
         pass
 
     @level_wrap
-    def warn(self, *args, **kwargs):
+    def warning(self, *args, **kwargs):
         pass
 
     @level_wrap
     def success(self, *args, **kwargs):
         pass
 
-    def record(self, record):
+    def handler_record(self, record):
         pass
 
 
@@ -81,7 +79,7 @@ class LogHandler(object):
     def __init__(self, printme):
         self.printme = printme
         self.log_path = os.getcwd()
-        self.log_name = f'{datetime.strftime(datetime.now(), "%Y-%m-%d")}.log'
+        self.log_name = 'colour_printing_log.log'
         self.log_delay = 60 * 2
         self.main_t = None
 
@@ -114,11 +112,26 @@ class LogHandler(object):
                 f.flush()
 
 
+def make_default():
+    r = {
+        "DEFAULT": lambda: "",  # 默认值<-- Must be function name or lambda expression
+        "fore": "blue",  # 前景色
+        "back": "",  # 背景色
+        "mode": "",  # 模式
+    }
+    return r
+
+
+def make_level_default(term):
+    r = {}
+    for t in term:
+        r.update({t: make_default()})
+    return r
+
+
 class PrintMe(ColourPrinting):
 
-    def __init__(self, template: str,
-                 config_path: str = '',
-                 config_filename: str = 'colour_printing_config.py'):
+    def __init__(self, template: str):
         self.raw_template = template
         self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
         if "message" not in self.term:
@@ -134,29 +147,31 @@ class PrintMe(ColourPrinting):
         self.__print_filter = []
         self.__log_filter = []
         # style config
-        self.config_filename = config_filename if config_filename.endswith('.py') else config_filename + '.py'
-        self.root_path = config_path if config_path else os.getcwd()
         self.config = Config(printme=self)
-        self.config.from_pyfile(self.config_filename)
         # log
         self.queue = Queue()
-        self.log_handler = LogHandler(self)
+        self.log_handler = LogHandler(printme=self)
 
     def load_config(self):
         """获取py文件中的配置"""
-        for k, v in self.config.items():
-            if k not in self.level_list:
-                continue
-            default = self.default[k] = {}
-            style = self.box[k] = {}
+        for level in self.level_list:
+            default = self.default[level] = {}
+            style = self.box[level] = {}
+            terms = self.config.get(level, make_level_default(self.term))  # 获取每个level里的字段
             for t in self.term:
-                default.update({t: v[t].pop("DEFAULT", lambda: "")})
-                sett = setting(**v[t])
+                cfg = terms.get(t, make_default())  # 获取每个字段的default,fore,mode,back
+                default.update({t: cfg.get("DEFAULT")})
+                sett = setting(fore=cfg.get('fore'), back=cfg.get('back'), mode=cfg.get('mode'))
                 style.update({f'{t}0': sett[0], f'{t}1': sett[1]})
 
     def show(self, level: str, data: dict, end: str):
+        if not self.box:
+            msg = self.raw_template.format(**data)
+            stream.write(msg)
+            stream.write(end)
+            return
         # style
-        style = self.box[level.upper()]
+        style = self.box.get(level.upper())
         data.update(style)
         msg = self.template.format(**data)
         stream.write(msg)
