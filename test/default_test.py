@@ -1,5 +1,5 @@
 from colour_printing.default import log
-from colour_printing import Switch, cprint, Back, Fore, Mode
+from colour_printing import Switch, cprint, Back, Fore, Mode,cword
 
 log.info("hello world!")
 # Switch.signal=False #关闭
@@ -17,7 +17,7 @@ print()
 cprint('default')
 cprint('hello', fore=Fore.RED)
 # 或者
-print()
-s1 = cprint('I', fore=Fore.YELLOW, show=False)
-s2 = cprint('LOVE', 'China', fore=Fore.RED, show=False)
-cprint(s1, s2[0], s2[1])
+cprint('',end='1')
+s1 = cword('I', fore=Fore.YELLOW)
+s2 = cword('LOVE', 'China', fore=Fore.RED)
+print(s1, s2[0], s2[1])

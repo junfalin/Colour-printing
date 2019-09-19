@@ -17,8 +17,6 @@ Python version: 3.5+
 - 过滤器
 
   + Switch.filter : list
-- 开关
-
   + Switch.signal : bool
 
 
@@ -44,9 +42,9 @@ Python version: 3.5+
     cprint('default')
     cprint('hello', fore=Fore.RED)
     #或者
-    s1 = cprint('I', fore=Fore.YELLOW, show=False)
-    s2 = cprint('LOVE','China', fore=Fore.RED, show=False)
-    cprint(s1, s2[0], s2[1])
+    s1 = cword('I', fore=Fore.YELLOW)
+    s2 = cword('LOVE','China', fore=Fore.RED)
+    print(s1, s2[0], s2[1])
 
 
 
@@ -79,9 +77,15 @@ Python version: 3.5+
 ===================
 
 ::
+
     from colour_printing.custom import PrintMe
 
-    p = PrintMe(template='{time} {message}')
+    p = PrintMe(template='{time} {message}',
+                config_filename,='',
+                log_output=True,#日志文件输出
+                log_name='',#日志文件名
+                log_delay=5)#日志关闭延迟
+
     # p.switch = False
     # p.filter.append('info')
     p.info('hello')
@@ -95,7 +99,7 @@ Python version: 3.5+
 
   + template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
 
-  + setting.py (配置文件):  DEFAULT ：由lambda 实现
+  + colour_printing_config.py (配置文件):  DEFAULT ：lambda or function name
 
 
 

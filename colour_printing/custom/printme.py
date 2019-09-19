@@ -12,7 +12,6 @@ DEBUG = 'DEBUG'
 SUCCESS = 'SUCCESS'
 ERROR = 'ERROR'
 WARN = 'WARN'
-tip = "[*]Tip>> {}"
 
 
 class PrintMeError(Exception):
@@ -32,32 +31,33 @@ def level_wrap(func):
     return wrap
 
 
-def log_to(printme, log_name: str):
-    count = 5
-    path = os.path.join(printme.root_path, log_name)
+def log_to(printme):
+    count = printme.log_delay
+    path = os.path.join(printme.root_path, printme.log_name)
     print(f'[*]Tip>> 日志文件path: {path}')
     with open(path, 'a+') as f:
         while printme.switch and printme.Master_switch:
             if count < 0:
-                print(end='\r')
                 print('[*]Tip>> 日志输出关闭')
                 break
             if printme.queue.empty():
-                print(end='\r')
-                print(f'[*]Tip>> 等待输出信息 {count} s', end='')
+                print(f'[*]Tip>> 等待输出信息 {count} s')
                 time.sleep(1)
                 count -= 1
                 continue
             f.write(printme.queue.get())
             f.flush()
+            count = printme.log_delay
 
 
 class PrintMe(object):
     level_list = [INFO, ERROR, SUCCESS, DEBUG, WARN]
     Master_switch = True
 
-    def __init__(self, template: str, config_filename: str = 'colour_printing_config.py', log_output: bool = False,
-                 log_name: str = 'colour_printing_log.log'):
+    def __init__(self, template: str, config_filename: str = 'colour_printing_config.py',
+                 log_output: bool = False,
+                 log_name: str = 'colour_printing_log.log',
+                 log_delay: int = 5):
         self.raw_template = template
         self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
         if "message" not in self.term:
@@ -78,8 +78,10 @@ class PrintMe(object):
         # log
         self.log_output = log_output
         if log_output:
-            self.queue = Queue(-1)
-            t = threading.Thread(target=log_to, args=(self, log_name))
+            self.log_name = log_name
+            self.log_delay = log_delay
+            self.queue = Queue()
+            t = threading.Thread(target=log_to, args=(self,))
             t.start()
 
     def set_config(self):
@@ -94,19 +96,28 @@ class PrintMe(object):
                 style.update({f'{t}0': sett[0], f'{t}1': sett[1]})
 
     def show(self, level, *args, **kwargs):
+        sep = kwargs.pop('sep', " ")
+        end = kwargs.pop('end', '\n')
+        file = kwargs.pop('file', None)
+
         style = self.box[level.upper()]
         default = self.default[level.upper()]
         data = {}
+        # 参数
         for i in self.term:
             data[i] = kwargs.pop(i, default[i]())
         data['message'] = " ".join([str(i) for i in args])
+        # 日志
         if self.log_output:
             msg = self.raw_template.format(**data) + "\n"
             self.queue.put(msg)
-        data.update(style)
-        data['message'] = " ".join([str(i) for i in args])
-        print(self.template.format(**data), sep=kwargs.get('sep', " "), end=kwargs.get('end', "\n"),
-              file=kwargs.get('file', None))
+        if file:
+            msg = self.raw_template.format(**data)
+        else:
+            # style
+            data.update(style)
+            msg = self.template.format(**data)
+        print(msg, sep=sep, end=end, file=file)
 
     @level_wrap
     def info(self, *args, **kwargs):

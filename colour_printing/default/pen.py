@@ -43,8 +43,14 @@ class Pen(object):
     def __call__(self, *args, **kwargs):
         if not Switch.signal or self.__flag_name.lower() in Switch.filter or self.__flag_name in Switch.filter:
             return
+        sep = kwargs.pop('sep', " ")
+        end = kwargs.pop('end', '\n')
+        file = kwargs.pop('file', None)
         flag, time, message_style = self.__user_setting()
         str_temp = []
         for s in args:
             str_temp.append(f'{message_style[0]}{s}{message_style[1]}')
-        print(time, flag, *str_temp, **kwargs)
+        if file:
+            print(self.__get_time(), self.__flag_name, *args, sep=sep, end=end, file=file)
+        else:
+            print(time, flag, *str_temp, sep=sep, end=end, file=file)

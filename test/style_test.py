@@ -11,4 +11,5 @@ class MyColour(ColourPrint):
 
 
 echo = MyColour()
-echo.warn('qwq')
+echo.warn('sd')
+print('',end='1')

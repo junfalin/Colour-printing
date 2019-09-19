@@ -13,8 +13,7 @@ pip install colour-printing
 - 过滤器：(用于默认模板)
   - Switch.filter : list
   - Switch.signal : bool
-- 内部实现当然是print,所以print中的参数同样支持
-  - sep=' ', end='\n', file=None
+
 #### 示例
 ```
     from colour_printing.default import log, Switch, Back, Fore, Mode
@@ -69,8 +68,11 @@ pip install colour-printing
 ```
     from colour_printing.custom import PrintMe
 
-    p = PrintMe(template='{time} {message}',config_filename,='',
-                                log_output=True,log_name='')#日志文件输出
+    p = PrintMe(template='{time} {message}'
+                config_filename,='',
+                log_output=True,#日志文件输出
+                log_name='',#日志文件名
+                log_delay=5)#日志关闭延迟
     # p.switch = False
     # p.filter.append('info')
     p.info('hello')
@@ -83,12 +85,6 @@ pip install colour-printing
 ```
 > 需要注意 
 - template (模板):  具体由format实现，所以格式要求 “{}{}{}{message}”  ！{message}必需！
-- myconfig.py (配置文件)如下图:  DEFAULT ：需由lambda 实现
-- 具体查看test/colour_printing_config.py
-![**_config.py](https://github.com/Faithforus/Colour-printing/blob/master/printme.png)
+- colour_printing_config.py (配置文件):  DEFAULT ：lambda or function name ;具体查看test/colour_printing_config.py
 
 
-
-
-
-> 参考：[@JeanCheng](https://blog.csdn.net/gatieme/article/details/45439671)

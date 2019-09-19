@@ -17,16 +17,16 @@ from colour_printing import Mode, Fore, Back
 
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
 
-time_default = lambda: ""
+time_default = get_time
 
 message_default = lambda: ""
 
 INFO = {
     'time': {
         "DEFAULT": time_default,  # <-- Must be function name or lambda expression
-        "fore": Fore.CYAN,
+        "fore": Fore.RED,
         "back": Back,
-        "mode": Mode,
+        "mode": Mode.INVERT,
     },
 
     'message': {
