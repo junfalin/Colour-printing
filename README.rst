@@ -70,6 +70,7 @@ Python version: 3.5+
 
 
     echo = MyColour()
+    echo.info('hello world!')
     echo.test('hello world!')
 
 
@@ -81,18 +82,15 @@ Python version: 3.5+
     from colour_printing.custom import PrintMe
 
     p = PrintMe(template='{time} {message}',
-                config_filename,='',
-                log_output=True,#日志文件输出
-                log_name='',#日志文件名
-                log_delay=5)#日志关闭延迟
+                config_filename = '' ,
+                log_output = True , #日志文件输出
+                log_name = '' , #日志文件名
+                log_delay = 5 ) #日志关闭延迟
 
     # p.switch = False
     # p.filter.append('info')
+
     p.info('hello')
-    p.error('hello')
-    p.success('hello')
-    p.debug('hello')
-    p.warn('hello')
 
 
 需要注意

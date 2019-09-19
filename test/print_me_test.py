@@ -1,12 +1,18 @@
 import time
 
-from colour_printing.custom import PrintMe
+from colour_printing.custom import PrintMe, level_wrap
 
-p = PrintMe(template='{time} :-> {message}', log_output=True)
-# p.switch = False
-# p.filter.append('info')
+
+class A(PrintMe):
+    @level_wrap
+    def critical(self, *args, **kwargs):
+        pass
+
+
+p = A(template='{time} :-> {message}')
+p.log_output()
 for i in range(50):
-    p.info(i,end='1\n')
+    p.info(i, end='1\n')
 
-time.sleep(2)
-p.info(1)
+time.sleep(1)
+p.critical(p.level_list)

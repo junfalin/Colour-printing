@@ -3,6 +3,23 @@ import os
 import sys
 import types
 
+stream = sys.stdout
+header = """\"""
+#                     *Colour-printing Reference*
+#########################################################################################
+#   @'fore': # 前景色         @'back':# 背景              @'mode':# 显示模式               # 
+#            'black': 黑色            'black':  黑色              'normal': 终端默认设置   # 
+#            'red': 红色              'red':  红色                'bold':  高亮显示        # 
+#            'green': 绿色            'green': 绿色               'underline':  使用下划线 #
+#            'yellow': 黄色           'yellow': 黄色              'blink': 闪烁           # 
+#            'blue':  蓝色            'blue':  蓝色               'invert': 反白显示       #    
+#            'purple':  紫红色        'purple':  紫红色            'hide': 不可见          #    
+#            'cyan':  青蓝色          'cyan':  青蓝色                                     #
+#            'white':  白色           'white':  白色                                     #
+#########################################################################################
+\"""
+"""
+
 
 def import_string(import_name, silent=False):
     import_name = str(import_name).replace(":", ".")
@@ -37,11 +54,11 @@ def level_template(level_name, term):
     res += "%s = {" % level_name
     for t in term:
         temp = """
-    '%s': {
-        "DEFAULT": %s,  # <-- Must be function name or lambda expression
-        "fore": Fore.CYAN,
-        "back": Back,
-        "mode": Mode,
+    "%s": {
+        "DEFAULT": %s,  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.CYAN,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode,  # 模式
     },
 """ % (t, t + "_default")
         res += temp
@@ -50,25 +67,12 @@ def level_template(level_name, term):
 
 
 def new_pyfile_template(level_list, term):
-    res = """\"""
-#                     *Colour-printing Reference*
-#########################################################################################
-#   @'fore': # 前景色         @'back':# 背景              @'mode':# 显示模式               # 
-#            'black': 黑色            'black':  黑色              'normal': 终端默认设置   # 
-#            'red': 红色              'red':  红色                'bold':  高亮显示        # 
-#            'green': 绿色            'green': 绿色               'underline':  使用下划线 #
-#            'yellow': 黄色           'yellow': 黄色              'blink': 闪烁           # 
-#            'blue':  蓝色            'blue':  蓝色               'invert': 反白显示       #    
-#            'purple':  紫红色        'purple':  紫红色            'hide': 不可见          #    
-#            'cyan':  青蓝色          'cyan':  青蓝色                                     #
-#            'white':  白色           'white':  白色                                     #
-#########################################################################################
-\"""
-"""
+    res = header
     # lib
     res += """from datetime import datetime
 from colour_printing import Mode, Fore, Back\n
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n
+
 """
     # default
     for t in term:
@@ -80,25 +84,25 @@ get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3
 
 
 class Config(dict):
-    def __init__(self, printme, root_path):
+    def __init__(self, printme):
         dict.__init__(self)
         self.printme = printme
-        self.root_path = root_path
+        self.root_path = printme.root_path
         self.config_str = ""
 
-    def create_py_file(self, filename):
-        with open(filename, 'w')as f:
+    def create_py_file(self, file_path):
+        with open(file_path, 'w')as f:
             f.write(new_pyfile_template(self.printme.level_list, self.printme.term))
 
     def from_pyfile(self, filename, silent=False):
         file_path = os.path.join(self.root_path, filename)
         if not os.path.exists(file_path):
             self.create_py_file(file_path)
-            print(f'[*]Tip>> 文件不存在,现已创建path: {file_path}')
+            stream.write(f'[*]Tip>> 文件不存在,现已创建path: {file_path}\n')
         d = types.ModuleType('config')
         d.__file__ = filename
         try:
-            with open(filename, mode='rb') as config_file:
+            with open(file_path, mode='rb') as config_file:
                 config = config_file.read()
                 self.config_str = config.decode()
                 exec(compile(config, filename, 'exec'), d.__dict__)
@@ -118,4 +122,4 @@ class Config(dict):
         for key in dir(obj):
             if key.isupper():
                 self[key] = getattr(obj, key)
-        self.printme.set_config()  # 渲染
+        self.printme.load_config()  # 渲染

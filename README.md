@@ -14,17 +14,13 @@ pip install colour-printing
   - Switch.filter : list
   - Switch.signal : bool
 
-#### 示例
+#### 示例默认模板
 ```
-    from colour_printing.default import log, Switch, Back, Fore, Mode
-    from colour_printing import cprint
+    from colour_printing.default import log
+    from colour_printing import cprint,cword
     
     
     log.info("hello world!")
-
-    # Switch.signal=False #关闭
-    # Switch.filter.append('SUCCESS') #过滤
-    
     log.error("hello world!")
     log.success("hello world!")
     log.warn("hello world!")
@@ -33,54 +29,29 @@ pip install colour-printing
     cprint('default')
     cprint('hello', fore=Fore.RED)
     #或者
-    s1 = cprint('I', fore=Fore.YELLOW, show=False)
-    s2 = cprint('LOVE','China', fore=Fore.RED, show=False)
-    cprint(s1, s2[0], s2[1])
+    s1 = cword('I', fore=Fore.YELLOW)
+    s2 = cword('LOVE','China', fore=Fore.RED)
+    print(s1, s2[0], s2[1])
     
     
 
 ```
 ![image](https://github.com/Faithforus/Colour-printing/blob/master/default.png)
-#### 默认模板修改 style
-- 查看样式表： 
-```
-  print(log)
-```
-```
-    from colour_printing.default import ColourPrint, Back, Fore, Mode    
-    class MyColour(ColourPrint):
-        def custom(self):
-            self.test = self.Markers('test')
-                        .flag_style(fore=Fore.CYAN)
-                        .time_style(mode=Mode.UNDERLINE)
-                        .message_style(fore=Fore.YELLOW)
-    
-    echo = MyColour()
-    echo.test('hello world!')
-
-
-```
-
-![image](https://github.com/Faithforus/Colour-printing/blob/master/style.png)
-
-#### 自定义模板/style
+#### 自定义模板/样式
 
 ```
     from colour_printing.custom import PrintMe
 
-    p = PrintMe(template='{time} {message}'
-                config_filename,='',
-                log_output=True,#日志文件输出
-                log_name='',#日志文件名
-                log_delay=5)#日志关闭延迟
+    p = PrintMe( template ='{time} {message}'
+                 config_filename ='' ,
+                 log_output = True , # 日志文件输出
+                 log_name = '' , # 日志文件名
+                 log_delay = 5 ) # 日志关闭延迟
+
     # p.switch = False
     # p.filter.append('info')
-    p.info('hello')
-    p.error('hello')
-    p.success('hello')
-    p.debug('hello')
-    p.warn('hello')
 
+    p.info('hello')
 
 ```
 > 需要注意 

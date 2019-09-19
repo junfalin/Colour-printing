@@ -1,47 +1,52 @@
 import re
 import os
 import functools
+import sys
 import threading
 from queue import Queue
 from colour_printing.style import setting
 from colour_printing.custom.config import Config
 import time
 
-INFO = 'INFO'
-DEBUG = 'DEBUG'
-SUCCESS = 'SUCCESS'
-ERROR = 'ERROR'
-WARN = 'WARN'
-
-
-class PrintMeError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+stream = sys.stdout
+level_list = []
 
 
 def level_wrap(func):
+    level_list.append(func.__name__.upper())
+
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
-        if self.switch is False or self.Master_switch is False:
-            return
-        if func.__name__ in self.filter:
-            return
-        return func(self, *args, **kwargs)
+        level = func.__name__.upper()
+        default = self.default[level]
+        data = {}
+        # 参数
+        for i in self.term:
+            data[i] = kwargs.pop(i, default[i]())
+        data['message'] = " ".join([str(i) for i in args])
+        # 日志
+        if level not in self.log_filter:
+            msg = self.raw_template.format(**data) + "\n"
+            self.queue.put(msg)
+        # 打印
+        if self.switch and self.Master_switch and level not in self.print_filter:
+            end = kwargs.get('end', '\n')
+            self.show(level, data=data, end=end)
 
     return wrap
 
 
-def log_to(printme):
+def log_to_file(printme):
     count = printme.log_delay
-    path = os.path.join(printme.root_path, printme.log_name)
-    print(f'[*]Tip>> 日志文件path: {path}')
+    path = os.path.join(printme.log_path, printme.log_name)
+    stream.write(f'[*]Tip>> 日志文件path: {path}\n')
     with open(path, 'a+') as f:
         while printme.switch and printme.Master_switch:
             if count < 0:
-                print('[*]Tip>> 日志输出关闭')
+                stream.write('[*]Tip>> 日志输出关闭\n')
                 break
             if printme.queue.empty():
-                print(f'[*]Tip>> 等待输出信息 {count} s')
+                stream.write(f'[*]Tip>> 等待输出信息 {count} s\n')
                 time.sleep(1)
                 count -= 1
                 continue
@@ -50,14 +55,40 @@ def log_to(printme):
             count = printme.log_delay
 
 
-class PrintMe(object):
-    level_list = [INFO, ERROR, SUCCESS, DEBUG, WARN]
+class PrintMeError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class ColourPrinting(object):
     Master_switch = True
 
-    def __init__(self, template: str, config_filename: str = 'colour_printing_config.py',
-                 log_output: bool = False,
-                 log_name: str = 'colour_printing_log.log',
-                 log_delay: int = 5):
+    @level_wrap
+    def info(self, *args, **kwargs):
+        pass
+
+    @level_wrap
+    def debug(self, *args, **kwargs):
+        pass
+
+    @level_wrap
+    def error(self, *args, **kwargs):
+        pass
+
+    @level_wrap
+    def warn(self, *args, **kwargs):
+        pass
+
+    @level_wrap
+    def success(self, *args, **kwargs):
+        pass
+
+
+class PrintMe(ColourPrinting):
+
+    def __init__(self, template: str,
+                 config_path: str = '',
+                 config_filename: str = 'colour_printing_config.py'):
         self.raw_template = template
         self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
         if "message" not in self.term:
@@ -65,26 +96,26 @@ class PrintMe(object):
         term_wrap = {i: "{%s}{%s}{%s}" % (i + '0', i, i + '1') for i in self.term}
         self.template = template.format(**term_wrap)
         # store
+        self.level_list = level_list
         self.box = {}
         self.default = {}
         # switch
-        self.switch = True
-        self.filter = []
+        self.__switch = True
+        self.__filter = []
         # style config
         self.config_filename = config_filename if config_filename.endswith('.py') else config_filename + '.py'
-        self.root_path = os.getcwd()
-        self.config = Config(printme=self, root_path=self.root_path)
+        self.root_path = config_path if config_path else os.getcwd()
+        self.config = Config(printme=self)
         self.config.from_pyfile(self.config_filename)
         # log
-        self.log_output = log_output
-        if log_output:
-            self.log_name = log_name
-            self.log_delay = log_delay
-            self.queue = Queue()
-            t = threading.Thread(target=log_to, args=(self,))
-            t.start()
+        self.queue = Queue()
+        self.log_path = os.getcwd()
+        self.log_name = 'colour_printing_log.log'
+        self.log_delay = 5
+        self.__log_filter = []
 
-    def set_config(self):
+    def load_config(self):
+        """获取py文件中的配置"""
         for k, v in self.config.items():
             if k not in self.level_list:
                 continue
@@ -95,46 +126,48 @@ class PrintMe(object):
                 sett = setting(**v[t])
                 style.update({f'{t}0': sett[0], f'{t}1': sett[1]})
 
-    def show(self, level, *args, **kwargs):
-        sep = kwargs.pop('sep', " ")
-        end = kwargs.pop('end', '\n')
-        file = kwargs.pop('file', None)
+    def log_output(self, log_path: str = '', log_name: str = '', log_delay: int = None):  # log
+        if log_path:
+            self.log_path = log_path
+        if log_name:
+            self.log_name = log_name
+        if log_delay:
+            self.log_delay = int(log_delay)
+        t = threading.Thread(target=log_to_file, args=(self,))
+        t.start()
 
+    def show(self, level: str, data: dict, end: str):
+        # style
         style = self.box[level.upper()]
-        default = self.default[level.upper()]
-        data = {}
-        # 参数
-        for i in self.term:
-            data[i] = kwargs.pop(i, default[i]())
-        data['message'] = " ".join([str(i) for i in args])
-        # 日志
-        if self.log_output:
-            msg = self.raw_template.format(**data) + "\n"
-            self.queue.put(msg)
-        if file:
-            msg = self.raw_template.format(**data)
-        else:
-            # style
-            data.update(style)
-            msg = self.template.format(**data)
-        print(msg, sep=sep, end=end, file=file)
+        data.update(style)
+        msg = self.template.format(**data)
+        stream.write(msg)
+        stream.write(end)
 
-    @level_wrap
-    def info(self, *args, **kwargs):
-        self.show(INFO, *args, **kwargs)
+    @property
+    def switch(self):
+        return self.__switch
 
-    @level_wrap
-    def debug(self, *args, **kwargs):
-        self.show(DEBUG, *args, **kwargs)
+    @switch.setter
+    def switch(self, val):
+        self.__switch = val
 
-    @level_wrap
-    def error(self, *args, **kwargs):
-        self.show(ERROR, *args, **kwargs)
+    @property
+    def print_filter(self):
+        return self.__filter
 
-    @level_wrap
-    def warn(self, *args, **kwargs):
-        self.show(WARN, *args, **kwargs)
+    @print_filter.setter
+    def print_filter(self, val):
+        if not isinstance(val, list):
+            val = [val]
+        self.__filter = [i.upper() for i in val]
 
-    @level_wrap
-    def success(self, *args, **kwargs):
-        self.show(SUCCESS, *args, **kwargs)
+    @property
+    def log_filter(self):
+        return self.__log_filter
+
+    @log_filter.setter
+    def log_filter(self, val):
+        if not isinstance(val, list):
+            val = [val]
+        self.__log_filter = [i.upper() for i in val]
