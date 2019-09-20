@@ -44,7 +44,6 @@ Python version: 3.5+
 
   + template (模板):  具体由format实现，所以格式要求 “{}{}{}{}”  ！{message}必需！
 
-  + colour_printing_config.py (配置文件):  DEFAULT ：lambda or function name
 
 
 
@@ -78,9 +77,9 @@ Python version: 3.5+
     from colour_printing.custom import PrintMe,level_wrap
 
     p = PrintMe( template ='{time} {message}')
-    log.config.from_pyfile(file_path = '') # 载入配置
+    p.config.from_pyfile(file_path = '') # 载入配置
     p.log_handler.run(log_name='',log_path='')  # 日志输出到文件
-
+    p.set_default(set_level='info',time='2019') # 设置默认值，将会覆盖配置文件值，其中set_level：指定设置的level.不指定则所有
     # p.switch = False
     # p.print_filter=['info','error']
 

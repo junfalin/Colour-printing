@@ -25,7 +25,7 @@ def level_template(level_name, term):
     for t in term:
         temp = """
     "%s": {
-        "DEFAULT": %s,  # 默认值<-- Must be function name or lambda expression
+        "DEFAULT": %s,  # 默认值
         "fore": Fore.CYAN,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode,  # 模式
@@ -48,7 +48,7 @@ TEMPLATE = "{template}"
 """
     # default
     for t in term:
-        res += '''%s_default = lambda: ""\n\n''' % t
+        res += '''%s_default = ""\n\n''' % t
     # style
     for l in level_list:
         res += level_template(l, term)

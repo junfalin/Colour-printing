@@ -187,3 +187,7 @@
 2019-09-20 10:27:36.605 SUCCESS hello world!
 2019-09-20 10:27:36.606 --WARN- hello world!
 2019-09-20 10:27:36.606 -DEBUG- hello world!
+2019-09-20 10:47:35.096 -ERROR- hello world!
+2019-09-20 10:47:35.096 SUCCESS hello world!
+2019-09-20 10:47:35.096 --WARN- hello world!
+2019-09-20 10:47:35.096 -DEBUG- hello world!

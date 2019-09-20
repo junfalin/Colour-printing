@@ -4,6 +4,8 @@ import functools
 import sys
 import threading
 from copy import deepcopy
+from inspect import isfunction
+from pprint import pprint
 from queue import Queue
 from colour_printing.style import setting
 from colour_printing.custom.config import Config
@@ -22,7 +24,15 @@ def level_wrap(func):
         data = {}
         # 参数
         for i in self.term:
-            data[i] = kwargs.pop(i, default.get(i, lambda: "")())
+            w = kwargs.get(i)
+            if w:
+                data[i] = w
+            else:
+                dd = default.get(i, lambda: "")
+                if isfunction(dd):
+                    data[i] = dd()
+                else:
+                    data[i] = dd
         sep = kwargs.get('sep', " ")
         data['message'] = sep.join([str(i) for i in args])
         # record
@@ -86,7 +96,6 @@ class LogHandler(object):
         """
         :param log_path: 路径
         :param log_name: 文件名
-        :param log_delay: 防止线程阻塞,无消息后延时退出 ,默认2分钟
         :return:
         """
         if log_path:
@@ -188,6 +197,22 @@ class PrintMe(ColourPrinting):
             msg = self.template.format(**data)
         stream.write(msg)
         stream.write(end)
+
+    def set_default(self, **kwargs):
+        """
+        设置默认值
+        :param kwargs:
+        :return:
+        """
+        level = kwargs.get('set_level')
+        if level:
+            if level.upper() in self.level_list:
+                for k, v in kwargs.items():
+                    self.default[level.upper()].update({k: v})
+        else:
+            for level in self.level_list:
+                for k, v in kwargs.items():
+                    self.default[level.upper()].update({k: v})
 
     @property
     def switch(self):

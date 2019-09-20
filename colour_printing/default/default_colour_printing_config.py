@@ -21,9 +21,9 @@ TEMPLATE = "{time} {flag} {message}"
 
 time_default = get_time
 
-flag_default = lambda: ""
+flag_default = ""
 
-message_default = lambda: ""
+message_default = ""
 
 fill = 7
 
@@ -36,7 +36,7 @@ INFO = {
     },
 
     "flag": {
-        "DEFAULT": lambda: "INFO".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "DEFAULT": "INFO".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
         "fore": Fore.BLUE,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode.INVERT,  # 模式
@@ -59,7 +59,7 @@ ERROR = {
     },
 
     "flag": {
-        "DEFAULT": lambda: "ERROR".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "DEFAULT": "ERROR".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
         "fore": Fore.RED,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode.INVERT,  # 模式
@@ -82,7 +82,7 @@ SUCCESS = {
     },
 
     "flag": {
-        "DEFAULT": lambda: "SUCCESS".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "DEFAULT": "SUCCESS".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
         "fore": Fore.GREEN,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode.INVERT,  # 模式
@@ -105,7 +105,7 @@ DEBUG = {
     },
 
     "flag": {
-        "DEFAULT": lambda: "DEBUG".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "DEFAULT": "DEBUG".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
         "fore": Fore.PURPLE,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode.INVERT,  # 模式
@@ -128,7 +128,7 @@ WARNING = {
     },
 
     "flag": {
-        "DEFAULT": lambda: "WARN".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "DEFAULT": "WARN".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
         "fore": Fore.YELLOW,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode.INVERT,  # 模式
