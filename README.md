@@ -46,8 +46,9 @@ pip install colour-printing
 ### 创建配置模板文件
 ```
 >> cd [path]
->> cprint (template) [config_filename]
-# cprint "{time}: {message}" "style"
+>> cprint -t (template) -n [config_filename]
+>> cprint -h # 查看帮助
+
 ```
 
 > 需要注意 

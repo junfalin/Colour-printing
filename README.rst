@@ -35,8 +35,9 @@ Python version: 3.5+
 ::
 
     >> cd [path]
-    >> cprint (template) [config_filename]
-    # cprint "{time}: {message}" "style"
+    >> cprint -t (template) -n [config_filename]
+    >> cprint -h # 查看帮助
+
 
 
 

@@ -1,14 +1,21 @@
 import re
 import sys
+import argparse
 import os
-
-from colour_printing import Fore, Back, Mode
 from colour_printing.custom.config import Config
+from colour_printing import cword
 
 stream = sys.stdout
+parser = argparse.ArgumentParser()
+parser.description = cword("***** Colour-printing       Auth:faithforus *****", fore="cyan")
+parser.add_argument('-n', '--filename', default="colour_printing_config.py", help=u'配置文件名')
+parser.add_argument('-t', '--template', help="输出信息模板")
+parser.add_argument('-l', '--newLevel', help="新增level")
 
 lk = '{'
 rk = '}'
+dy = "\"\""
+
 header = """\"""
 #                     *Colour-printing Reference*
 #########################################################################################
@@ -41,41 +48,34 @@ get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3
 """
 
 
-def tip(msg):
-    stream.write(f"[*]Tip>> {msg}")
+def tip(msg, colour='purple'):
+    stream.write(cword(f"[*]Tip>> {msg}", fore=colour))
     stream.write('\n')
 
 
 def term_template(term, kw: dict):
-    DEFAULT = kw[term]['DEFAULT']
-    fore = kw[term]['fore']
-    back = kw[term]['back']
-    mode = kw[term]['mode']
-    print(fore)
-    if str(fore) == str(Fore):
-        fore = Fore
-    if str(back) == str(Back):
-        back = Back
-    if str(mode) == str(Mode):
-        mode = Mode
+    style = kw.get(term, term_model(term))
+    DEFAULT = style.get('DEFAULT')
+    fore = style.get('fore')
+    back = style.get('back')
+    mode = style.get('mode')
     return f"""
-        "{term}":{lk}
-            "DEFAULT":{DEFAULT if DEFAULT else f"{term}_default"},
-            "fore":{fore},
-            "back":{back},
-            "mode":{mode}
-        {rk}
+        "{term}": {lk}
+            "DEFAULT": {f'"{DEFAULT}"' if DEFAULT else f"{term}_default"},
+            "fore": {f'"{fore}"' if fore else dy},
+            "back": {f'"{back}"' if back else dy},
+            "mode": {f'"{mode}"' if mode else dy}
+        {rk},
 """
 
 
 def term_model(term):
     return {term: {
-        "DEFAULT": f"{term}_default",
-        "fore": "Fore",
-        "back": "Back",
-        "mode": "Mode"
-    }
-    }
+        "DEFAULT": "",
+        "fore": "",
+        "back": "",
+        "mode": ""
+    }}
 
 
 def level_template(level_list, term_list, config):
@@ -104,51 +104,42 @@ def new_pyfile_template(config):
 def create_py_file(file_path, level_list, term, template):
     config = dict(level_list=level_list, term=term, template=template)
     if os.path.exists(file_path):
+        confirm = input(cword(f"[*]Tip>> 该配置文件已存在,确认要覆盖吗?\n"
+                              f"(如果覆盖则会保留原有的且是新模板中所需的配置)[Y/n]:", fore='purple'))
+        if confirm != "Y":
+            sys.exit(0)
         cfg = Config()
         cfg.from_pyfile(file_path)
         config.update(cfg)
-
     ns = new_pyfile_template(config)
     with open(file_path, 'w')as f:
         f.write(ns)
-    tip(f'创建配置模板文件完成-->  {file_path}')
+    tip(f'创建配置模板文件完成-->  {file_path}', colour='green')
     return 0
 
 
-def execute(argv=None):
-    if argv is None:
-        argv = sys.argv
+def execute():
+    args = parser.parse_args()
+    template = args.template
+    name = args.filename
+    new_level = args.newLevel
     # template
-    try:
-        template = str(argv[1])
-    except IndexError:
-        tip('Usage: cprint (template) [filename] [new_level]')
-        exit(2)
-    term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
-    for t in term:
-        if t.strip() == '':
-            tip('Template have {} ! ')
+    if template:
+        term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
+        if "message" not in term:
+            tip('template muse have {message} ! ', colour='red')
             sys.exit(2)
-    if "message" not in term:
-        tip('template muse have {message} ! ')
-        sys.exit(2)
+        for t in term:
+            if t.strip() == '':
+                tip(f'Unknown {{}} in " {template} " ', colour='red')
+                sys.exit(2)
     # filepath
-    try:
-        name = str(argv[2])
-        name = name if name.endswith('.py') else name + '.py'
-        file_path = f'{os.getcwd()}/{name}'
-    except IndexError:
-        file_path = f'{os.getcwd()}/colour_printing_config.py'
-
-    try:
-        new_level = argv[3:]
-    except IndexError:
-        new_level = []
-    level_list = ['INFO', 'SUCCESS', 'WARNING', 'ERROR', 'DEBUG'] + new_level
-    tip('创建配置模板文件中....')
+    name = name if name.endswith('.py') else name + '.py'
+    file_path = f'{os.getcwd()}/{name}'
+    # level
+    level_list = ['INFO', 'SUCCESS', 'WARNING', 'ERROR', 'DEBUG']
+    if new_level:
+        level_list += new_level.split(" ")
+    tip(u'创建配置模板文件中....')
     code = create_py_file(file_path, level_list, term, template)
     sys.exit(code)
-
-
-if __name__ == "__main__":
-    execute(["", "{message}"])

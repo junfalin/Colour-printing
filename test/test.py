@@ -1,9 +1,16 @@
-lk = '{'
-rk = '}'
-a = """"{term}":{lk}
-    "DEFAULT":{DEFAULT},
-    "fore":{fore},
-    "back":{back},
-    "mode":{mode}
-    {rk}""".format(lk=lk, rk=rk, **kwargs)
-print(a)
+class Mode:
+    NORMAL = 'normal'
+    BOLD = 'bold'
+    UNDERLINE = 'underline'
+    BLINK = 'blink'
+    INVERT = 'invert'
+    HIDE = 'hide'
+
+    def __repr__(self):
+        return '123'
+
+    def __str__(self):
+        return '123'
+
+
+print(Mode)

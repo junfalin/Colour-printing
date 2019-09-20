@@ -89,5 +89,3 @@ class Mode(dict):
     BLINK = 'blink'
     INVERT = 'invert'
     HIDE = 'hide'
-
-
