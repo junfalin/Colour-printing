@@ -39,9 +39,11 @@ class Config(dict):
         dict.__init__(self)
         self.printme = printme
         self.config_str = ""
+        self.filename = ""
 
     def from_pyfile(self, file_path, silent=False):
         filename = os.path.split(file_path)[1]
+        self.filename = filename
         d = types.ModuleType('config')
         d.__file__ = filename
         try:

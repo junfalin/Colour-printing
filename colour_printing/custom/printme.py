@@ -3,18 +3,13 @@ import os
 import functools
 import sys
 import threading
+from copy import deepcopy
 from queue import Queue
 from colour_printing.style import setting
 from colour_printing.custom.config import Config
 
 stream = sys.stdout
 level_list = []
-
-
-class Term(object):
-    def __init__(self, term, **kwargs):
-        for t in term:
-            setattr(self, t, kwargs.get(t))
 
 
 def level_wrap(func):
@@ -28,9 +23,12 @@ def level_wrap(func):
         # 参数
         for i in self.term:
             data[i] = kwargs.pop(i, default.get(i, lambda: "")())
-        data['message'] = " ".join([str(i) for i in args])
+        sep = kwargs.get('sep', " ")
+        data['message'] = sep.join([str(i) for i in args])
         # record
-        self.handler_record(Term(self.term, **data))
+        self.handler_record(deepcopy(data))
+        # 最高优先级,对data的操作会影响后续操作的输出内容
+        res = func(self, data)
         # 日志
         if level not in self.log_filter:
             msg = self.raw_template.format(**data) + "\n"
@@ -39,40 +37,41 @@ def level_wrap(func):
         if self.switch and self.Master_switch and level not in self.print_filter:
             end = kwargs.get('end', '\n')
             self.show(level, data=data, end=end)
+        return res
 
     return wrap
 
 
 class PrintMeError(Exception):
     def __init__(self, message):
-        super().__init__(message)
+        super().__init__(f"\n[*]Tip>> {message}")
 
 
 class ColourPrinting(object):
     Master_switch = True
 
     @level_wrap
-    def info(self, *args, **kwargs):
-        pass
+    def info(self, data):
+        """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     @level_wrap
-    def debug(self, *args, **kwargs):
-        pass
+    def debug(self, data):
+        """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     @level_wrap
-    def error(self, *args, **kwargs):
-        pass
+    def error(self, data):
+        """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     @level_wrap
-    def warning(self, *args, **kwargs):
-        pass
+    def warning(self, data):
+        """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     @level_wrap
-    def success(self, *args, **kwargs):
-        pass
+    def success(self, data):
+        """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     def handler_record(self, record):
-        pass
+        """record不受level函数影响,处理日志信息 重写此函数以应用每个不同的使用场景 """
 
 
 class LogHandler(object):
@@ -102,7 +101,7 @@ class LogHandler(object):
         path = os.path.join(self.log_path, self.log_name)
         stream.write(f'[*]Tip>> 日志文件path: {path}\n')
         with open(path, 'a+') as f:
-            while self.printme.switch and self.printme.Master_switch:
+            while True:
                 if self.printme.queue.empty():
                     if self.main_t.isAlive():
                         continue
@@ -131,13 +130,10 @@ def make_level_default(term):
 
 class PrintMe(ColourPrinting):
 
-    def __init__(self, template: str):
-        self.raw_template = template
-        self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
-        if "message" not in self.term:
-            raise PrintMeError('\n [*]Tip>> template muse have {message} ! ')
-        term_wrap = {i: "{%s}{%s}{%s}" % (i + '0', i, i + '1') for i in self.term}
-        self.template = template.format(**term_wrap)
+    def __init__(self, **kwargs):
+        self.raw_template = ''
+        self.term = []
+        self.template = ''
         # store
         self.level_list = level_list
         self.box = {}
@@ -151,9 +147,27 @@ class PrintMe(ColourPrinting):
         # log
         self.queue = Queue()
         self.log_handler = LogHandler(printme=self)
+        for k, v in kwargs.items():
+            if k in dir(self):
+                raise PrintMeError(f'变量名"{k}"已被定义,请更换')
+            setattr(self, k, v)
 
     def load_config(self):
         """获取py文件中的配置"""
+        # template 检查
+        template = self.config.get('TEMPLATE')
+        if not template:
+            raise PrintMeError(f"'{self.config.filename}' Can't find TEMPLATE = '' ")
+        self.raw_template = template
+        self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
+        for t in self.term:
+            if t.strip() == '':
+                raise PrintMeError('Template have {} ! ')
+        if "message" not in self.term:
+            raise PrintMeError('Template muse have {message} ! ')
+        term_wrap = {i: "{%s}{%s}{%s}" % (i + '0', i, i + '1') for i in self.term}
+        self.template = template.format(**term_wrap)
+        # style map
         for level in self.level_list:
             default = self.default[level] = {}
             style = self.box[level] = {}
@@ -165,15 +179,13 @@ class PrintMe(ColourPrinting):
                 style.update({f'{t}0': sett[0], f'{t}1': sett[1]})
 
     def show(self, level: str, data: dict, end: str):
+        # style
         if not self.box:
             msg = self.raw_template.format(**data)
-            stream.write(msg)
-            stream.write(end)
-            return
-        # style
-        style = self.box.get(level.upper())
-        data.update(style)
-        msg = self.template.format(**data)
+        else:
+            style = self.box.get(level.upper())
+            data.update(style)
+            msg = self.template.format(**data)
         stream.write(msg)
         stream.write(end)
 
