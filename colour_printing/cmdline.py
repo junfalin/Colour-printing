@@ -7,7 +7,7 @@ from colour_printing import cword
 
 stream = sys.stdout
 parser = argparse.ArgumentParser()
-parser.description = cword("***** Colour-printing       Auth:faithforus *****", fore="cyan")
+parser.description = cword("***** Colour-printing ***** github@Faithforus ", fore="cyan")
 parser.add_argument('-n', '--filename', default="colour_printing_config.py", help=u'配置文件名')
 parser.add_argument('-t', '--template', help="输出信息模板")
 parser.add_argument('-l', '--newLevel', help="新增level")
@@ -105,7 +105,7 @@ def create_py_file(file_path, level_list, term, template):
     config = dict(level_list=level_list, term=term, template=template)
     if os.path.exists(file_path):
         confirm = input(cword(f"[*]Tip>> 该配置文件已存在,确认要覆盖吗?\n"
-                              f"(如果覆盖则会保留原有的且是新模板中所需的配置)[Y/n]:", fore='purple'))
+                              f"(如果覆盖则会保留原有的且是新模板中所需的配置)[Y/n]:", fore='yellow'))
         if confirm != "Y":
             sys.exit(0)
         cfg = Config()

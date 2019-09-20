@@ -17,39 +17,12 @@ from colour_printing import Mode, Fore, Back
 
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
 
-TEMPLATE = "{message}{temp}{sadas}{ppp}"
+TEMPLATE = "{message}"
 message_default = ""
-
-temp_default = ""
-
-sadas_default = ""
-
-ppp_default = ""
 
 INFO = {
         "message": {
             "DEFAULT": message_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "temp": {
-            "DEFAULT": temp_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "sadas": {
-            "DEFAULT": sadas_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "ppp": {
-            "DEFAULT": ppp_default,
             "fore": "",
             "back": "",
             "mode": ""
@@ -62,52 +35,10 @@ SUCCESS = {
             "back": "",
             "mode": ""
         },
-
-        "temp": {
-            "DEFAULT": temp_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "sadas": {
-            "DEFAULT": sadas_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "ppp": {
-            "DEFAULT": ppp_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
 }
 WARNING = {
         "message": {
             "DEFAULT": message_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "temp": {
-            "DEFAULT": temp_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "sadas": {
-            "DEFAULT": sadas_default,
-            "fore": "sadasdsadsa",
-            "back": "",
-            "mode": ""
-        },
-
-        "ppp": {
-            "DEFAULT": ppp_default,
             "fore": "",
             "back": "",
             "mode": ""
@@ -120,52 +51,10 @@ ERROR = {
             "back": "asddwqe",
             "mode": ""
         },
-
-        "temp": {
-            "DEFAULT": "asdasd",
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "sadas": {
-            "DEFAULT": sadas_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "ppp": {
-            "DEFAULT": ppp_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
 }
 DEBUG = {
         "message": {
             "DEFAULT": "dasdas",
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "temp": {
-            "DEFAULT": temp_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "sadas": {
-            "DEFAULT": sadas_default,
-            "fore": "",
-            "back": "",
-            "mode": ""
-        },
-
-        "ppp": {
-            "DEFAULT": ppp_default,
             "fore": "",
             "back": "",
             "mode": ""
