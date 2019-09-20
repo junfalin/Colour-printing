@@ -35,7 +35,7 @@ integer_types = (int,)
 
 
 class Config(dict):
-    def __init__(self, printme):
+    def __init__(self, printme=None):
         dict.__init__(self)
         self.printme = printme
         self.config_str = ""
@@ -58,8 +58,7 @@ class Config(dict):
                 return False
             e.strerror = 'Unable to load configuration file (%s)' % e.strerror
             raise
-        self.from_object(d)
-        return True
+        return self.from_object(d)
 
     def from_object(self, obj):
         if isinstance(obj, string_types):
@@ -67,4 +66,6 @@ class Config(dict):
         for key in dir(obj):
             if key.isupper():
                 self[key] = getattr(obj, key)
-        self.printme.load_config()  # 渲染
+        if self.printme:
+            self.printme.load_config()  # 渲染
+        return True
