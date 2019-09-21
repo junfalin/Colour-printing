@@ -5,7 +5,6 @@ import sys
 import threading
 from copy import deepcopy
 from inspect import isfunction
-from pprint import pprint
 from queue import Queue
 from colour_printing.style import setting
 from colour_printing.custom.config import Config
@@ -34,7 +33,8 @@ def level_wrap(func):
                 else:
                     data[i] = dd
         sep = kwargs.get('sep', " ")
-        data['message'] = sep.join([str(i) for i in args])
+        if args:
+            data['message'] = sep.join([str(i) for i in args])
         # record
         self.handler_record(deepcopy(data))
         # 最高优先级,对data的操作会影响后续操作的输出内容
@@ -122,7 +122,7 @@ class LogHandler(object):
 
 def make_default():
     r = {
-        "DEFAULT": lambda: "",  # 默认值<-- Must be function name or lambda expression
+        "DEFAULT": "",  # 默认值
         "fore": "blue",  # 前景色
         "back": "",  # 背景色
         "mode": "",  # 模式
@@ -171,7 +171,7 @@ class PrintMe(ColourPrinting):
         self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
         for t in self.term:
             if t.strip() == '':
-                raise PrintMeError('Template have {} ! ')
+                raise PrintMeError('Unknown {} ! ')
         if "message" not in self.term:
             raise PrintMeError('Template muse have {message} ! ')
         term_wrap = {i: "{%s}{%s}{%s}" % (i + '0', i, i + '1') for i in self.term}

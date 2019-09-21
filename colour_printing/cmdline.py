@@ -35,20 +35,21 @@ header = """\"""
 
 def default_template(term, template):
     # default
-    res = f'TEMPLATE = "{template}"\n'
+    res = f'TEMPLATE = "{template}"\n\n'
     for t in term:
-        res += '''%s_default = ""\n\n''' % t
+        res += '''%s_default = ""\n''' % t
     return res
 
 
 def lib_template():
-    return f"""from datetime import datetime
+    return f"""
+from datetime import datetime
 from colour_printing import Mode, Fore, Back\n
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n
 """
 
 
-def tip(msg, colour='purple'):
+def tip(msg, colour='blue'):
     stream.write(cword(f"[*]Tip>> {msg}", fore=colour))
     stream.write('\n')
 
@@ -61,7 +62,7 @@ def term_template(term, kw: dict):
     mode = style.get('mode')
     return f"""
         "{term}": {lk}
-            "DEFAULT": {f'"{DEFAULT}"' if DEFAULT else f"{term}_default"},
+            "DEFAULT": {f'"{DEFAULT}"' if DEFAULT and isinstance(DEFAULT, str) else f"{term}_default"},
             "fore": {f'"{fore}"' if fore else dy},
             "back": {f'"{back}"' if back else dy},
             "mode": {f'"{mode}"' if mode else dy}
@@ -79,7 +80,7 @@ def term_model(term):
 
 
 def level_template(level_list, term_list, config):
-    res = ""
+    res = "\n"
     for level in level_list:
         res += level + " = {"
         for term in term_list:
@@ -104,9 +105,10 @@ def new_pyfile_template(config):
 def create_py_file(file_path, level_list, term, template):
     config = dict(level_list=level_list, term=term, template=template)
     if os.path.exists(file_path):
-        confirm = input(cword(f"[*]Tip>> 该配置文件已存在,确认要覆盖吗?\n"
-                              f"(如果覆盖则会保留原有的且是新模板中所需的配置)[Y/n]:", fore='yellow'))
+        confirm = input(cword(f"[*]Tip>> 该配置文件已存在,确认要覆写吗?\n"
+                              f"(如果覆写则会丢失部分配置)[Y/n]:", fore='yellow'))
         if confirm != "Y":
+            tip('已取消')
             sys.exit(0)
         cfg = Config()
         cfg.from_pyfile(file_path)
