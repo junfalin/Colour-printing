@@ -18,9 +18,9 @@ from colour_printing import Mode, Fore, Back
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
 
 
-TEMPLATE = "{time}{message}"
+TEMPLATE = "{time} {message}"
 
-time_default = lambda: ""
+time_default = get_time
 
 message_default = lambda: ""
 

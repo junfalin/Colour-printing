@@ -121,6 +121,9 @@ def create_py_file(file_path, level_list, term, template):
 
 
 def execute():
+    if len(sys.argv) <= 1:
+        tip("Please enter parameters or [-h] to see help")
+        sys.exit(0)
     args = parser.parse_args()
     template = args.template
     name = args.filename
@@ -141,7 +144,7 @@ def execute():
     # level
     level_list = ['INFO', 'SUCCESS', 'WARNING', 'ERROR', 'DEBUG']
     if new_level:
-        level_list += new_level.split(" ")
+        level_list += [l.upper() for l in new_level.split(" ") if l.strip()]
     tip(u'创建配置模板文件中....')
     code = create_py_file(file_path, level_list, term, template)
     sys.exit(code)
