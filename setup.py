@@ -2,9 +2,8 @@ import setuptools
 import codecs
 import os
 
-
 def read(fname):
-    return codecs.open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return codecs.open(os.path.join(os.path.dirname(__file__), fname), 'rb', encoding='gb18030', errors='ignore').read()
 
 
 setuptools.setup(
