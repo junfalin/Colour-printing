@@ -3,7 +3,7 @@
 ```
 pip install colour-printing
 ```
-> Support:Python 3.5+
+> Support:Python 3.7
 - 内置： 
   - info 
   - success 
