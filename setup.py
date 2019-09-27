@@ -1,10 +1,11 @@
 import setuptools
-import codecs
-import os
 
-def read(fname):
-    return codecs.open(os.path.join(os.path.dirname(__file__), fname), 'rb', encoding='gb18030', errors='ignore').read()
+try:
+    import pypandoc
 
+    long_description = pypandoc.convert_file('README.md', 'rst')
+except Exception:
+    long_description = ""
 
 setuptools.setup(
     name="colour-printing",
@@ -12,7 +13,7 @@ setuptools.setup(
     author="faithforus",
     author_email="ljunf817@163.com",
     description="colour-printing",
-    long_description=read('README.rst'),
+    long_description=long_description,
     keywords="python package print",
     url="https://github.com/Faithforus/Colour-printing",
     packages=setuptools.find_packages(),
