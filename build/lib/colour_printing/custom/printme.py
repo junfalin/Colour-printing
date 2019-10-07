@@ -40,7 +40,7 @@ def level_wrap(func):
         # 最高优先级,对data的操作会影响后续操作的输出内容
         res = func(self, data)
         # 日志
-        if level not in self.log_filter and self.Master_switch:
+        if level not in self.log_filter:
             msg = self.raw_template.format(**data) + "\n"
             self.queue.put(msg)
         # 打印
@@ -123,7 +123,7 @@ class LogHandler(object):
 def make_default():
     r = {
         "DEFAULT": "",  # 默认值
-        "fore": "",  # 前景色
+        "fore": "blue",  # 前景色
         "back": "",  # 背景色
         "mode": "",  # 模式
     }
@@ -140,7 +140,7 @@ def make_level_default(term):
 class PrintMe(ColourPrinting):
 
     def __init__(self, **kwargs):
-        self.raw_template = '{message}'
+        self.raw_template = ''
         self.term = []
         self.template = ''
         # store
@@ -166,7 +166,7 @@ class PrintMe(ColourPrinting):
         # template 检查
         template = self.config.get('TEMPLATE')
         if not template:
-            raise PrintMeError(f"'{self.config.filename}' Can't find variable TEMPLATE")
+            raise PrintMeError(f"'{self.config.filename}' Can't find TEMPLATE = '' ")
         self.raw_template = template
         self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
         for t in self.term:
@@ -218,15 +218,18 @@ class PrintMe(ColourPrinting):
     def switch(self):
         return self.__switch
 
-    def hide(self):
-        self.__switch = False
+    @switch.setter
+    def switch(self, val):
+        self.__switch = val
 
     @property
     def print_filter(self):
         return self.__print_filter
 
     @print_filter.setter
-    def print_filter(self, val: list):
+    def print_filter(self, val):
+        if not isinstance(val, list):
+            val = [val]
         self.__print_filter = [i.upper() for i in val]
 
     @property
@@ -234,5 +237,7 @@ class PrintMe(ColourPrinting):
         return self.__log_filter
 
     @log_filter.setter
-    def log_filter(self, val: list):
+    def log_filter(self, val):
+        if not isinstance(val, list):
+            val = [val]
         self.__log_filter = [i.upper() for i in val]

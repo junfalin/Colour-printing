@@ -15,14 +15,17 @@
 from datetime import datetime
 from colour_printing import Mode, Fore, Back
 
-get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
+get_time = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S.%f")[:-3]
 
-
-TEMPLATE = "{time} {message}"
+TEMPLATE = "{time} {flag} {message}"
 
 time_default = get_time
 
-message_default = lambda: ""
+flag_default = ""
+
+message_default = ""
+
+fill = 7
 
 INFO = {
     "time": {
@@ -32,41 +35,16 @@ INFO = {
         "mode": Mode,  # 模式
     },
 
-    "message": {
-        "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
+    "flag": {
+        "DEFAULT": "INFO".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.BLUE,  # 前景色
         "back": Back,  # 背景色
-        "mode": Mode,  # 模式
-    },
-}
-
-SUCCESS = {
-    "time": {
-        "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
-        "back": Back,  # 背景色
-        "mode": Mode,  # 模式
+        "mode": Mode.INVERT,  # 模式
     },
 
     "message": {
         "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
-        "back": Back,  # 背景色
-        "mode": Mode,  # 模式
-    },
-}
-
-WARNING = {
-    "time": {
-        "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
-        "back": Back,  # 背景色
-        "mode": Mode,  # 模式
-    },
-
-    "message": {
-        "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
+        "fore": Fore.BLUE,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode,  # 模式
     },
@@ -80,9 +58,39 @@ ERROR = {
         "mode": Mode,  # 模式
     },
 
+    "flag": {
+        "DEFAULT": "ERROR".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.RED,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode.INVERT,  # 模式
+    },
+
     "message": {
         "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.RED,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode,  # 模式
+    },
+}
+
+SUCCESS = {
+    "time": {
+        "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
         "fore": Fore.CYAN,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode,  # 模式
+    },
+
+    "flag": {
+        "DEFAULT": "SUCCESS".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.GREEN,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode.INVERT,  # 模式
+    },
+
+    "message": {
+        "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.GREEN,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode,  # 模式
     },
@@ -96,11 +104,40 @@ DEBUG = {
         "mode": Mode,  # 模式
     },
 
+    "flag": {
+        "DEFAULT": "DEBUG".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.PURPLE,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode.INVERT,  # 模式
+    },
+
     "message": {
         "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-        "fore": Fore.CYAN,  # 前景色
+        "fore": Fore.PURPLE,  # 前景色
         "back": Back,  # 背景色
         "mode": Mode,  # 模式
     },
 }
 
+WARNING = {
+    "time": {
+        "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.CYAN,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode,  # 模式
+    },
+
+    "flag": {
+        "DEFAULT": "WARN".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.YELLOW,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode.INVERT,  # 模式
+    },
+
+    "message": {
+        "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
+        "fore": Fore.YELLOW,  # 前景色
+        "back": Back,  # 背景色
+        "mode": Mode,  # 模式
+    },
+}

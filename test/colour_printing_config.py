@@ -18,14 +18,14 @@ from colour_printing import Mode, Fore, Back
 
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]
 
-TEMPLATE = "{sdcx}{message}"
+TEMPLATE = "{time}{message}"
 
-sdcx_default = ""
+time_default = ""
 message_default = ""
 
 INFO = {
-        "sdcx": {
-            "DEFAULT": sdcx_default,
+        "time": {
+            "DEFAULT": time_default,
             "fore": "",
             "back": "",
             "mode": ""
@@ -39,8 +39,8 @@ INFO = {
         },
 }
 SUCCESS = {
-        "sdcx": {
-            "DEFAULT": sdcx_default,
+        "time": {
+            "DEFAULT": time_default,
             "fore": "",
             "back": "",
             "mode": ""
@@ -54,8 +54,8 @@ SUCCESS = {
         },
 }
 WARNING = {
-        "sdcx": {
-            "DEFAULT": sdcx_default,
+        "time": {
+            "DEFAULT": time_default,
             "fore": "",
             "back": "",
             "mode": ""
@@ -69,8 +69,8 @@ WARNING = {
         },
 }
 ERROR = {
-        "sdcx": {
-            "DEFAULT": sdcx_default,
+        "time": {
+            "DEFAULT": time_default,
             "fore": "",
             "back": "",
             "mode": ""
@@ -84,8 +84,8 @@ ERROR = {
         },
 }
 DEBUG = {
-        "sdcx": {
-            "DEFAULT": sdcx_default,
+        "time": {
+            "DEFAULT": time_default,
             "fore": "",
             "back": "",
             "mode": ""
