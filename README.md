@@ -61,9 +61,9 @@ pip install colour-printing
 ```
     from colour_printing.custom import PrintMe,level_wrap
 
-    p = PrintMe(my_var1='',my_var2='') # 可载入所需变量 
-    p.config.from_pyfile(file_path = '') # 载入配置文件
-    p.log_handler.run(log_name='',log_path='')  # 日志输出到文件
+    p = PrintMe(config_obj=None,config_path="",my_var1='',my_var2='') 
+    # 可通过object或配置文件path导入，可另外载入自定义变量(可选) 
+    p.log_handler.run(log_name='',log_path='')  # 日志输出到文件，参数可选
     p.set_default(set_level='info',time='2019') # 设置默认值，将会覆盖配置文件值，其中set_level：指定设置的level.不指定则所有
 
     # p.hide()
@@ -75,10 +75,10 @@ pip install colour-printing
     p.success('hello')
 
     #新增level
-    cprint -t [] -l "critical other1 other2"
+    >>> cprint -l "critical other1 other2"
     class NewOne(PrintMe):
         @level_wrap
-        def critical(self, data):
+        def critical(self, data:dict):
             """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
 

@@ -61,26 +61,26 @@ class ColourPrinting(object):
     Master_switch = True
 
     @level_wrap
-    def info(self, data):
+    def info(self, data: dict):
         """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     @level_wrap
-    def debug(self, data):
+    def debug(self, data: dict):
         """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     @level_wrap
-    def error(self, data):
+    def error(self, data: dict):
         """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     @level_wrap
-    def warning(self, data):
+    def warning(self, data: dict):
         """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
     @level_wrap
-    def success(self, data):
+    def success(self, data: dict):
         """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
-    def handler_record(self, record):
+    def handler_record(self, record: dict):
         """record不受level函数影响,处理日志信息 重写此函数以应用每个不同的使用场景 """
 
 
@@ -139,7 +139,7 @@ def make_level_default(term):
 
 class PrintMe(ColourPrinting):
 
-    def __init__(self, **kwargs):
+    def __init__(self, config_obj=None, config_path="", **kwargs):
         self.raw_template = '{message}'
         self.term = []
         self.template = ''
@@ -152,7 +152,12 @@ class PrintMe(ColourPrinting):
         self.__print_filter = []
         self.__log_filter = []
         # style config
-        self.config = Config(printme=self)
+        self.config = Config()
+        if config_obj:
+            self.config.from_object(config_obj)
+        elif config_path:
+            self.config.from_pyfile(config_path)
+        self.load_config()
         # log
         self.queue = Queue()
         self.log_handler = LogHandler(printme=self)
@@ -173,7 +178,7 @@ class PrintMe(ColourPrinting):
             if t.strip() == '':
                 raise PrintMeError('未知 {} ! ')
         if "message" not in self.term:
-            raise PrintMeError('模板中未找到 {message} ! ')
+            raise PrintMeError('TEMPLATE中未找到 {message} ! ')
         term_wrap = {i: "{%s}{%s}{%s}" % (i + '0', i, i + '1') for i in self.term}
         self.template = template.format(**term_wrap)
         # style map

@@ -1,5 +1,4 @@
-import os
 from colour_printing.custom import PrintMe
+from .default_colour_printing_config import CP
 
-log = PrintMe()
-log.config.from_pyfile(os.path.split(__file__)[0] + '/default_colour_printing_config.py')
+log = PrintMe(config_obj=CP)

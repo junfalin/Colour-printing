@@ -35,12 +35,10 @@ integer_types = (int,)
 
 
 class Config(dict):
-    def __init__(self, printme=None):
+    def __init__(self):
         dict.__init__(self)
-        self.printme = printme
         self.config_str = ""
         self.filename = ""
-        
 
     def from_pyfile(self, file_path, silent=False):
         filename = os.path.split(file_path)[1]
@@ -67,6 +65,4 @@ class Config(dict):
         for key in dir(obj):
             if key.isupper():
                 self[key] = getattr(obj, key)
-        if self.printme:
-            self.printme.load_config()  # 渲染
         return True
