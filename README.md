@@ -18,7 +18,7 @@ pip install colour-printing
 
     # 打印色彩字符
     cprint('default')
-    cprint('hello', fo re=Fore.RED)
+    cprint('hello', fore=Fore.RED)
     #或者只要色彩字符
     s1 = cword('I', fore=Fore.YELLOW)
     s2 = cword('LOVE','China', fore=Fore.RED)
