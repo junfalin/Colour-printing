@@ -166,14 +166,14 @@ class PrintMe(ColourPrinting):
         # template 检查
         template = self.config.get('TEMPLATE')
         if not template:
-            raise PrintMeError(f"'{self.config.filename}' Can't find variable TEMPLATE")
+            raise PrintMeError(f"'{self.config.filename}' 找不到变量 TEMPLATE")
         self.raw_template = template
         self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
         for t in self.term:
             if t.strip() == '':
-                raise PrintMeError('Unknown {} ! ')
+                raise PrintMeError('未知 {} ! ')
         if "message" not in self.term:
-            raise PrintMeError('Template muse have {message} ! ')
+            raise PrintMeError('模板中未找到 {message} ! ')
         term_wrap = {i: "{%s}{%s}{%s}" % (i + '0', i, i + '1') for i in self.term}
         self.template = template.format(**term_wrap)
         # style map

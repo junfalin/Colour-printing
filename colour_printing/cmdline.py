@@ -122,7 +122,7 @@ def create_py_file(file_path, level_list, term, template):
 
 def execute():
     if len(sys.argv) <= 1:
-        tip("Please enter parameters or [-h] to see help")
+        tip("请输出参数[cprint -h 查看帮助]")
         sys.exit(0)
     args = parser.parse_args()
     template = args.template
@@ -132,11 +132,14 @@ def execute():
     if template:
         term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
         if "message" not in term:
-            tip('template muse have {message} ! ', colour='red')
+            tip('模板中未找到 {message} ! ', colour='red')
             sys.exit(2)
         for t in term:
             if t.strip() == '':
-                tip(f'Unknown {{}} in " {template} " ', colour='red')
+                tip(f'未知 {{}} in " {template} " ', colour='red')
+                sys.exit(2)
+            if " " in t:
+                tip(f'未知 {{{t}}} in "{template} " ', colour='red')
                 sys.exit(2)
     # filepath
     name = name if name.endswith('.py') else name + '.py'
