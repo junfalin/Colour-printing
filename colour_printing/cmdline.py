@@ -113,10 +113,9 @@ def new_pyfile_template(config):
 def create_py_file(file_path, level_list, term, template):
     config = dict(level_list=level_list, term=term, template=template)
     if os.path.exists(file_path):
-        confirm = input(cword(f"[*]Tip>> 该配置文件已存在,确认要覆写吗?\n"
-                              f"(如果覆写则尽可能保留少部分配置)[Y/n]:", fore='yellow'))
+        confirm = input(cword(f"[*]Tip>> 该配置文件已存在,确认要覆写吗?\n[Y/n]:", fore='yellow'))
         if confirm != "Y":
-            tip('取消操作')
+            tip('cancel!')
             sys.exit(0)
         if not is_obj:
             cfg = Config()
@@ -131,7 +130,7 @@ def create_py_file(file_path, level_list, term, template):
 
 def execute():
     if len(sys.argv) <= 1:
-        tip("请输出参数[cprint -h 查看帮助]")
+        tip("cprint -h 查看帮助")
         sys.exit(0)
     args = parser.parse_args()
     template = args.template
@@ -149,7 +148,7 @@ def execute():
                 tip(f'未知 {{}} in " {template} " ', colour='red')
                 sys.exit(2)
             if " " in t:
-                tip(f'未知 {{{t}}} in "{template} " ', colour='red')
+                tip(f'{{{t}}} 含空格', colour='red')
                 sys.exit(2)
     # filepath
     name = name if name.endswith('.py') else name + '.py'

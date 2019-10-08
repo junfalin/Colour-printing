@@ -9,7 +9,7 @@ except Exception:
 
 setuptools.setup(
     name="colour-printing",
-    version="0.3.14",
+    version="0.3.16",
     author="faithforus",
     author_email="ljunf817@163.com",
     description="colour-printing",

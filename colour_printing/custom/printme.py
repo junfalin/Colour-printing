@@ -139,7 +139,7 @@ def make_level_default(term):
 
 class PrintMe(ColourPrinting):
 
-    def __init__(self, config_obj=None, config_path="", **kwargs):
+    def __init__(self, cp_config: str or object, **kwargs):
         self.raw_template = '{message}'
         self.term = []
         self.template = ''
@@ -153,14 +153,15 @@ class PrintMe(ColourPrinting):
         self.__log_filter = []
         # style config
         self.config = Config()
-        if config_obj:
-            self.config.from_object(config_obj)
-        elif config_path:
-            self.config.from_pyfile(config_path)
+        if isinstance(cp_config, str):
+            self.config.from_pyfile(cp_config)
+        else:
+            self.config.from_object(cp_config)
         self.load_config()
         # log
         self.queue = Queue()
         self.log_handler = LogHandler(printme=self)
+        # custom args
         for k, v in kwargs.items():
             if k in dir(self):
                 raise PrintMeError(f'变量名"{k}"已被定义,请更换')
