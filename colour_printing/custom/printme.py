@@ -60,6 +60,10 @@ class PrintMeError(Exception):
 class ColourPrinting(object):
     Master_switch = True
 
+    @classmethod
+    def shutdown(cls):
+        cls.Master_switch = False
+
     @level_wrap
     def info(self, data: dict):
         """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""

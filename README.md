@@ -1,5 +1,5 @@
 # Colour-printing
-用颜色区分终端输出信息类型，自定义输出模板，标识出重要信息
+开发者小工具：用颜色,等级区分终端输出信息类型，自定义输出模板，标识出重要信息，日志输入到文件
 ```
 pip install colour-printing
 ```
@@ -21,7 +21,7 @@ pip install colour-printing
     log.success("hello world!")
     log.warning("hello world!")
     log.debug("hello world!")
-
+    
     
 
 ```
@@ -53,12 +53,12 @@ pip install colour-printing
 ```
 >> cd /home/faith/GIT/Colour-printing
 
->> cprint (-t template) [-n config_filename]
+>> cprint (-t template) [-n config_filename] [-o]# 配置对象 
 
 ```
 
 > 需要注意 
-- template (模板):  具体由format实现，所以格式要求 “{}{}{}{}”  {**message**}字段必需!
+- template (模板):  具体由format实现，所以格式要求 “{}{}{}{}”且需包含{**message**}字段
 
 
 
@@ -67,7 +67,7 @@ pip install colour-printing
 ```
     from colour_printing.custom import PrintMe,level_wrap
 
-    p = PrintMe(cp_config,my_var1='',my_var2='') 
+    p = PrintMe(cp_config:str or object, my_var1='',my_var2='') 
     # cp_config:可通过object或配置文件path导入;可另外载入自定义变量(可选) 
     
     p.log_handler.run(log_name='',log_path='')  
@@ -88,12 +88,12 @@ pip install colour-printing
     >>> cprint -l "critical other1 other2"
     
     class NewOne(PrintMe):
-    
+        #装饰新增level func
         @level_wrap
         def critical(self, data:dict):
             """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
-
+    n = NewOne(cp_config)
 ```
 
 
@@ -104,4 +104,5 @@ pip install colour-printing
         """record不受level函数影响,处理日志信息 重写此函数以应用每个不同的使用场景 """
             print("handler_record: ",record)
     
+    vlog = Vlog(cp_config)
 ```

@@ -11,7 +11,7 @@ parser.description = cword("***** Colour-printing ***** github@Faithforus ", for
 parser.add_argument('-n', '--filename', default="colour_printing_config.py", help='配置文件名')
 parser.add_argument('-t', '--template', help="信息模板")
 parser.add_argument('-l', '--newLevel', help="新增level,配合@level_wrap使用")
-parser.add_argument('-o', '--isObj', help="配置默认是对象,后跟任意参数")
+parser.add_argument('-o', '--isObj', action="store_true", help="生成配置对象模板")
 
 header = """\"""
 #                     *Colour-printing Reference*
@@ -33,11 +33,9 @@ lk = '{'
 rk = '}'
 dy = "\"\""
 
-is_obj = True
-obj_header = """\n
-class CP(object):
-    TEMPLATE = TEMPLATE"""
-obj_tab = " " * 4
+is_obj = False
+obj_header = "\n"
+obj_tab = ""
 
 
 def default_template(term, template):
@@ -156,16 +154,22 @@ def execute():
     # level
     level_list = ['INFO', 'SUCCESS', 'WARNING', 'ERROR', 'DEBUG']
     if new_level:
-        level_list += [l.upper() for l in new_level.split(" ") if l.strip()]
+        level_list += [l.strip().upper() for l in new_level.split(" ") if l.strip()]
 
     # obj
     if isObj:
         global is_obj
         global obj_header
         global obj_tab
-        is_obj = False
-        obj_header = "\n"
-        obj_tab = ""
+        is_obj = True
+        obj_header = """\n
+class CP(object):
+    TEMPLATE = TEMPLATE"""
+        obj_tab = " " * 4
     tip(u'创建配置模板文件中....')
     code = create_py_file(file_path, level_list, term, template)
     sys.exit(code)
+
+
+if __name__ == '__main__':
+    execute()

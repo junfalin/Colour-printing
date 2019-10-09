@@ -16,9 +16,10 @@ setuptools.setup(
     long_description=long_description,
     keywords="python package print",
     url="https://github.com/Faithforus/Colour-printing",
+    license="MIT",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
