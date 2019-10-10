@@ -6,28 +6,25 @@ import threading
 from copy import deepcopy
 from inspect import isfunction
 from queue import Queue
-from colour_printing.style import setting
-from colour_printing.custom.config import Config
+from colour_printing.config import CPConfig
+from colour_printing.exception import PrintMeError
 
 stream = sys.stdout
-level_list = []
 
 
 def level_wrap(func):
-    level_list.append(func.__name__.upper())
-
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
         level = func.__name__.upper()
-        default = self.default.get(level, {})
+        default = self.cp._default.get(level, {})
         data = {}
         # 参数
-        for i in self.term:
+        for i in self.cp._terms:
             w = kwargs.get(i)
             if w:
                 data[i] = w
             else:
-                dd = default.get(i, lambda: "")
+                dd = default.get(i, "")
                 if isfunction(dd):
                     data[i] = dd()
                 else:
@@ -41,7 +38,7 @@ def level_wrap(func):
         res = func(self, data)
         # 日志
         if level not in self.log_filter and self.Master_switch:
-            msg = self.raw_template.format(**data) + "\n"
+            msg = self.cp._rawtemplate.format(**data) + "\n"
             self.queue.put(msg)
         # 打印
         if self.switch and self.Master_switch and level not in self.print_filter:
@@ -50,11 +47,6 @@ def level_wrap(func):
         return res
 
     return wrap
-
-
-class PrintMeError(Exception):
-    def __init__(self, message):
-        super().__init__(f"\n[*]Tip>> {message}")
 
 
 class ColourPrinting(object):
@@ -124,87 +116,33 @@ class LogHandler(object):
                 f.flush()
 
 
-def make_default():
-    r = {
-        "DEFAULT": "",  # 默认值
-        "fore": "",  # 前景色
-        "back": "",  # 背景色
-        "mode": "",  # 模式
-    }
-    return r
-
-
-def make_level_default(term):
-    r = {}
-    for t in term:
-        r.update({t: make_default()})
-    return r
-
-
 class PrintMe(ColourPrinting):
 
-    def __init__(self, cp_config: str or object, **kwargs):
-        self.raw_template = '{message}'
-        self.term = []
-        self.template = ''
+    def __init__(self, cp: CPConfig, **kwargs):
         # store
-        self.level_list = level_list
-        self.box = {}
-        self.default = {}
+        # style config
+        self.cp = cp
         # switch
         self.__switch = True
         self.__print_filter = []
         self.__log_filter = []
-        # style config
-        self.config = Config()
-        if isinstance(cp_config, str):
-            self.config.from_pyfile(cp_config)
-        else:
-            self.config.from_object(cp_config)
-        self.load_config()
         # log
         self.queue = Queue()
         self.log_handler = LogHandler(printme=self)
         # custom args
         for k, v in kwargs.items():
             if k in dir(self):
-                raise PrintMeError(f'变量名"{k}"已被定义,请更换')
+                raise PrintMeError(f'变量名"{k}"已被定义咯,请更换其他变量名')
             setattr(self, k, v)
-
-    def load_config(self):
-        """获取py文件中的配置"""
-        # template 检查
-        template = self.config.get('TEMPLATE')
-        if not template:
-            raise PrintMeError(f"'{self.config.filename}' 找不到变量 TEMPLATE")
-        self.raw_template = template
-        self.term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
-        for t in self.term:
-            if t.strip() == '':
-                raise PrintMeError('未知 {} ! ')
-        if "message" not in self.term:
-            raise PrintMeError('TEMPLATE中未找到 {message} ! ')
-        term_wrap = {i: "{%s}{%s}{%s}" % (i + '0', i, i + '1') for i in self.term}
-        self.template = template.format(**term_wrap)
-        # style map
-        for level in self.level_list:
-            default = self.default[level] = {}
-            style = self.box[level] = {}
-            terms = self.config.get(level, make_level_default(self.term))  # 获取每个level里的字段
-            for t in self.term:
-                cfg = terms.get(t, make_default())  # 获取每个字段的default,fore,mode,back
-                default.update({t: cfg.get("DEFAULT")})
-                sett = setting(fore=cfg.get('fore'), back=cfg.get('back'), mode=cfg.get('mode'))
-                style.update({f'{t}0': sett[0], f'{t}1': sett[1]})
 
     def show(self, level: str, data: dict, end: str):
         # style
-        if not self.box:
-            msg = self.raw_template.format(**data)
+        if not self.cp._box.get(level.upper()):
+            msg = self.cp._rawtemplate.format(**data)
         else:
-            style = self.box.get(level.upper())
+            style = self.cp._box.get(level.upper())
             data.update(style)
-            msg = self.template.format(**data)
+            msg = self.cp._template.format(**data)
         stream.write(msg)
         stream.write(end)
 
@@ -216,19 +154,19 @@ class PrintMe(ColourPrinting):
         """
         level = kwargs.get('set_level')
         if level:
-            if level.upper() in self.level_list:
+            if level.upper() in self.cp._levels:
                 for k, v in kwargs.items():
-                    self.default[level.upper()].update({k: v})
+                    self.cp._default[level.upper()].update({k: v})
         else:
-            for level in self.level_list:
+            for level in self.cp._levels:
                 for k, v in kwargs.items():
-                    self.default[level.upper()].update({k: v})
+                    self.cp._default[level.upper()].update({k: v})
 
     @property
     def switch(self):
         return self.__switch
 
-    def hide(self):
+    def close(self):
         self.__switch = False
 
     @property

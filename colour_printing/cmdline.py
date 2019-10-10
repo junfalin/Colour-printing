@@ -2,16 +2,21 @@ import re
 import sys
 import argparse
 import os
-from colour_printing.custom.config import Config
 from colour_printing import cword
+from colour_printing.helper import check
 
 stream = sys.stdout
 parser = argparse.ArgumentParser()
 parser.description = cword("***** Colour-printing ***** github@Faithforus ", fore="cyan")
 parser.add_argument('-n', '--filename', default="colour_printing_config.py", help='配置文件名')
 parser.add_argument('-t', '--template', help="信息模板")
-parser.add_argument('-l', '--newLevel', help="新增level,配合@level_wrap使用")
-parser.add_argument('-o', '--isObj', action="store_true", help="生成配置对象模板")
+parser.add_argument('-l', '--newLevel', help="新增level,配合@level_wrap使用;多个用分号隔开")
+
+
+def tip(msg, colour='blue'):
+    stream.write(cword(f"[*]Tip>> {msg}", fore=colour))
+    stream.write('\n')
+
 
 header = """\"""
 #                     *Colour-printing Reference*
@@ -26,104 +31,61 @@ header = """\"""
 #            'cyan':  青蓝色          'cyan':  青蓝色                                     #
 #            'white':  白色           'white':  白色                                     #
 #########################################################################################
-\"""
-"""
+\"""\n\n"""
 
 lk = '{'
 rk = '}'
 dy = "\"\""
-
-is_obj = False
-obj_header = "\n"
-obj_tab = ""
+tab = " " * 4
 
 
-def default_template(term, template):
-    # default
-    res = f'TEMPLATE = "{template}"\n\n'
-    for t in term:
-        res += '''%s_default = ""\n''' % t
-    return res
-
-
-def lib_template():
+def lib_template(template):
     return f"""
-from datetime import datetime
+from colour_printing.config import CPConfig, Term\n
+from datetime import datetime\n
 from colour_printing import Mode, Fore, Back\n
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n
+TEMPLATE = "{template}"
+CP = CPConfig(TEMPLATE) # 导出CP即可\n\n
 """
 
 
-def tip(msg, colour='blue'):
-    stream.write(cword(f"[*]Tip>> {msg}", fore=colour))
-    stream.write('\n')
-
-
-def term_template(term, kw: dict):
-    style = kw.get(term, term_model(term))
-    DEFAULT = style.get('DEFAULT')
-    fore = style.get('fore')
-    back = style.get('back')
-    mode = style.get('mode')
-    return f"""
-        {obj_tab}"{term}": {lk}
-            {obj_tab}"DEFAULT": {f'"{DEFAULT}"' if DEFAULT and isinstance(DEFAULT, str) else f"{term}_default"},
-            {obj_tab}"fore": {f'"{fore}"' if fore else dy},
-            {obj_tab}"back": {f'"{back}"' if back else dy},
-            {obj_tab}"mode": {f'"{mode}"' if mode else dy}
-        {obj_tab}{rk},
-"""
-
-
-def term_model(term):
-    return {term: {
-        "DEFAULT": "",
-        "fore": "",
-        "back": "",
-        "mode": ""
-    }}
-
-
-def level_template(level_list, term_list, config):
-    res = f"\n"
+def cls_template(level_list, terms):
+    result = """
+class Paper(object):"""
     for level in level_list:
-        res += f"{obj_tab}{level} = {lk}"
-        for term in term_list:
-            res += term_template(term, config.get(level, term_model(term)))
-        res += f"{obj_tab}{rk}\n"
-    return res
+        result += f"""\n
+{tab}@CP.wrap
+{tab}def {level}(self):"""
+        for term in terms:
+            result += f"""
+{tab * 2}self.{term} = Term()"""
+    return result
 
 
-def new_pyfile_template(config):
-    term = config['term']
-    template = config['template']
-    level_list = config['level_list']
-    res = header
-    # lib
-    res += lib_template()
-    res += default_template(term, template)
-    # style
-    res += obj_header
-    res += level_template(level_list, term, config)
-    return res
+def assemble(level_list, terms, template):
+    result = header
+    result += lib_template(template)
+    result += cls_template(level_list, terms)
+    return result
 
 
-def create_py_file(file_path, level_list, term, template):
-    config = dict(level_list=level_list, term=term, template=template)
-    if os.path.exists(file_path):
-        confirm = input(cword(f"[*]Tip>> 该配置文件已存在,确认要覆写吗?\n[Y/n]:", fore='yellow'))
-        if confirm != "Y":
-            tip('cancel!')
-            sys.exit(0)
-        if not is_obj:
-            cfg = Config()
-            cfg.from_pyfile(file_path)
-            config.update(cfg)
-    ns = new_pyfile_template(config)
+def create_py_file(file_path, level_list, terms, template):
+    ns = assemble(level_list, terms, template)
     with open(file_path, 'w')as f:
         f.write(ns)
     tip(f'创建配置模板文件完成-->  {file_path}', colour='green')
     return 0
+
+
+def template_handle(template):
+    # template
+    terms = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
+    e = check(terms)
+    if e:
+        tip(e, colour='red')
+        sys.exit(2)
+    return terms
 
 
 def execute():
@@ -134,40 +96,22 @@ def execute():
     template = args.template
     name = args.filename
     new_level = args.newLevel
-    isObj = args.isObj
-    # template
-    if template:
-        term = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
-        if "message" not in term:
-            tip('模板中未找到 {message} ! ', colour='red')
-            sys.exit(2)
-        for t in term:
-            if t.strip() == '':
-                tip(f'未知 {{}} in " {template} " ', colour='red')
-                sys.exit(2)
-            if " " in t:
-                tip(f'{{{t}}} 含空格', colour='red')
-                sys.exit(2)
+    # handle
+    terms = template_handle(template)
     # filepath
     name = name if name.endswith('.py') else name + '.py'
     file_path = f'{os.getcwd()}/{name}'
+    if os.path.exists(file_path):
+        tip(f"{name}该配置文件已存在,确认要覆写吗?将配置丢失", colour='yellow')
+        if input("[Y/n]:") != "Y":
+            tip('cancel!')
+            sys.exit(0)
     # level
-    level_list = ['INFO', 'SUCCESS', 'WARNING', 'ERROR', 'DEBUG']
+    level_list = ['info', 'success', 'warning', 'error', 'debug']
     if new_level:
-        level_list += [l.strip().upper() for l in new_level.split(" ") if l.strip()]
-
-    # obj
-    if isObj:
-        global is_obj
-        global obj_header
-        global obj_tab
-        is_obj = True
-        obj_header = """\n
-class CP(object):
-    TEMPLATE = TEMPLATE"""
-        obj_tab = " " * 4
+        level_list += [l.strip() for l in new_level.split(";") if l.strip()]
     tip(u'创建配置模板文件中....')
-    code = create_py_file(file_path, level_list, term, template)
+    code = create_py_file(file_path, level_list, terms, template)
     sys.exit(code)
 
 

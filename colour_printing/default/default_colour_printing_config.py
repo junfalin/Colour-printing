@@ -12,135 +12,46 @@
 #            'white':  白色           'white':  白色                                     #
 #########################################################################################
 """
+
+from colour_printing.config import CPConfig, Term
+
 from datetime import datetime
 from colour_printing import Mode, Fore, Back
 
 get_time = lambda: datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S.%f")[:-3]
-
-TEMPLATE = "{time} {flag} {message}"
-
-time_default = get_time
-
-flag_default = ""
-
-message_default = ""
-
 fill = 7
 
+TEMPLATE = "{time} {flag} {message}"
+CP = CPConfig(TEMPLATE)
 
-class CP(object):
-    TEMPLATE = TEMPLATE
-    INFO = {
-        "time": {
-            "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.CYAN,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
 
-        "flag": {
-            "DEFAULT": "INFO".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.BLUE,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode.INVERT,  # 模式
-        },
+class Paper(object):
+    @CP.wrap
+    def info(self):
+        self.time = Term(default=get_time, fore=Fore.CYAN)
+        self.flag = Term(default="INFO".center(fill, "-"), fore=Fore.BLUE, mode=Mode.INVERT)
+        self.message = Term(fore=Fore.BLUE)
 
-        "message": {
-            "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.BLUE,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
-    }
+    @CP.wrap
+    def error(self):
+        self.time = Term(default=get_time, fore=Fore.CYAN)
+        self.flag = Term(default="ERROR".center(fill, "-"), fore=Fore.RED, mode=Mode.INVERT)
+        self.message = Term(fore=Fore.RED)
 
-    ERROR = {
-        "time": {
-            "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.CYAN,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
+    @CP.wrap
+    def success(self):
+        self.time = Term(default=get_time, fore=Fore.CYAN)
+        self.flag = Term(default="SUCCESS".center(fill, "-"), fore=Fore.GREEN, mode=Mode.INVERT)
+        self.message = Term(fore=Fore.GREEN)
 
-        "flag": {
-            "DEFAULT": "ERROR".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.RED,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode.INVERT,  # 模式
-        },
+    @CP.wrap
+    def debug(self):
+        self.time = Term(default=get_time, fore=Fore.CYAN)
+        self.flag = Term(default="DEBUG".center(fill, "-"), fore=Fore.PURPLE, mode=Mode.INVERT)
+        self.message = Term(fore=Fore.PURPLE)
 
-        "message": {
-            "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.RED,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
-    }
-
-    SUCCESS = {
-        "time": {
-            "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.CYAN,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
-
-        "flag": {
-            "DEFAULT": "SUCCESS".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.GREEN,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode.INVERT,  # 模式
-        },
-
-        "message": {
-            "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.GREEN,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
-    }
-
-    DEBUG = {
-        "time": {
-            "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.CYAN,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
-
-        "flag": {
-            "DEFAULT": "DEBUG".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.PURPLE,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode.INVERT,  # 模式
-        },
-
-        "message": {
-            "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.PURPLE,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
-    }
-
-    WARNING = {
-        "time": {
-            "DEFAULT": time_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.CYAN,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
-
-        "flag": {
-            "DEFAULT": "WARN".center(fill, "-"),  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.YELLOW,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode.INVERT,  # 模式
-        },
-
-        "message": {
-            "DEFAULT": message_default,  # 默认值<-- Must be function name or lambda expression
-            "fore": Fore.YELLOW,  # 前景色
-            "back": Back,  # 背景色
-            "mode": Mode,  # 模式
-        },
-    }
+    @CP.wrap
+    def warning(self):
+        self.time = Term(default=get_time, fore=Fore.CYAN)
+        self.flag = Term(default="WARNING".center(fill, "-"), fore=Fore.YELLOW, mode=Mode.INVERT)
+        self.message = Term(fore=Fore.YELLOW)
