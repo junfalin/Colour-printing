@@ -46,9 +46,10 @@ from datetime import datetime\n
 from colour_printing import Mode, Fore, Back\n
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n
 TEMPLATE = "{template}"
-CP = CPConfig(TEMPLATE) # 导出CP即可\n\n
-"""
-
+CP = CPConfig(TEMPLATE)  # 我才是主角,从其他地方导入我\n
+#        +------------------------->  doesn't matter,不用实例化
+#        |
+#        V"""
 
 def cls_template(level_list, terms):
     result = """
