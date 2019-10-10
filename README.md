@@ -53,7 +53,7 @@ pip install colour-printing
 ```
 >> cd /home/faith/GIT/Colour-printing
 
->> cprint (-t template) [-n config_filename] [-o]# 配置对象 
+>> cprint (-t template) [-n config_filename]
 
 ```
 
@@ -67,8 +67,8 @@ pip install colour-printing
 ```
     from colour_printing.custom import PrintMe,level_wrap
 
-    p = PrintMe(cp_config:str or object, my_var1='',my_var2='') 
-    # cp_config:可通过object或配置文件path导入;可另外载入自定义变量(可选) 
+    p = PrintMe(cp_config:CPConfig, my_var1='',my_var2='') 
+    # 可另外载入自定义变量(可选) 
     
     p.log_handler.run(log_name='',log_path='')  
     # 日志输出到文件，参数可选
@@ -76,7 +76,7 @@ pip install colour-printing
     p.set_default(set_level='info',time='2019')
     # 设置默认值，将会覆盖配置文件值，其中set_level：指定设置的level.不指定则所有
 
-    # p.hide()
+    # p.close()
     # p.print_filter=['info','error']
 
     p.info('hello')
@@ -85,7 +85,7 @@ pip install colour-printing
     p.success('hello')
 
     #新增level
-    >>> cprint -l "critical other1 other2"
+    >>> cprint -l critical;other1;other2
     
     class NewOne(PrintMe):
         #装饰新增level func
