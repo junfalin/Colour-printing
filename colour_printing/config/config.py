@@ -6,9 +6,13 @@ from colour_printing.style import setting
 
 
 class Term(object):
-    def __init__(self, default='', fore='', back='', mode=''):
+    def __init__(self, *args, default=''):
         self.default = default
-        self.style = setting(mode=mode, back=back, fore=fore)  # list
+        data = {}
+        for i in args:
+            if isinstance(i, dict):
+                data[i['type']] = i['value']
+        self.style = setting(**data)  # list
 
 
 class CPConfig(object):

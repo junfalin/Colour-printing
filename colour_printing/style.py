@@ -61,31 +61,31 @@ def setting(mode='', fore='', back=''):
 
 
 class Fore(dict):
-    BLACK = 'black'
-    RED = 'red'
-    GREEN = 'green'
-    YELLOW = 'yellow'
-    BLUE = 'blue'
-    PURPLE = 'purple'
-    CYAN = 'cyan'
-    WHITE = 'white'
+    BLACK = dict(type="fore", value="black")
+    RED = dict(type="fore", value="red")
+    GREEN = dict(type="fore", value="green")
+    YELLOW = dict(type="fore", value="yellow")
+    BLUE = dict(type="fore", value="blue")
+    PURPLE = dict(type="fore", value="purple")
+    CYAN = dict(type="fore", value="cyan")
+    WHITE = dict(type="fore", value="white")
 
 
 class Back(dict):
-    BLACK = 'black'
-    RED = 'red'
-    GREEN = 'green'
-    YELLOW = 'yellow'
-    BLUE = 'blue'
-    PURPLE = 'purple'
-    CYAN = 'cyan'
-    WHITE = 'white'
+    BLACK = dict(type="back", value="black")
+    RED = dict(type="back", value="red")
+    GREEN = dict(type="back", value="green")
+    YELLOW = dict(type="back", value="yellow")
+    BLUE = dict(type="back", value="blue")
+    PURPLE = dict(type="back", value="purple")
+    CYAN = dict(type="back", value="cyan")
+    WHITE = dict(type="back", value="white")
 
 
 class Mode(dict):
-    NORMAL = 'normal'
-    BOLD = 'bold'
-    UNDERLINE = 'underline'
-    BLINK = 'blink'
-    INVERT = 'invert'
-    HIDE = 'hide'
+    NORMAL = dict(type="mode", value="normal")
+    BOLD = dict(type="mode", value="bold")
+    UNDERLINE = dict(type="mode", value="underline")
+    BLINK = dict(type="mode", value="blink")
+    INVERT = dict(type="mode", value="invert")
+    HIDE = dict(type="mode", value="hide")

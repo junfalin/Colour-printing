@@ -28,30 +28,30 @@ CP = CPConfig(TEMPLATE)
 class Paper(object):
     @CP.wrap
     def info(self):
-        self.time = Term(default=get_time, fore=Fore.CYAN)
-        self.flag = Term(default="INFO".center(fill, "-"), fore=Fore.BLUE, mode=Mode.INVERT)
-        self.message = Term(fore=Fore.BLUE)
+        self.time = Term(Fore.CYAN, default=get_time)
+        self.flag = Term(Fore.BLUE, Mode.INVERT, default="INFO".center(fill, "-"))
+        self.message = Term(Fore.BLUE)
 
     @CP.wrap
     def error(self):
-        self.time = Term(default=get_time, fore=Fore.CYAN)
-        self.flag = Term(default="ERROR".center(fill, "-"), fore=Fore.RED, mode=Mode.INVERT)
-        self.message = Term(fore=Fore.RED)
+        self.time = Term(Fore.CYAN, default=get_time)
+        self.flag = Term(Fore.RED, Mode.INVERT, default="ERROR".center(fill, "-"))
+        self.message = Term(Fore.RED)
 
     @CP.wrap
     def success(self):
-        self.time = Term(default=get_time, fore=Fore.CYAN)
-        self.flag = Term(default="SUCCESS".center(fill, "-"), fore=Fore.GREEN, mode=Mode.INVERT)
-        self.message = Term(fore=Fore.GREEN)
+        self.time = Term(Fore.CYAN, default=get_time, )
+        self.flag = Term(Fore.GREEN, Mode.INVERT, default="SUCCESS".center(fill, "-"))
+        self.message = Term(Fore.GREEN)
 
     @CP.wrap
     def debug(self):
-        self.time = Term(default=get_time, fore=Fore.CYAN)
-        self.flag = Term(default="DEBUG".center(fill, "-"), fore=Fore.PURPLE, mode=Mode.INVERT)
-        self.message = Term(fore=Fore.PURPLE)
+        self.time = Term(Fore.CYAN, default=get_time)
+        self.flag = Term(Fore.PURPLE, Mode.INVERT, default="DEBUG".center(fill, "-"))
+        self.message = Term(Fore.PURPLE)
 
     @CP.wrap
     def warning(self):
-        self.time = Term(default=get_time, fore=Fore.CYAN)
-        self.flag = Term(default="WARNING".center(fill, "-"), fore=Fore.YELLOW, mode=Mode.INVERT)
-        self.message = Term(fore=Fore.YELLOW)
+        self.time = Term(Fore.CYAN, default=get_time)
+        self.flag = Term(Fore.YELLOW, Mode.INVERT, default="WARNING".center(fill, "-"))
+        self.message = Term(Fore.YELLOW)
