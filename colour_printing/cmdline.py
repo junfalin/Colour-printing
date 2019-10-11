@@ -8,13 +8,13 @@ from colour_printing.helper import check
 stream = sys.stdout
 parser = argparse.ArgumentParser()
 parser.description = cword("***** Colour-printing ***** github@Faithforus ", fore="cyan")
-parser.add_argument('-n', '--filename', default="colour_printing_config.py", help='配置文件名')
-parser.add_argument('-t', '--template', help="信息模板")
-parser.add_argument('-l', '--newLevel', help="新增level,配合@level_wrap使用;多个用分号隔开")
+parser.add_argument('-n', '--filename', default="colour_printing_config.py", help='配置文件名.py')
+parser.add_argument('-t', '--template', help="信息模板,例: {}{}{message}")
+parser.add_argument('-l', '--newLevel', help="新增level,配合@level_wrap使用,多个用分号隔开")
 
 
 def tip(msg, colour='blue'):
-    stream.write(cword(f"[*]Tip>> {msg}", fore=colour))
+    stream.write(cword("[*]Tip>> {msg}".format(msg=msg), fore=colour))
     stream.write('\n')
 
 
@@ -40,27 +40,28 @@ tab = " " * 4
 
 
 def lib_template(template):
-    return f"""
+    return """
 from colour_printing.config import CPConfig, Term\n
 from datetime import datetime\n
 from colour_printing import Mode, Fore, Back\n
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n
 TEMPLATE = "{template}"
-CP = CPConfig(TEMPLATE)  # 我才是主角,从其他地方导入我\n
-#        +------------------------->  doesn't matter,不用实例化
-#        |
-#        V"""
+CP = CPConfig(TEMPLATE)  # 从其他地方导入我
+#        +----------->  一.填空题
+#        |                 请在括号中【Term】填入相应的Fore,Back,Mode,default可多选,少填或者不填不扣分.
+#        v""".format(template=template)
+
 
 def cls_template(level_list, terms):
     result = """
 class Paper(object):"""
     for level in level_list:
-        result += f"""\n
+        result += """\n
 {tab}@CP.wrap
-{tab}def {level}(self):"""
+{tab}def {level}(self):""".format(tab=tab, level=level)
         for term in terms:
-            result += f"""
-{tab * 2}self.{term} = Term()"""
+            result += """
+{tab}self.{term} = Term()""".format(tab=tab * 2, term=term)
     return result
 
 
@@ -101,9 +102,9 @@ def execute():
     terms = template_handle(template)
     # filepath
     name = name if name.endswith('.py') else name + '.py'
-    file_path = f'{os.getcwd()}/{name}'
+    file_path = os.getcwd() + '/' + name
     if os.path.exists(file_path):
-        tip(f"{name}该配置文件已存在,确认要覆写吗?将配置丢失", colour='yellow')
+        tip("{name}该配置文件已存在,确认要覆写吗?将配置丢失".format(name=name), colour='yellow')
         if input("[Y/n]:") != "Y":
             tip('cancel!')
             sys.exit(0)

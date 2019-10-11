@@ -5,5 +5,5 @@ def check(terms):
         if t.strip() == '':
             return '未知 {} ! '
         if " " in t:
-            return f'{{{t}}} 含空格'
+            return '{{t}} 含空格'.format(t)
     return None

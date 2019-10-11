@@ -41,7 +41,8 @@ class CPConfig(object):
         self._levels.append(level_name)
         for t in self._terms:
             term = getattr(self, t, Term())
-            self._box.setdefault(level_name, {}).update({f"{t}0": term.style[0], f"{t}1": term.style[1]})
+            self._box.setdefault(level_name, {}).update(
+                {"{t}0".format(t=t): term.style[0], "{t}1".format(t=t): term.style[1]})
             self._default.setdefault(level_name, {}).update({t: term.default})
             if hasattr(self, t):
                 delattr(self, t)

@@ -1,4 +1,3 @@
-import re
 import os
 import functools
 import sys
@@ -104,7 +103,7 @@ class LogHandler(object):
 
     def __log_to_file(self):
         path = os.path.join(self.log_path, self.log_name)
-        stream.write(f'[*]Tip>> 日志文件path: {path}\n')
+        stream.write('[*]Tip>> 日志文件path: {path}\n'.format(path=path))
         with open(path, 'a+') as f:
             while True:
                 if self.printme.queue.empty():
@@ -119,7 +118,6 @@ class LogHandler(object):
 class PrintMe(ColourPrinting):
 
     def __init__(self, cp: CPConfig, **kwargs):
-        # store
         # style config
         self.cp = cp
         # switch
@@ -132,7 +130,7 @@ class PrintMe(ColourPrinting):
         # custom args
         for k, v in kwargs.items():
             if k in dir(self):
-                raise PrintMeError(f'变量名"{k}"已被定义咯,请更换其他变量名')
+                raise PrintMeError('变量名"{k}"已被定义咯,请更换其他变量名'.format(k=k))
             setattr(self, k, v)
 
     def show(self, level: str, data: dict, end: str):

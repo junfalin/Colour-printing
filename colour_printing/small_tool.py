@@ -32,5 +32,5 @@ def cword(*args, **kwargs):
     style = setting(mode=mode, fore=fore, back=back)
     str_temp = []
     for s in args:
-        str_temp.append(f'{style[0]}{s}{style[1]}')
+        str_temp.append('{s0}{s}{s1}'.format(s0=style[0], s=s, s1=style[1]))
     return str_temp[0] if len(str_temp) == 1 else str_temp
