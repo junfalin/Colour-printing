@@ -9,7 +9,7 @@ except Exception:
 
 setuptools.setup(
     name="colour-printing",
-    version="0.3.18",
+    version="0.3.19",
     author="faithforus",
     author_email="ljunf817@163.com",
     description="colour-printing",
@@ -19,7 +19,7 @@ setuptools.setup(
     license="MIT",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
