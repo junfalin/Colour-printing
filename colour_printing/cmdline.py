@@ -2,12 +2,11 @@ import re
 import sys
 import argparse
 import os
-from colour_printing import cword
 from colour_printing.helper import check
 
 stream = sys.stdout
 parser = argparse.ArgumentParser()
-parser.description = cword("***** Colour-printing ***** github@Faithforus ", fore="cyan")
+parser.description = "***** Colour-printing ***** github@Faithforus "
 parser.add_argument('-n', '--filename', default="colour_printing_config.py", help='配置文件名.py')
 parser.add_argument('-t', '--template', help="信息模板,例: {}{}{message}")
 parser.add_argument('-l', '--newLevel', help="新增level,配合@level_wrap使用,多个用分号隔开")
