@@ -1,0 +1,7 @@
+*egg-info/*
+.vscode/*
+venv
+__pycache__
+dist
+colour_printing.egg-info
+build
