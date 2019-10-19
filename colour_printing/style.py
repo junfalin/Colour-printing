@@ -60,32 +60,38 @@ def setting(mode='', fore='', back=''):
     return style, end
 
 
-class Fore(dict):
-    BLACK = dict(type="fore", value="black")
-    RED = dict(type="fore", value="red")
-    GREEN = dict(type="fore", value="green")
-    YELLOW = dict(type="fore", value="yellow")
-    BLUE = dict(type="fore", value="blue")
-    PURPLE = dict(type="fore", value="purple")
-    CYAN = dict(type="fore", value="cyan")
-    WHITE = dict(type="fore", value="white")
+class CPStyle(object):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
 
 
-class Back(dict):
-    BLACK = dict(type="back", value="black")
-    RED = dict(type="back", value="red")
-    GREEN = dict(type="back", value="green")
-    YELLOW = dict(type="back", value="yellow")
-    BLUE = dict(type="back", value="blue")
-    PURPLE = dict(type="back", value="purple")
-    CYAN = dict(type="back", value="cyan")
-    WHITE = dict(type="back", value="white")
+class Fore:
+    BLACK = CPStyle(name="fore", value="black")
+    RED = CPStyle(name="fore", value="red")
+    GREEN = CPStyle(name="fore", value="green")
+    YELLOW = CPStyle(name="fore", value="yellow")
+    BLUE = CPStyle(name="fore", value="blue")
+    PURPLE = CPStyle(name="fore", value="purple")
+    CYAN = CPStyle(name="fore", value="cyan")
+    WHITE = CPStyle(name="fore", value="white")
 
 
-class Mode(dict):
-    NORMAL = dict(type="mode", value="normal")
-    BOLD = dict(type="mode", value="bold")
-    UNDERLINE = dict(type="mode", value="underline")
-    BLINK = dict(type="mode", value="blink")
-    INVERT = dict(type="mode", value="invert")
-    HIDE = dict(type="mode", value="hide")
+class Back:
+    BLACK = CPStyle(name="back", value="black")
+    RED = CPStyle(name="back", value="red")
+    GREEN = CPStyle(name="back", value="green")
+    YELLOW = CPStyle(name="back", value="yellow")
+    BLUE = CPStyle(name="back", value="blue")
+    PURPLE = CPStyle(name="back", value="purple")
+    CYAN = CPStyle(name="back", value="cyan")
+    WHITE = CPStyle(name="back", value="white")
+
+
+class Mode:
+    NORMAL = CPStyle(name="mode", value="normal")
+    BOLD = CPStyle(name="mode", value="bold")
+    UNDERLINE = CPStyle(name="mode", value="underline")
+    BLINK = CPStyle(name="mode", value="blink")
+    INVERT = CPStyle(name="mode", value="invert")
+    HIDE = CPStyle(name="mode", value="hide")

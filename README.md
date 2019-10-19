@@ -12,6 +12,9 @@ pip install colour-printing
   - debug
   
 
+> 目前windows下cmd输出不了彩色,会显示：\x1b[36mHelloWorld\x1b[0m,所以默认不显示颜色字符.如果需要:
+PrintMe.DYE=True
+
 #### 示例默认模板
 ```
     from colour_printing.default import log
@@ -26,34 +29,13 @@ pip install colour-printing
 
 ```
 
-
-#### 小工具
-
-```
-    from colour_printing import cprint,cword
-
-    # 打印色彩字符
-    cprint('default')
-    cprint('hello', fore=Fore.RED)
-    
-    #或者只要色彩字符
-    s1 = cword('I', fore=Fore.YELLOW)
-    s2 = cword('LOVE','China', fore=Fore.RED)
-    
-    print(s1, s2[0], s2[1])
-```
-
-
-![image](https://github.com/Faithforus/Colour-printing/blob/master/default.png)
-
-
-
 ### 创建配置模板文件
 >> cprint -h # 查看帮助
 ```
->> cd /home/faith/GIT/Colour-printing
+# 可查看默认模板 colour_priting.default.default_colour_printing_config.py
+>> cd [path]
 
->> cprint (-t template) [-n config_filename]
+>> cprint -t {level}{time}{message} -n mycpconfig
 
 ```
 
@@ -72,7 +54,9 @@ pip install colour-printing
     
     p.log_handler.run(log_name='',log_path='')  
     # 日志输出到文件，参数可选
-    
+
+    #cp.set_all_default(key=value)  # 可在模板文件中更便捷的设置默认值
+
     p.set_default(set_level='info',time='2019')
     # 设置默认值，将会覆盖配置文件值，其中set_level：指定设置的level.不指定则所有
 
@@ -93,7 +77,7 @@ pip install colour-printing
         def critical(self, data:dict):
             """最高优先级,对data的操作会影响后续操作(日志,打印)的输出内容"""
 
-    n = NewOne(cp_config)
+    log = NewOne(cp)
 ```
 
 
@@ -104,5 +88,23 @@ pip install colour-printing
         """record不受level函数影响,处理日志信息 重写此函数以应用每个不同的使用场景 """
             print("handler_record: ",record)
     
-    vlog = Vlog(cp_config)
+    vlog = Vlog(cp)
 ```
+#### 小工具
+
+```
+    from colour_printing import cprint,cword
+
+    # 打印色彩字符
+    cprint('default')
+    cprint('hello',Fore.RED)
+    
+    #或者只要色彩字符
+    s1 = cword('I',Fore.YELLOW)
+    s2 = cword('LOVE','China',Fore.RED)
+    
+    print(s1, s2[0], s2[1])
+```
+
+
+![image](https://github.com/Faithforus/Colour-printing/blob/master/default.png)

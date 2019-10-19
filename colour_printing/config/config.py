@@ -2,7 +2,7 @@ import re
 
 from colour_printing.exception import PrintMeError
 from colour_printing.helper import check
-from colour_printing.style import setting
+from colour_printing.style import setting, CPStyle
 
 
 class Term(object):
@@ -10,8 +10,8 @@ class Term(object):
         self.default = default
         data = {}
         for i in args:
-            if isinstance(i, dict):
-                data[i['type']] = i['value']
+            if isinstance(i, CPStyle):
+                data[i.name] = i.value
         self.style = setting(**data)  # list
 
 

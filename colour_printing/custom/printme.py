@@ -50,6 +50,7 @@ def level_wrap(func):
 
 class ColourPrinting(object):
     Master_switch = True
+    DYE = DYE
 
     @classmethod
     def shutdown(cls):
@@ -136,7 +137,7 @@ class PrintMe(ColourPrinting):
 
     def show(self, level: str, data: dict, end: str):
         # style
-        if not DYE or not self.cp._box.get(level.upper()):
+        if not self.DYE or not self.cp._box.get(level.upper()):
             msg = self.cp._rawtemplate.format(**data)
         else:
             style = self.cp._box.get(level.upper())
