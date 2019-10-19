@@ -7,6 +7,7 @@ from inspect import isfunction
 from queue import Queue
 from colour_printing.config import CPConfig
 from colour_printing.exception import PrintMeError
+from colour_printing.helper import DYE
 
 stream = sys.stdout
 
@@ -19,10 +20,9 @@ def level_wrap(func):
         data = {}
         # 参数
         for i in self.cp._terms:
-            w = kwargs.get(i)
-            if w:
-                data[i] = w
-            else:
+            try:
+                data[i] = kwargs[i]
+            except:
                 dd = default.get(i, "")
                 if isfunction(dd):
                     data[i] = dd()
@@ -84,7 +84,6 @@ class LogHandler(object):
         self.printme = printme
         self.log_path = os.getcwd()
         self.log_name = 'colour_printing_log.log'
-        self.log_delay = 60 * 2
         self.main_t = None
 
     def run(self, log_path: str = '', log_name: str = ''):  # log
@@ -118,6 +117,8 @@ class LogHandler(object):
 class PrintMe(ColourPrinting):
 
     def __init__(self, cp: CPConfig, **kwargs):
+        if not isinstance(cp, CPConfig):
+            raise PrintMeError("type must be CPconfig")
         # style config
         self.cp = cp
         # switch
@@ -135,7 +136,7 @@ class PrintMe(ColourPrinting):
 
     def show(self, level: str, data: dict, end: str):
         # style
-        if not self.cp._box.get(level.upper()):
+        if not DYE or not self.cp._box.get(level.upper()):
             msg = self.cp._rawtemplate.format(**data)
         else:
             style = self.cp._box.get(level.upper())
@@ -154,11 +155,11 @@ class PrintMe(ColourPrinting):
         if level:
             if level.upper() in self.cp._levels:
                 for k, v in kwargs.items():
-                    self.cp._default[level.upper()].update({k: v})
+                    self.cp._default.setdefault(level.upper(), {}).update({k: v})
         else:
             for level in self.cp._levels:
                 for k, v in kwargs.items():
-                    self.cp._default[level.upper()].update({k: v})
+                    self.cp._default.setdefault(level.upper(), {}).update({k: v})
 
     @property
     def switch(self):

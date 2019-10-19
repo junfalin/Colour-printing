@@ -28,30 +28,33 @@ CP = CPConfig(TEMPLATE)
 class Paper(object):
     @CP.wrap
     def info(self):
-        self.time = Term(Fore.CYAN, default=get_time)
+        self.time = Term(Fore.CYAN)
         self.flag = Term(Fore.BLUE, Mode.INVERT, default="INFO".center(fill, "-"))
         self.message = Term(Fore.BLUE)
 
     @CP.wrap
     def error(self):
-        self.time = Term(Fore.CYAN, default=get_time)
+        self.time = Term(Fore.CYAN)
         self.flag = Term(Fore.RED, Mode.INVERT, default="ERROR".center(fill, "-"))
         self.message = Term(Fore.RED)
 
     @CP.wrap
     def success(self):
-        self.time = Term(Fore.CYAN, default=get_time, )
+        self.time = Term(Fore.CYAN)
         self.flag = Term(Fore.GREEN, Mode.INVERT, default="SUCCESS".center(fill, "-"))
         self.message = Term(Fore.GREEN)
 
     @CP.wrap
     def debug(self):
-        self.time = Term(Fore.CYAN, default=get_time)
+        self.time = Term(Fore.CYAN)
         self.flag = Term(Fore.PURPLE, Mode.INVERT, default="DEBUG".center(fill, "-"))
         self.message = Term(Fore.PURPLE)
 
     @CP.wrap
     def warning(self):
-        self.time = Term(Fore.CYAN, default=get_time)
+        self.time = Term(Fore.CYAN)
         self.flag = Term(Fore.YELLOW, Mode.INVERT, default="WARNING".center(fill, "-"))
         self.message = Term(Fore.YELLOW)
+
+
+CP.set_all_default(time=get_time)

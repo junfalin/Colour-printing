@@ -1,3 +1,11 @@
+import platform
+
+if platform.system() == 'Linux':
+    DYE = True
+else:
+    DYE = False
+
+
 def check(terms):
     if "message" not in terms:
         return 'TEMPLATE中未找到 {message} ! '

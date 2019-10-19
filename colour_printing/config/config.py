@@ -20,9 +20,9 @@ class CPConfig(object):
         self._box = {}
         self._default = {}
         self._levels = []
-        self.check(template)
+        self._check(template)
 
-    def check(self, template):
+    def _check(self, template):
         self._rawtemplate = template
         self._terms = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
         e = check(self._terms)
@@ -46,3 +46,13 @@ class CPConfig(object):
             self._default.setdefault(level_name, {}).update({t: term.default})
             if hasattr(self, t):
                 delattr(self, t)
+
+    def set_all_default(self, **kwargs):
+        """
+        设置默认值
+        :param kwargs:
+        :return:
+        """
+        for level in self._levels:
+            for k, v in kwargs.items():
+                self._default.setdefault(level.upper(), {}).update({k: v})

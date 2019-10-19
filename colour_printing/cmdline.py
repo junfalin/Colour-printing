@@ -13,8 +13,8 @@ parser.add_argument('-t', '--template', help="信息模板,例: {}{}{message}")
 parser.add_argument('-l', '--newLevel', help="新增level,配合@level_wrap使用,多个用分号隔开")
 
 
-def tip(msg, colour='blue'):
-    stream.write(cword("[*]Tip>> {msg}".format(msg=msg), fore=colour))
+def tip(msg):
+    stream.write("[*]Tip>> {msg}".format(msg=msg))
     stream.write('\n')
 
 
@@ -47,9 +47,7 @@ from colour_printing import Mode, Fore, Back\n
 get_time = lambda: datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S.%f')[:-3]\n
 TEMPLATE = "{template}"
 CP = CPConfig(TEMPLATE)  # 从其他地方导入我
-#        +----------->  一.填空题
-#        |                 请在括号中【Term】填入相应的Fore,Back,Mode,default可多选,少填或者不填不扣分.
-#        v""".format(template=template)
+""".format(template=template)
 
 
 def cls_template(level_list, terms):
@@ -76,7 +74,7 @@ def create_py_file(file_path, level_list, terms, template):
     ns = assemble(level_list, terms, template)
     with open(file_path, 'w')as f:
         f.write(ns)
-    tip(f'创建配置模板文件完成-->  {file_path}', colour='green')
+    tip(f'创建配置模板文件完成-->  {file_path}')
     return 0
 
 
@@ -85,7 +83,7 @@ def template_handle(template):
     terms = re.findall(r'(?<=\{)[^}]*(?=\})+', template)
     e = check(terms)
     if e:
-        tip(e, colour='red')
+        tip(e)
         sys.exit(2)
     return terms
 
@@ -104,7 +102,7 @@ def execute():
     name = name if name.endswith('.py') else name + '.py'
     file_path = os.getcwd() + '/' + name
     if os.path.exists(file_path):
-        tip("{name}该配置文件已存在,确认要覆写吗?将配置丢失".format(name=name), colour='yellow')
+        tip("{name}该配置文件已存在,确认要覆写吗?将配置丢失".format(name=name))
         if input("[Y/n]:") != "Y":
             tip('cancel!')
             sys.exit(0)
