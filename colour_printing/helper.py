@@ -3,7 +3,8 @@ import platform
 if platform.system() == 'Linux':
     DYE = True
 else:
-    DYE = False
+    # DYE = False
+    DYE = True
 
 
 def check(terms):
