@@ -15,6 +15,8 @@ stream = sys.stdout
 def level_wrap(func):
     @functools.wraps(func)
     def wrap(self, *args, **kwargs):
+        if not self.Master_switch:
+            return
         level = func.__name__.upper()
         default = self.cp._default.get(level, {})
         data = {}
@@ -36,11 +38,11 @@ def level_wrap(func):
         # 最高优先级,对data的操作会影响后续操作的输出内容
         res = func(self, data)
         # 日志
-        if level not in self.log_filter and self.Master_switch:
+        if self.log_start and level not in self.log_filter:
             msg = self.cp._rawtemplate.format(**data) + "\n"
             self.queue.put(msg)
         # 打印
-        if self.switch and self.Master_switch and level not in self.print_filter:
+        if self.switch and level not in self.print_filter:
             end = kwargs.get('end', '\n')
             self.show(level, data=data, end=end)
         return res
@@ -97,6 +99,7 @@ class LogHandler(object):
             self.log_path = log_path
         if log_name:
             self.log_name = log_name
+        self.printme.log_start = True
         self.main_t = threading.currentThread()
         t = threading.Thread(target=self.__log_to_file, args=())
         t.start()
@@ -129,6 +132,7 @@ class PrintMe(ColourPrinting):
         # log
         self.queue = Queue()
         self.log_handler = LogHandler(printme=self)
+        self.log_start = False
         # custom args
         for k, v in kwargs.items():
             if k in dir(self):
